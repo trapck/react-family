@@ -1,0 +1,8 @@
+.link {
+	color: #e87d0d;
+}
+
+.link_active {
+	color: #3c3c3c;
+	text-decoration: none;
+}

@@ -1,15 +1,19 @@
-import React from "react";
-import Header from "./header";
+import React, {PropTypes} from "react";
+import Header from "./header/header";
 
-const app = () => {
+const App = (props) => {
 	return (
 		<div>
 			<Header/>
 			<div>
-				React component
+				{props.children}
 			</div>
 		</div>
 	);
 };
 
-export default app;
+App.propTypes = {
+	children: PropTypes.object.isRequired
+};
+
+export default App;
