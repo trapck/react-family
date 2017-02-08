@@ -1,9 +1,11 @@
 import React from "react";
+import Header from "./header";
 
-const BudgetPage = () => {
+const BudgetPage = (props) => {
 	return (
 		<div>
-			Budget page
+			<Header/>
+			{props.children}
 		</div>
 	);
 };
