@@ -1,8 +1,18 @@
 import React from "react";
+import MockApi from "../../../other/mock-api";
 
 const Main = () => {
 	return (
-		<div>Current month</div>
+		<div>
+			<div>Current month</div>
+				<ul>
+					{MockApi.getExpenses().map(item => {
+						return (
+							<li key = {item.id}>{item.title} {item.title}</li>
+						);
+					})}
+				</ul>
+		</div>
 	);
 };
 
