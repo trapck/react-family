@@ -8,7 +8,7 @@ const Main = () => {
 				<ul>
 					{MockApi.getExpenses().map(item => {
 						return (
-							<li key = {item.id}>{item.title} {item.title}</li>
+							<li key = {item.id}>{item.id + " " + item.title}</li>
 						);
 					})}
 				</ul>
