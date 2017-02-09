@@ -11,7 +11,7 @@ export default {
 		},
 		{
 			id: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			title: "entityConstraint"
+			title: "entityRelations"
 		},
 		{
 			id: "20d0b3ce-d429-4c29-ad37-621151c4e435",
@@ -30,7 +30,7 @@ export default {
 			title: "expenseComment"
 		},
 		{
-			id: "fbfb949e-d27c-4169-acb4-a9fc23433cb1",
+			id: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
 			title: "month"
 		},
 		{
