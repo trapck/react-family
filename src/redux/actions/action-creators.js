@@ -53,10 +53,19 @@ const getExpenseComments = () => {
 };
 export {getExpenseComments};
 
-const getExpenses = () => {
-	return {
-		type: actionTypes.GET_EXPENSES
-	};
+const getExpenses = () => (dispatch) => {
+	return mockApi.getExpenses().then(
+		expenses => dispatch(setReceivedExpenses(expenses)),
+		ex => {throw ex;}
+	);
 };
 export {getExpenses};
+
+const setReceivedExpenses = (expenses = []) => {
+	return {
+		type: actionTypes.SET_RECEIVED_EXPENSES,
+		expenses
+	};
+};
+export {setReceivedExpenses};
 

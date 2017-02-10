@@ -9,23 +9,11 @@ class App extends React.Component {
 		super(props);
 	}
 
-	componentDidMount() {
-		this.props.getUsers();
-	}
-
 	render() {
 		return (
 			<div>
-				<Header/>
-				<div>{this.props.currentUser.name + " : " + this.props.currentUser.nickName}</div>
-				<div>
-					{this.props.users.map(
-						(user) => {
-							return (<p key = {user.id}>{user.nickName}</p>);
-						}
-					)}
-				</div>
-				<div>
+				<Header {...this.props}/>
+				<div className = "children-body">
 					{this.props.children}
 				</div>
 			</div>
@@ -35,16 +23,12 @@ class App extends React.Component {
 
 App.propTypes = {
 	children: PropTypes.object.isRequired,
-	currentUser: PropTypes.object.isRequired,
-	setCurrentUser: PropTypes.func.isRequired,
-	users: PropTypes.array.isRequired,
-	getUsers: PropTypes.func.isRequired
+	currentUser: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
 	return {
-		currentUser: state.currentUser,
-		users: state.users
+		currentUser: state.currentUser
 	};
 };
 

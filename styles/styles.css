@@ -6,3 +6,23 @@
 	color: #3c3c3c;
 	text-decoration: none;
 }
+
+.header {
+	height: 50px;
+	border: 1px solid #1b6d85;
+}
+
+.header-nav {
+	float: left;
+}
+
+.header-login {
+	float: right;
+}
+
+.children-body {
+	margin-top: 50px;
+	clear: both;
+	width: 100%;
+	border: 1px solid #1b6d85;
+}

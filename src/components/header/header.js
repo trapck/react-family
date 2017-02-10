@@ -1,22 +1,20 @@
-import React from "react";
+import React, {PropTypes} from "react";
 import {Link, IndexLink} from "react-router";
+import HeaderNav from "./header-nav";
+import HeaderLogin from "./header-login";
 
-const Header = () => {
+
+const Header = (props) => {
 	return (
-		<div>
-			<IndexLink to="/" className = "link" activeClassName = "link_active">
-				Home
-			</IndexLink>
-			{" | "}
-			<Link to="/budget" className = "link" activeClassName = "link_active">
-				Budget
-			</Link>
-			{" | "}
-			<Link to="/next" className = "link" activeClassName = "link_active">
-				Next
-			</Link>
+		<div className = "header">
+			<HeaderNav/>
+			<HeaderLogin {...props}/>
 		</div>
 	);
+};
+
+Header.propTypes = {
+	currentUser: PropTypes.object.isRequired
 };
 
 export default Header;

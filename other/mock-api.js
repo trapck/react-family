@@ -41,16 +41,11 @@ let currentUser = {
 
 const api = {
 	getExpenses() {
-		return expenses;
+		debugger;
+		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenses]), 2000));
 	},
 	getUsers() {
-		return new Promise(
-			(resolve, reject) => {
-				setTimeout(() => {
-					resolve([...users]);
-				}, 2000);
-			}
-		);
+		return new Promise((resolve, reject) => setTimeout(() =>resolve([...users]), 2000));
 	},
 	getCurrentUser() {
 		return currentUser;

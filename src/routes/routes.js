@@ -2,7 +2,7 @@ import React from "react";
 import {Route, IndexRoute} from "react-router";
 import App from "../components/app";
 import BudgetPage from "../components/budget-page/budget-page";
-import BudgetMain from "../components/budget-page/main";
+import BudgetMain from "../components/budget-page/budget-main";
 import BudgetHistory from "../components/budget-page/history";
 import BudgetSettings from "../components/budget-page/settings";
 import HomePage from "../components/home-page/home-page";
