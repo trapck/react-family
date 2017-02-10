@@ -1,4 +1,4 @@
-import ColumnType from "./entity-column-type";
+import ColumnTypes from "./entity-column-types";
 
 export default {
 	entityName: "entityColumn",
@@ -9,7 +9,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "b667cdb0-d94d-4ab5-9344-7857c7fe1fa9",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -17,7 +17,7 @@ export default {
 			title: "title",
 			caption: "Title",
 			entity: "b667cdb0-d94d-4ab5-9344-7857c7fe1fa9",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 
@@ -27,7 +27,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -35,7 +35,7 @@ export default {
 			title: "title",
 			caption: "Title",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 		{
@@ -43,7 +43,7 @@ export default {
 			title: "caption",
 			caption: "Caption",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: false
 		},
 		{
@@ -51,7 +51,7 @@ export default {
 			title: "entity",
 			caption: "Entity",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -59,7 +59,7 @@ export default {
 			title: "type",
 			caption: "Type",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: false
 		},
 		{
@@ -67,7 +67,7 @@ export default {
 			title: "Is display value",
 			caption: "Display column",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
-			type: ColumnType.BOOLEAN,
+			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
 		},
 
@@ -77,7 +77,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: true
 		},
 		{
@@ -85,7 +85,7 @@ export default {
 			title: "column",
 			caption: "Column",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -93,7 +93,7 @@ export default {
 			title: "linkTo",
 			caption: "LinkTo",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -101,7 +101,7 @@ export default {
 			title: "isCheckIntegrityConstraint",
 			caption: "Check IntegrityConstraint",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.BOOLEAN,
+			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
 		},
 		{
@@ -109,7 +109,7 @@ export default {
 			title: "isDeleteCascade",
 			caption: "Is cascade delete allowed",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.BOOLEAN,
+			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
 		},
 		{
@@ -117,7 +117,7 @@ export default {
 			title: "isShowDeleteCascadeWarning",
 			caption: "Show cascade delete warning",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
-			type: ColumnType.BOOLEAN,
+			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
 		},
 
@@ -127,7 +127,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "20d0b3ce-d429-4c29-ad37-621151c4e435",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -135,7 +135,7 @@ export default {
 			title: "name",
 			caption: "Name",
 			entity: "20d0b3ce-d429-4c29-ad37-621151c4e435",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: false
 		},
 		{
@@ -143,7 +143,7 @@ export default {
 			title: "nickName",
 			caption: "NickName",
 			entity: "20d0b3ce-d429-4c29-ad37-621151c4e435",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 
@@ -153,7 +153,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -161,7 +161,7 @@ export default {
 			title: "title",
 			caption: "Title",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 		{
@@ -169,7 +169,7 @@ export default {
 			title: "isEnabledForChoose",
 			caption: "Enabled for choose",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
-			type: ColumnType.BOOLEAN,
+			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
 		},
 
@@ -179,7 +179,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -187,7 +187,7 @@ export default {
 			title: "availableAmount",
 			caption: "Available amount",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
-			type: ColumnType.NUMBER,
+			type: ColumnTypes.NUMBER,
 			isDisplayValue: true
 		},
 		{
@@ -195,7 +195,7 @@ export default {
 			title: "wishfulAmount",
 			caption: "Wishful amount",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
-			type: ColumnType.NUMBER,
+			type: ColumnTypes.NUMBER,
 			isDisplayValue: false
 		},
 		{
@@ -203,7 +203,7 @@ export default {
 			title: "month",
 			caption: "Month",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 
@@ -213,7 +213,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -221,7 +221,7 @@ export default {
 			title: "text",
 			caption: "Text",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 		{
@@ -229,7 +229,7 @@ export default {
 			title: "expense",
 			caption: "Expense",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -237,7 +237,7 @@ export default {
 			title: "author",
 			caption: "Author",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -245,7 +245,7 @@ export default {
 			title: "date",
 			caption: "Date",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
-			type: ColumnType.DATE,
+			type: ColumnTypes.DATE,
 			isDisplayValue: false
 		},
 
@@ -255,7 +255,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -263,7 +263,7 @@ export default {
 			title: "title",
 			caption: "Title",
 			entity: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 		{
@@ -271,7 +271,7 @@ export default {
 			title: "number",
 			caption: "Number",
 			entity: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
-			type: ColumnType.NUMBER,
+			type: ColumnTypes.NUMBER,
 			isDisplayValue: false
 		},
 
@@ -281,7 +281,7 @@ export default {
 			title: "id",
 			caption: "Id",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.GUID,
+			type: ColumnTypes.GUID,
 			isDisplayValue: false
 		},
 		{
@@ -289,7 +289,7 @@ export default {
 			title: "title",
 			caption: "Title",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: true
 		},
 		{
@@ -297,7 +297,7 @@ export default {
 			title: "category",
 			caption: "Category",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -305,7 +305,7 @@ export default {
 			title: "amount",
 			caption: "Amount",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.NUMBER,
+			type: ColumnTypes.NUMBER,
 			isDisplayValue: false
 		},
 		{
@@ -313,7 +313,7 @@ export default {
 			title: "date",
 			caption: "Date",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.DATE,
+			type: ColumnTypes.DATE,
 			isDisplayValue: false
 		},
 		{
@@ -321,7 +321,7 @@ export default {
 			title: "author",
 			caption: "Author",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.LOOKUP,
+			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false
 		},
 		{
@@ -329,8 +329,8 @@ export default {
 			title: "description",
 			caption: "Description",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
-			type: ColumnType.STRING,
+			type: ColumnTypes.STRING,
 			isDisplayValue: false
 		}
 	]
-}
+};
