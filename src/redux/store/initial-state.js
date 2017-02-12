@@ -18,6 +18,7 @@ export default {
 		expenseCategories: [],
 		monthExpenseLimits: [],
 		expenseComments: [],
-		expenses: []
+		expenses: [],
+		currentMonthGeneralInfo: []
 	}
 };

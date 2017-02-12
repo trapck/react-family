@@ -67,5 +67,19 @@ const setReceivedExpenses = (expenses = []) => {
 		expenses
 	};
 };
-export {setReceivedExpenses};
+
+const getCurrentMonthGeneralInfo = () => dispatch => {
+	return mockApi.getCurrentMonthGeneralInfo().then(
+		info => dispatch(setReceivedCurrentMonthGeneralInfo(info)),
+		ex => {throw ex;}
+	);
+};
+export {getCurrentMonthGeneralInfo};
+
+const setReceivedCurrentMonthGeneralInfo = info => {
+	return {
+		type: actionTypes.SET_RECEIVED_CURRENT_MONTH_GENERAL_INFO,
+		info
+	};
+};
 

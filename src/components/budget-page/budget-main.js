@@ -10,6 +10,7 @@ class BudgetMain extends React.Component {
 
 	componentDidMount() {
 		this.props.getExpenses(); // TODO: check to make call each time when selecting BudgetMain
+		this.props.getCurrentMonthGeneralInfo();
 	}
 
 	render() {
@@ -19,10 +20,22 @@ class BudgetMain extends React.Component {
 				<ul>
 					{this.props.expenses.map(item => {
 						return (
-							<li key={item.id}>{item.id + " " + item.title}</li>
+							<li key = {item.id}>{item.id + " " + item.title}</li>
 						);
 					})}
 				</ul>
+				<p>{"-".repeat(100)}</p>
+				<div>
+					{this.props.generalInfo.map(
+						({category, count, amount}) => {
+							return (
+								<p key = {category}>
+									{`${category} *** ${count} *** ${amount}`}
+								</p>
+							);
+						}
+					)}
+				</div>
 			</div>
 		);
 	}
@@ -30,12 +43,15 @@ class BudgetMain extends React.Component {
 
 BudgetMain.propTypes = {
 	expenses: PropTypes.array.isRequired,
-	getExpenses: PropTypes.func.isRequired
+	getExpenses: PropTypes.func.isRequired,
+	generalInfo: PropTypes.array.isRequired,
+	getCurrentMonthGeneralInfo: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
 	return {
-		expenses: state.budget.expenses
+		expenses: state.budget.expenses,
+		generalInfo: state.budget.currentMonthGeneralInfo
 	};
 };
 

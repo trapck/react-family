@@ -166,8 +166,8 @@ export default {
 		},
 		{
 			id: "67439829-9a81-4b24-abb3-05719b3b4018",
-			title: "isEnabledForChoose",
-			caption: "Enabled for choose",
+			title: "isNotVisibleForChoose",
+			caption: "Isn't visible for choose",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
 			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
