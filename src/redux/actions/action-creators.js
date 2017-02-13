@@ -83,3 +83,12 @@ const setReceivedCurrentMonthGeneralInfo = info => {
 	};
 };
 
+const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
+	return {
+		type: actionTypes.SET_GENERAL_INFO_GROUP_COLLAPSED,
+		key,
+		isCollapsed
+	};
+};
+export {setGeneralInfoGroupCollapsed};
+

@@ -1,7 +1,9 @@
 import React, {PropTypes} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import CollapsibleGroup from "../common/collapsible-group";
 import * as actionCreators from "../../redux/actions/action-creators";
+import GeneralInfoRow from "./general-info-row";
 
 class BudgetMain extends React.Component {
 	constructor(props) {
@@ -29,9 +31,10 @@ class BudgetMain extends React.Component {
 					{this.props.generalInfo.map(
 						({category, count, amount}) => {
 							return (
-								<p key = {category}>
-									{`${category} *** ${count} *** ${amount}`}
-								</p>
+								<CollapsibleGroup key = {category}>
+									<GeneralInfoRow title = {category} category = {category} count = {count} amount = {amount}/>
+									<p>{`${category} *** ${count} *** ${amount}`}</p>
+								</CollapsibleGroup>
 							);
 						}
 					)}
