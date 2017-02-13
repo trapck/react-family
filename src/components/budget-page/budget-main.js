@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import CollapsibleGroup from "../common/collapsible-group";
 import * as actionCreators from "../../redux/actions/action-creators";
 import GeneralInfoRow from "./general-info-row";
+import ExpensesList from "./expenses-list";
 
 class BudgetMain extends React.Component {
 	constructor(props) {
@@ -13,6 +14,10 @@ class BudgetMain extends React.Component {
 	componentDidMount() {
 		this.props.getExpenses(); // TODO: check to make call each time when selecting BudgetMain
 		this.props.getCurrentMonthGeneralInfo();
+	}
+
+	setGeneralInfoGroupCollapsed(key, isCollapsed) {
+		this.props.setGeneralInfoGroupCollapsed(key, isCollapsed);
 	}
 
 	render() {
@@ -30,10 +35,22 @@ class BudgetMain extends React.Component {
 				<div>
 					{this.props.generalInfo.map(
 						({category, count, amount}) => {
+							let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
+								isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
+									this.props.generalInfoRowsCollapsedState[category] :
+									true,
+								expenses = this.props.expenses.filter(e => e.category === category);
 							return (
 								<CollapsibleGroup key = {category}>
-									<GeneralInfoRow title = {category} category = {category} count = {count} amount = {amount}/>
-									<p>{`${category} *** ${count} *** ${amount}`}</p>
+									<GeneralInfoRow
+										title = {category}
+										category = {category}
+										count = {count}
+										amount = {amount}
+										isCollapsed = {isCollapsed}
+										onHeaderClick = {onClick}
+									/>
+									<ExpensesList expenses = {expenses}/>
 								</CollapsibleGroup>
 							);
 						}
@@ -48,13 +65,16 @@ BudgetMain.propTypes = {
 	expenses: PropTypes.array.isRequired,
 	getExpenses: PropTypes.func.isRequired,
 	generalInfo: PropTypes.array.isRequired,
-	getCurrentMonthGeneralInfo: PropTypes.func.isRequired
+	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
+	generalInfoRowsCollapsedState: PropTypes.object.isRequired,
+	setGeneralInfoGroupCollapsed: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
 	return {
 		expenses: state.budget.expenses,
-		generalInfo: state.budget.currentMonthGeneralInfo
+		generalInfo: state.budget.currentMonthGeneralInfo,
+		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed
 	};
 };
 
