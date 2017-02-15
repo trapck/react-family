@@ -10,7 +10,8 @@ export default {
 			caption: "Id",
 			entity: "b667cdb0-d94d-4ab5-9344-7857c7fe1fa9",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "3a0944f1-44e7-4765-8b96-3bd6004d0f7f",
@@ -28,7 +29,8 @@ export default {
 			caption: "Id",
 			entity: "2c78b83f-e46e-4421-8df5-45957578399b",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "7c521622-871f-409e-8221-b830ca74a099",
@@ -78,7 +80,8 @@ export default {
 			caption: "Id",
 			entity: "1b443d40-8caf-4c7b-9d29-9524b17c70fa",
 			type: ColumnTypes.GUID,
-			isDisplayValue: true
+			isDisplayValue: true,
+			isSystem: true
 		},
 		{
 			id: "65be328d-1820-4b8c-a0d6-2fab925c91b0",
@@ -128,7 +131,8 @@ export default {
 			caption: "Id",
 			entity: "20d0b3ce-d429-4c29-ad37-621151c4e435",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "b08d9582-3768-4ac6-9bb2-ef2f3b769503",
@@ -154,7 +158,8 @@ export default {
 			caption: "Id",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "5b72051c-52b4-49b4-9191-83e53df81b5e",
@@ -180,7 +185,8 @@ export default {
 			caption: "Id",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "61f6a61b-9b25-4975-9fe3-d8cd9f7d39ef",
@@ -214,7 +220,8 @@ export default {
 			caption: "Id",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "60a65852-b9e8-40bd-93fe-763c9bd2221f",
@@ -256,7 +263,8 @@ export default {
 			caption: "Id",
 			entity: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "916770b7-a8be-4cee-822c-9b0e6ad37e2a",
@@ -282,7 +290,8 @@ export default {
 			caption: "Id",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
 			type: ColumnTypes.GUID,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isSystem: true
 		},
 		{
 			id: "13acd320-dd63-4b3f-970c-cbd98bb26400",

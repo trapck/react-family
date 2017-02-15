@@ -4,7 +4,6 @@ import {getFormatedDate} from "../../../other/utils";
 const Expense = (props) => {
 	return (
 		<tr>
-			<td>{props.id}</td>
 			<td>{props.title}</td>
 			<td>{props.category}</td>
 			<td>{props.amount}</td>

@@ -1,5 +1,7 @@
 import entityColumns from "../src/static-data/entity-info/entity-columns";
+import entityColumnTypes from "../src/static-data/entity-info/entity-column-types";
 import entities from "../src/static-data/entity-info/entities";
+import entityStructure from "../src/static-data/entity-info/entity-sctructure";
 
 const getFormatedDate = (date) => {
 	let day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate(),
@@ -9,12 +11,31 @@ const getFormatedDate = (date) => {
 };
 export {getFormatedDate};
 
-const getEntityColumns = entityName => {
-	const id = entities.data.filter(e => e.title === entityName)[0].id,
-		columns = entityColumns.data.filter(e => e.entity === id);
-	return columns;
+const getEntityColumns = (entityName, ignoreColumns = []) => {
+	return Object.keys(entityStructure[entityName].columns).
+		filter(k => ignoreColumns.indexOf(k) === -1).
+		map(k => entityStructure[entityName].columns[k]);
 };
 export {getEntityColumns};
 
-const getEntityColumnsCaptions = entityName => getEntityColumns(entityName).map(e => e.caption);
+const getEntityColumnsCaptions = (entityName, ignoreColumns = []) =>
+	getEntityColumns(entityName, ignoreColumns).map(c => c.caption);
 export {getEntityColumnsCaptions};
+
+const getLookupValue = (value, entityName, columnName, dbData) => {
+	const linkTo = entityStructure[entityName].columns[columnName].linkTo;
+	return (dbData[linkTo.entityName].filter(v => v.id === value)[0] || {})[linkTo.columnName] || "";
+};
+export {getLookupValue};
+
+const createObjectWithDisplayValues = (entityName, entity, dbData) => {
+	let resultObject = Object.assign({lookupIds: {}}, entity);
+	for (let column in entity) {
+		if ((entityStructure[entityName].columns[column] || {}).type === entityColumnTypes.LOOKUP) {
+			resultObject[column] = getLookupValue(entity[column], entityName, column, dbData);
+			resultObject.lookupIds[column] = entity[column];
+		}
+	}
+	return resultObject;
+};
+export {createObjectWithDisplayValues};

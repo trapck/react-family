@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as actionCreators from "../redux/actions/action-creators";
 import Header from "./header/header";
+import entityStructure from "../static-data/entity-info/entity-sctructure";
 
 class App extends React.Component {
 	constructor(props) {
