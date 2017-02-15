@@ -96,6 +96,12 @@ let expenses = [
 	}
 ];
 
+const dbData = {
+	user: users,
+	expenseCategory: expenseCategories,
+	expense: expenses
+};
+
 const currentMonth = new Date().getMonth();
 
 const api = {
