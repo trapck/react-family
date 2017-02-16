@@ -8,7 +8,7 @@
 }
 
 .header {
-	height: 50px;
+	height: 20px;
 	border: 1px solid #1b6d85;
 }
 
@@ -21,9 +21,9 @@
 }
 
 .children-body {
-	margin-top: 50px;
 	clear: both;
-	width: 100%;
+	width: 70%;
+	margin: 20px auto;
 	border: 1px solid #1b6d85;
 }
 
@@ -34,4 +34,9 @@
 
 .collapsible-group-content {
 	background-color: #bbbbbb;
+}
+
+.expenses-table th,
+.expenses-table td {
+	padding: 5px 10px;
 }

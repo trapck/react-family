@@ -8,6 +8,7 @@ export default {
 	},
 	users: [],
 	currentUser: {},
+	isLoading: {},
 	budget: {
 		expenseCategories: [],
 		monthExpenseLimits: [],

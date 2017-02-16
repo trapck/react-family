@@ -3,6 +3,24 @@ import mockApi from "../../../other/mock-api";
 
 // Common actions
 
+const setIsLoading = (token, value) => {
+	return {
+		type: actionTypes.SET_IS_LOADING,
+		token,
+		value
+	};
+};
+export {setIsLoading};
+
+
+const removeIsLoading = (token) => {
+	return {
+		type: actionTypes.REMOVE_IS_LOADING,
+		token
+	};
+};
+export {removeIsLoading};
+
 const getUsers = () => {
 	return dispatch => {
 		return mockApi.getUsers().then(
@@ -53,10 +71,17 @@ const getExpenseComments = () => {
 };
 export {getExpenseComments};
 
-const getExpenses = (category) => (dispatch) => {
+const getExpenses = (category, isLoadingToken) => (dispatch) => {
+	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getExpenses(category).then(
-		expenses => dispatch(setReceivedExpenses(expenses, category)),
-		ex => {throw ex;}
+		expenses => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedExpenses(expenses, category));
+		},
+		ex => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			throw ex;
+		}
 	);
 };
 export {getExpenses};
@@ -69,10 +94,17 @@ const setReceivedExpenses = (expenses = [], category = "") => {
 	};
 };
 
-const getCurrentMonthGeneralInfo = (category = "") => dispatch => {
+const getCurrentMonthGeneralInfo = (category = "", isLoadingToken) => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getCurrentMonthGeneralInfo(category).then(
-		info => dispatch(setReceivedCurrentMonthGeneralInfo(info, category)),
-		ex => {throw ex;}
+		info => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedCurrentMonthGeneralInfo(info, category));
+		},
+		ex => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			throw ex;
+		}
 	);
 };
 export {getCurrentMonthGeneralInfo};
