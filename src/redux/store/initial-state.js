@@ -1,16 +1,10 @@
-import entities from "../../static-data/entity-info/entities";
-import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
-import entityColumns from "../../static-data/entity-info/entity-columns";
-import entityRelations from "../../static-data/entity-info/entity-relations";
+import entityStructure from "../../static-data/entity-info/entity-sctructure";
 import months from "../../static-data/months";
 
 export default {
 	staticData: {
-		entities,
-		entityColumnTypes,
-		entityColumns,
-		entityRelations,
-		months
+		entityStructure,
+		months: months.data
 	},
 	users: [],
 	currentUser: {},
