@@ -23,39 +23,28 @@ class BudgetMain extends React.Component {
 	render() {
 		return (
 			<div>
-				<div>Current month</div>
-				<ul>
-					{this.props.expenses.map(item => {
+				{this.props.generalInfo.map(
+					({category, count, amount}) => {
+						let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
+							isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
+								this.props.generalInfoRowsCollapsedState[category] :
+								true,
+							expenses = this.props.expenses.filter(e => e.category === category);
 						return (
-							<li key = {item.id}>{item.id + " " + item.title}</li>
+							<CollapsibleGroup key = {category}>
+								<GeneralInfoRow
+									title = {category}
+									category = {category}
+									count = {count}
+									amount = {amount}
+									isCollapsed = {isCollapsed}
+									onHeaderClick = {onClick}
+								/>
+								<ExpensesList expenses = {expenses}/>
+							</CollapsibleGroup>
 						);
-					})}
-				</ul>
-				<p>{"-".repeat(100)}</p>
-				<div>
-					{this.props.generalInfo.map(
-						({category, count, amount}) => {
-							let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
-								isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
-									this.props.generalInfoRowsCollapsedState[category] :
-									true,
-								expenses = this.props.expenses.filter(e => e.category === category);
-							return (
-								<CollapsibleGroup key = {category}>
-									<GeneralInfoRow
-										title = {category}
-										category = {category}
-										count = {count}
-										amount = {amount}
-										isCollapsed = {isCollapsed}
-										onHeaderClick = {onClick}
-									/>
-									<ExpensesList expenses = {expenses}/>
-								</CollapsibleGroup>
-							);
-						}
-					)}
-				</div>
+					}
+				)}
 			</div>
 		);
 	}

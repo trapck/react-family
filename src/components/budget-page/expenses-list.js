@@ -8,7 +8,7 @@ const ExpensesList = (props) => {
 		<table>
 			<tbody>
 			<tr>
-				{getEntityColumnsCaptions("expense").map(c => <th key = {c}>{c}</th>)}
+				{getEntityColumnsCaptions("expense", ["id"]).map(c => <th key = {c}>{c}</th>)}
 			</tr>
 			{props.expenses.map(e => <Expense
 				key = {e.id}

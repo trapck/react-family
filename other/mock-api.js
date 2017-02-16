@@ -1,4 +1,5 @@
 "use strict";
+import {createObjectWithDisplayValues} from "./utils";
 
 let users = [
 	{
@@ -96,7 +97,7 @@ let expenses = [
 	}
 ];
 
-const dbData = {
+let dbData = {
 	user: users,
 	expenseCategory: expenseCategories,
 	expense: expenses
@@ -106,17 +107,21 @@ const currentMonth = new Date().getMonth();
 
 const api = {
 	getUsers() {
+		let users = dbData.user.map(u => createObjectWithDisplayValues("user", u, dbData));
 		return new Promise((resolve, reject) => setTimeout(() =>resolve([...users]), 1000));
 	},
 	getCurrentUser() {
-		return currentUser;
+		return createObjectWithDisplayValues("user", currentUser, dbData);
 	},
 
 	getExpenseCategories() {
+		let expenseCategories = dbData.expenseCategory.
+			map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenseCategories]), 1000));
 	},
 
 	getExpenses() {
+		let expenses = dbData.expense.map(e => createObjectWithDisplayValues("expense", e, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenses]), 1000));
 	},
 
@@ -140,6 +145,7 @@ const api = {
 				}
 			}
 		);
+		result = result.map(e => createObjectWithDisplayValues("expense", e, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...result]), 1000));
 	}
 };
