@@ -120,14 +120,17 @@ const api = {
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenseCategories]), 1000));
 	},
 
-	getExpenses() {
+	getExpenses(category) {
 		let expenses = dbData.expense.map(e => createObjectWithDisplayValues("expense", e, dbData));
+		if (category) {
+			expenses = expenses.filter(e => e.category === category);
+		}
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenses]), 1000));
 	},
 
-	getCurrentMonthGeneralInfo() {
+	getCurrentMonthGeneralInfo(category) {
 		const currentMonthExpenses = expenses.filter(
-			expense => expense.date.getMonth() === currentMonth
+			expense => expense.date.getMonth() === currentMonth && (category ? expense.category === category : true)
 		);
 		let checkedCategories = [],
 			result = [];

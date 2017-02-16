@@ -53,33 +53,35 @@ const getExpenseComments = () => {
 };
 export {getExpenseComments};
 
-const getExpenses = () => (dispatch) => {
-	return mockApi.getExpenses().then(
-		expenses => dispatch(setReceivedExpenses(expenses)),
+const getExpenses = (category) => (dispatch) => {
+	return mockApi.getExpenses(category).then(
+		expenses => dispatch(setReceivedExpenses(expenses, category)),
 		ex => {throw ex;}
 	);
 };
 export {getExpenses};
 
-const setReceivedExpenses = (expenses = []) => {
+const setReceivedExpenses = (expenses = [], category = "") => {
 	return {
 		type: actionTypes.SET_RECEIVED_EXPENSES,
-		expenses
+		expenses,
+		category
 	};
 };
 
-const getCurrentMonthGeneralInfo = () => dispatch => {
-	return mockApi.getCurrentMonthGeneralInfo().then(
-		info => dispatch(setReceivedCurrentMonthGeneralInfo(info)),
+const getCurrentMonthGeneralInfo = (category = "") => dispatch => {
+	return mockApi.getCurrentMonthGeneralInfo(category).then(
+		info => dispatch(setReceivedCurrentMonthGeneralInfo(info, category)),
 		ex => {throw ex;}
 	);
 };
 export {getCurrentMonthGeneralInfo};
 
-const setReceivedCurrentMonthGeneralInfo = info => {
+const setReceivedCurrentMonthGeneralInfo = (info, category = "") => {
 	return {
 		type: actionTypes.SET_RECEIVED_CURRENT_MONTH_GENERAL_INFO,
-		info
+		info,
+		category
 	};
 };
 

@@ -5,17 +5,15 @@ const GeneralInfoRow = (props) => {
 	return (
 		<div>
 			<a href = "#" className = "link" onClick = {preventFn}>
-				{`${props.title} (${props.count}) ${props.amount}`}
+				{`${props.generalInfoRowModel.displayValues.category} ` +
+				`(${props.generalInfoRowModel.count}) ${props.generalInfoRowModel.amount}`}
 			</a>
 		</div>
 	);
 };
 
 GeneralInfoRow.propTypes = {
-	category: PropTypes.string.isRequired,
-	title: PropTypes.string.isRequired,
-	count: PropTypes.number.isRequired,
-	amount: PropTypes.number.isRequired,
+	generalInfoRowModel: PropTypes.object.isRequired,
 	onHeaderClick: PropTypes.func.isRequired,
 	isCollapsed: PropTypes.bool
 };

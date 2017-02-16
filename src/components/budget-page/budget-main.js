@@ -12,7 +12,6 @@ class BudgetMain extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.getExpenses(); // TODO: check to make call each time when selecting BudgetMain
 		this.props.getCurrentMonthGeneralInfo();
 	}
 
@@ -24,23 +23,19 @@ class BudgetMain extends React.Component {
 		return (
 			<div>
 				{this.props.generalInfo.map(
-					({category, count, amount}) => {
+					({category, count, amount, displayValues}) => {
 						let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
 							isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
 								this.props.generalInfoRowsCollapsedState[category] :
-								true,
-							expenses = this.props.expenses.filter(e => e.category === category);
+								true;
 						return (
 							<CollapsibleGroup key = {category}>
 								<GeneralInfoRow
-									title = {category}
-									category = {category}
-									count = {count}
-									amount = {amount}
+									generalInfoRowModel = {{category, count, amount, displayValues}}
 									isCollapsed = {isCollapsed}
 									onHeaderClick = {onClick}
 								/>
-								<ExpensesList expenses = {expenses}/>
+								<ExpensesList category = {category} count = {count} amount = {amount} isSyncNeeded/>
 							</CollapsibleGroup>
 						);
 					}
@@ -52,8 +47,8 @@ class BudgetMain extends React.Component {
 
 BudgetMain.propTypes = {
 	expenses: PropTypes.array.isRequired,
-	getExpenses: PropTypes.func.isRequired,
 	generalInfo: PropTypes.array.isRequired,
+	getExpenses: PropTypes.func.isRequired,
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
 	generalInfoRowsCollapsedState: PropTypes.object.isRequired,
 	setGeneralInfoGroupCollapsed: PropTypes.func.isRequired

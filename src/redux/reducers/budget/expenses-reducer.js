@@ -4,9 +4,12 @@ import actionTypes from "../../actions/action-types";
 const expenses = (state = [], action = {}) => {
 	switch (action.type) {
 		case actionTypes.SET_RECEIVED_EXPENSES:
-					return action.expenses || []; // TODO: import immutable state checker
+			if (action.category) {
+				return state.filter(e => e.category !== action.category).concat(action.expenses);
+			}
+			return action.expenses || []; // TODO: import immutable state checker
 		default:
-					return state;
+			return state;
 	}
 };
 export default expenses;

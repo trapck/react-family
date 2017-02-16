@@ -4,24 +4,18 @@ import {getFormatedDate} from "../../../other/utils";
 const Expense = (props) => {
 	return (
 		<tr>
-			<td>{props.title}</td>
-			<td>{props.category}</td>
-			<td>{props.amount}</td>
-			<td>{getFormatedDate(props.date)}</td>
-			<td>{props.author}</td>
-			<td>{props.description}</td>
+			<td>{props.expense.title}</td>
+			<td>{props.expense.displayValues.category}</td>
+			<td>{props.expense.amount}</td>
+			<td>{getFormatedDate(props.expense.date)}</td>
+			<td>{props.expense.displayValues.author}</td>
+			<td>{props.expense.description}</td>
 		</tr>
 	);
 };
 
 Expense.propTypes = {
-	id: PropTypes.string.isRequired,
-	title: PropTypes.string.isRequired,
-	category: PropTypes.string.isRequired,
-	amount: PropTypes.number.isRequired,
-	date: PropTypes.object.isRequired,
-	author: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired
+	expense: PropTypes.object.isRequired
 };
 
 export default Expense;

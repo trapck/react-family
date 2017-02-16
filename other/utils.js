@@ -22,18 +22,17 @@ const getEntityColumnsCaptions = (entityName, ignoreColumns = []) =>
 	getEntityColumns(entityName, ignoreColumns).map(c => c.caption);
 export {getEntityColumnsCaptions};
 
-const getLookupValue = (value, entityName, columnName, dbData) => {
+const getLookupDisplayValue = (value, entityName, columnName, dbData) => {
 	const linkTo = entityStructure[entityName].columns[columnName].linkTo;
 	return (dbData[linkTo.entityName].filter(v => v.id === value)[0] || {})[linkTo.columnName] || "";
 };
-export {getLookupValue};
+export {getLookupDisplayValue};
 
 const createObjectWithDisplayValues = (entityName, entity, dbData) => {
-	let resultObject = Object.assign({lookupIds: {}}, entity);
+	let resultObject = Object.assign({displayValues: {}}, entity);
 	for (let column in entity) {
 		if ((entityStructure[entityName].columns[column] || {}).type === entityColumnTypes.LOOKUP) {
-			resultObject[column] = getLookupValue(entity[column], entityName, column, dbData);
-			resultObject.lookupIds[column] = entity[column];
+			resultObject.displayValues[column] = getLookupDisplayValue(entity[column], entityName, column, dbData);
 		}
 	}
 	return resultObject;
