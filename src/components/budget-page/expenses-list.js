@@ -4,7 +4,6 @@ import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
-import babelPolyfill from "babel-polyfill";
 import {getEntityColumnsCaptions} from "../../../other/utils";
 import guid from "uuid/v4";
 

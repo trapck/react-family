@@ -1,6 +1,11 @@
 import actionTypes from "./action-types";
 import mockApi from "../../../other/mock-api";
 
+const rejectCallback = (ex, isLoadingToken, dispatch) => {
+	dispatch(setIsLoading(isLoadingToken, false));
+	throw ex;
+};
+
 // Common actions
 
 const setIsLoading = (token, value) => {
@@ -25,7 +30,7 @@ const getUsers = () => {
 	return dispatch => {
 		return mockApi.getUsers().then(
 				users => dispatch(setReceivedUsers(users),
-				ex => {throw ex;}
+					ex => rejectCallback(ex)
 			)
 		);
 	};
@@ -57,13 +62,6 @@ const getExpenseCategories = () => {
 };
 export {getExpenseCategories};
 
-const getMonthExpenseLimits = () => {
-	return {
-		type: actionTypes.GET_MONTH_EXPENSE_LIMITS
-	};
-};
-export {getMonthExpenseLimits};
-
 const getExpenseComments = () => {
 	return {
 		type: actionTypes.GET_EXPENSE_COMMENTS
@@ -71,17 +69,14 @@ const getExpenseComments = () => {
 };
 export {getExpenseComments};
 
-const getExpenses = (category, isLoadingToken) => (dispatch) => {
+const getExpenses = (category = "", isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getExpenses(category).then(
-		expenses => {
+			expenses => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedExpenses(expenses, category));
 		},
-		ex => {
-			dispatch(setIsLoading(isLoadingToken, false));
-			throw ex;
-		}
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenses};
@@ -94,17 +89,14 @@ const setReceivedExpenses = (expenses = [], category = "") => {
 	};
 };
 
-const getCurrentMonthGeneralInfo = (category = "", isLoadingToken) => dispatch => {
+const getCurrentMonthGeneralInfo = (category = "", isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getCurrentMonthGeneralInfo(category).then(
-		info => {
+			info => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedCurrentMonthGeneralInfo(info, category));
 		},
-		ex => {
-			dispatch(setIsLoading(isLoadingToken, false));
-			throw ex;
-		}
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getCurrentMonthGeneralInfo};
@@ -126,3 +118,21 @@ const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
 };
 export {setGeneralInfoGroupCollapsed};
 
+const getMonthExpenseLimits = (isLoadingToken, month, year) => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.getMonthExpenseLimits().then(
+			limits => {
+				dispatch(setReceivedMonthExpenseLimits(limits));
+				dispatch(setIsLoading(isLoadingToken, false));
+		},
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {getMonthExpenseLimits};
+
+const setReceivedMonthExpenseLimits = (limits) => {
+	return {
+		type: actionTypes.SET_RECEIVED_MONTH_EXPENSE_LIMITS,
+		limits
+	};
+};

@@ -1,4 +1,3 @@
-import babelPolyfill from "babel-polyfill";
 import entities from "./entities";
 import entityColumns from "./entity-columns";
 import entityRelations from "./entity-relations";

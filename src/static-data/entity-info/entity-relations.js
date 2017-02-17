@@ -28,15 +28,6 @@ export default {
 			isDeleteCascade: false,
 			isShowDeleteCascadeWarning: false
 		},
-		// monthExpenseLimit.month -> month.id
-		{
-			id: "",
-			column: "a8280def-53f0-44fd-9e4c-6f65a2b16074",
-			linkTo: "fd2ff769-1af4-4de7-ac39-d3ba8eb8b997",
-			isCheckIntegrityConstraint: false,
-			isDeleteCascade: false,
-			isShowDeleteCascadeWarning: false
-		},
 		// expenseComment.expense -> expense.id
 		{
 			id: "",

@@ -2,6 +2,9 @@ import initialState from "../../store/initial-state";
 import actionTypes from "../../actions/action-types";
 
 const isLoading = (state = initialState.isLoading, action = {}) => {
+	if (!action.token) {
+		return state;
+	}
 	switch (action.type) {
 		case actionTypes.SET_IS_LOADING:
 			return Object.assign({}, state, {[action.token]: action.value});

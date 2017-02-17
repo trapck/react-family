@@ -190,16 +190,16 @@ export default {
 		},
 		{
 			id: "61f6a61b-9b25-4975-9fe3-d8cd9f7d39ef",
-			title: "availableAmount",
-			caption: "Available amount",
+			title: "income",
+			caption: "Income",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
 			type: ColumnTypes.NUMBER,
 			isDisplayValue: true
 		},
 		{
 			id: "c339061f-9140-48b2-8ed6-43dda0e38d89",
-			title: "wishfulAmount",
-			caption: "Wishful amount",
+			title: "limit",
+			caption: "Limit",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
 			type: ColumnTypes.NUMBER,
 			isDisplayValue: false
@@ -209,7 +209,15 @@ export default {
 			title: "month",
 			caption: "Month",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
-			type: ColumnTypes.LOOKUP,
+			type: ColumnTypes.NUMBER,
+			isDisplayValue: false
+		},
+		{
+			id: "a8280def-53f0-44fd-9e4c-6f65a2b16074",
+			title: "year",
+			caption: "Year",
+			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
+			type: ColumnTypes.NUMBER,
 			isDisplayValue: false
 		},
 

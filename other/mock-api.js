@@ -97,6 +97,7 @@ let expenses = [
 	}
 ];
 
+
 let dbData = {
 	user: users,
 	expenseCategory: expenseCategories,
@@ -104,6 +105,7 @@ let dbData = {
 };
 
 const currentMonth = new Date().getMonth();
+const currentYear = new Date().getFullYear();
 
 const api = {
 	getUsers() {
@@ -121,7 +123,8 @@ const api = {
 	},
 
 	getExpenses(category) {
-		let expenses = dbData.expense.map(e => createObjectWithDisplayValues("expense", e, dbData));
+		let expenses = dbData.expense.filter(e => e.date.getMonth() === currentMonth && e.date.getFullYear() === currentYear)
+			.map(e => createObjectWithDisplayValues("expense", e, dbData));
 		if (category) {
 			expenses = expenses.filter(e => e.category === category);
 		}
@@ -130,7 +133,9 @@ const api = {
 
 	getCurrentMonthGeneralInfo(category) {
 		const currentMonthExpenses = expenses.filter(
-			expense => expense.date.getMonth() === currentMonth && (category ? expense.category === category : true)
+			expense => expense.date.getMonth() === currentMonth &&
+			expense.date.getFullYear() === currentYear &&
+			(category ? expense.category === category : true)
 		);
 		let checkedCategories = [],
 			result = [];
@@ -150,6 +155,15 @@ const api = {
 		);
 		result = result.map(e => createObjectWithDisplayValues("expense", e, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...result]), 1000));
+	},
+
+	getMonthExpenseLimits(month, year) {
+		return new Promise((resolve, reject) => setTimeout(() => resolve([{
+			income: 410,
+			limit: 310,
+			month:currentMonth,
+			year: currentYear
+		}]), 1000));
 	}
 };
 

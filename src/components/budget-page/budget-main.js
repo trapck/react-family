@@ -15,7 +15,8 @@ class BudgetMain extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.getCurrentMonthGeneralInfo(this.isLoadingToken);
+		this.props.getCurrentMonthGeneralInfo(null, this.isLoadingToken);
+		this.props.getMonthExpenseLimits();
 	}
 
 	componentWillUnmount() {
@@ -30,6 +31,7 @@ class BudgetMain extends React.Component {
 		return (
 			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 				<div>
+					{this.props.monthLimits.map((l, i) => <p key = {i}>{l.income + " " + l.limit + " " + l.month + " " + l.year}</p>)}
 					{this.props.generalInfo.map(
 						({category, count, amount, displayValues}) => {
 							let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
@@ -59,6 +61,8 @@ BudgetMain.propTypes = {
 	generalInfo: PropTypes.array.isRequired,
 	getExpenses: PropTypes.func.isRequired,
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
+	monthLimits: PropTypes.array.isRequired,
+	getMonthExpenseLimits: PropTypes.func.isRequired,
 	generalInfoRowsCollapsedState: PropTypes.object.isRequired,
 	setGeneralInfoGroupCollapsed: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
@@ -70,6 +74,7 @@ const mapStateToProps = state => {
 		expenses: state.budget.expenses,
 		generalInfo: state.budget.currentMonthGeneralInfo,
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
+		monthLimits: state.budget.monthLimits,
 		isLoading: state.isLoading
 	};
 };

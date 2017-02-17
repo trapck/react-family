@@ -1,6 +1,5 @@
 import initialState from "../../../store/initial-state";
 import actionTypes from "../../../actions/action-types";
-import babelPolyfill from "babel-polyfill";
 
 export default (state = {}, action = {}) => {
 	switch (action.type) {

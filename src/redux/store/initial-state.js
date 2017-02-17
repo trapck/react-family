@@ -15,6 +15,7 @@ export default {
 		expenseComments: [],
 		expenses: [],
 		currentMonthGeneralInfo: [],
+		monthLimits: [],
 		ui: {
 			isGeneralInfoRowCollapsed: {}
 		}
