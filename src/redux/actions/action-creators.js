@@ -69,43 +69,43 @@ const getExpenseComments = () => {
 };
 export {getExpenseComments};
 
-const getExpenses = (category = "", isLoadingToken = "") => dispatch => {
+const getExpenses = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.getExpenses(category).then(
+	return mockApi.getExpenses(filters).then(
 			expenses => {
 			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(setReceivedExpenses(expenses, category));
+			dispatch(setReceivedExpenses(expenses, filters));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenses};
 
-const setReceivedExpenses = (expenses = [], category = "") => {
+const setReceivedExpenses = (expenses = [], filters = []) => {
 	return {
 		type: actionTypes.SET_RECEIVED_EXPENSES,
 		expenses,
-		category
+		filters
 	};
 };
 
-const getCurrentMonthGeneralInfo = (category = "", isLoadingToken = "") => dispatch => {
+const getCurrentMonthGeneralInfo = (filters, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.getCurrentMonthGeneralInfo(category).then(
+	return mockApi.getCurrentMonthGeneralInfo(filters).then(
 			info => {
 			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(setReceivedCurrentMonthGeneralInfo(info, category));
+			dispatch(setReceivedCurrentMonthGeneralInfo(info, filters));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getCurrentMonthGeneralInfo};
 
-const setReceivedCurrentMonthGeneralInfo = (info, category = "") => {
+const setReceivedCurrentMonthGeneralInfo = (info, filters = []) => {
 	return {
 		type: actionTypes.SET_RECEIVED_CURRENT_MONTH_GENERAL_INFO,
 		info,
-		category
+		filters
 	};
 };
 

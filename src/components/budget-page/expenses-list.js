@@ -14,9 +14,14 @@ class ExpensesList extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.getExpenses(this.props.category, this.isLoadingToken);
+		let categoryFilter = {
+			column: "category",
+			value: this.props.category
+		},
+			filters = [categoryFilter];
+		this.props.getExpenses(filters, this.isLoadingToken);
 		if (this.props.isSyncNeeded) {
-			this.props.getCurrentMonthGeneralInfo(this.props.category);
+			this.props.getCurrentMonthGeneralInfo(filters);
 		}
 	}
 

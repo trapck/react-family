@@ -15,7 +15,7 @@ class BudgetMain extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.getCurrentMonthGeneralInfo(null, this.isLoadingToken);
+		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken);
 		this.props.getMonthExpenseLimits();
 	}
 
@@ -57,9 +57,7 @@ class BudgetMain extends React.Component {
 }
 
 BudgetMain.propTypes = {
-	expenses: PropTypes.array.isRequired,
 	generalInfo: PropTypes.array.isRequired,
-	getExpenses: PropTypes.func.isRequired,
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
 	monthLimits: PropTypes.array.isRequired,
 	getMonthExpenseLimits: PropTypes.func.isRequired,
@@ -71,7 +69,6 @@ BudgetMain.propTypes = {
 
 const mapStateToProps = state => {
 	return {
-		expenses: state.budget.expenses,
 		generalInfo: state.budget.currentMonthGeneralInfo,
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimits: state.budget.monthLimits,

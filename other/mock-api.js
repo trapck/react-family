@@ -1,5 +1,5 @@
 "use strict";
-import {createObjectWithDisplayValues} from "./utils";
+import {createObjectWithDisplayValues, createFilterFunction} from "./utils";
 
 let users = [
 	{
@@ -118,37 +118,31 @@ const api = {
 
 	getExpenseCategories() {
 		let expenseCategories = dbData.expenseCategory.
-			map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
+		map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenseCategories]), 1000));
 	},
 
-	getExpenses(category) {
-		let expenses = dbData.expense.filter(e => e.date.getMonth() === currentMonth && e.date.getFullYear() === currentYear)
+	getExpenses(filters) {
+		let expenses = dbData.expense
+			.filter(createFilterFunction("expense", filters))
 			.map(e => createObjectWithDisplayValues("expense", e, dbData));
-		if (category) {
-			expenses = expenses.filter(e => e.category === category);
-		}
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenses]), 1000));
 	},
 
-	getCurrentMonthGeneralInfo(category) {
-		const currentMonthExpenses = expenses.filter(
-			expense => expense.date.getMonth() === currentMonth &&
-			expense.date.getFullYear() === currentYear &&
-			(category ? expense.category === category : true)
-		);
+	getMonthGeneralInfo(filters) {
+		const expenses = dbData.expense.filter(createFilterFunction("expense", filters));
 		let checkedCategories = [],
 			result = [];
-		currentMonthExpenses.forEach(
+		expenses.forEach(
 			(expense) => {
 				if (checkedCategories.indexOf(expense.category) === -1) {
 					checkedCategories.push(expense.category);
 					result.push({
 						category: expense.category,
-						count: currentMonthExpenses.filter(item => item.category === expense.category).length,
-						amount: currentMonthExpenses.
-							filter(item => item.category === expense.category).
-							reduce((total, item) => total + item.amount, 0)
+						count: expenses.filter(item => item.category === expense.category).length,
+						amount: expenses
+							.filter(item => item.category === expense.category)
+							.reduce((total, item) => total + item.amount, 0)
 					});
 				}
 			}
@@ -157,7 +151,19 @@ const api = {
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...result]), 1000));
 	},
 
-	getMonthExpenseLimits(month, year) {
+	getCurrentMonthGeneralInfo(filters = []) {
+		let newFilters = [...filters];
+		newFilters.push({
+			column: "date",
+			value: {
+				M: currentMonth,
+				Y: currentYear
+			}
+		});
+		return this.getMonthGeneralInfo(newFilters);
+	},
+
+	getMonthExpenseLimits(filters) {
 		return new Promise((resolve, reject) => setTimeout(() => resolve([{
 			income: 410,
 			limit: 310,
