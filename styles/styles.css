@@ -40,3 +40,19 @@
 .expenses-table td {
 	padding: 5px 10px;
 }
+
+.month-expense-summary {
+	border: 1px solid #bbbbbb;
+}
+
+.month-expense-summary-danger {
+	color: #761c19;
+}
+
+.month-expense-summary-warning {
+	color: #e87d0d;
+}
+
+.month-expense-summary-ok {
+	color: #3e8f3e;
+}

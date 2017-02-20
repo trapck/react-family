@@ -1,6 +1,9 @@
 "use strict";
 import {createObjectWithDisplayValues, createFilterFunction} from "./utils";
 
+const currentMonth = new Date().getMonth();
+const currentYear = new Date().getFullYear();
+
 let users = [
 	{
 		id: "a8b10cfc-c418-4141-b28e-b5f31e18a660",
@@ -97,15 +100,54 @@ let expenses = [
 	}
 ];
 
+let monthExpenseLimits = [
+	{
+		income: 200,
+		limit: 150,
+		month:currentMonth - 2,
+		year: currentYear
+	},
+	{
+		income: 2000,
+		limit: 1500,
+		month:currentMonth - 1,
+		year: currentYear
+	},
+	{
+		income: 20000,
+		limit: 15000,
+		month:currentMonth,
+		year: currentYear
+	}
+];
 
 let dbData = {
 	user: users,
 	expenseCategory: expenseCategories,
-	expense: expenses
+	expense: expenses,
+	monthExpenseLimit: monthExpenseLimits
 };
 
-const currentMonth = new Date().getMonth();
-const currentYear = new Date().getFullYear();
+const addLimitToDb = (month, year) => {
+	let limit = {
+		month,
+		year,
+		income: 0,
+		limit: 0
+	};
+	if (month === currentMonth && year === currentYear) {
+		let lastMonth = dbData.monthExpenseLimit
+			.filter(l =>
+			(l.month === currentMonth - 1 && l.year === currentYear) ||
+			(currentMonth === 0 && l.month === 11 && l.year === currentYear - 1))[0];
+		if (lastMonth) {
+			limit.income = lastMonth.income;
+			limit.limit = lastMonth.limit;
+		}
+	}
+	monthExpenseLimits.push(limit);
+	return limit;
+};
 
 const api = {
 	getUsers() {
@@ -164,12 +206,17 @@ const api = {
 	},
 
 	getMonthExpenseLimits(filters) {
-		return new Promise((resolve, reject) => setTimeout(() => resolve([{
-			income: 410,
-			limit: 310,
-			month:currentMonth,
-			year: currentYear
-		}]), 1000));
+		let limits = dbData.monthExpenseLimit.filter(createFilterFunction("monthExpenseLimit", filters));
+		if (!limits.length) {
+			if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
+				let month = filters.filter(f => f.column === "month")[0].value,
+					year = filters.filter(f => f.column === "year")[0].value;
+				if (!Number.isNaN(month - year)) {
+					limits = [addLimitToDb(month, year)];
+				}
+			}
+		}
+		return new Promise((resolve, reject) => setTimeout(() => resolve(limits), 1000));
 	}
 };
 

@@ -6,6 +6,7 @@ import * as actionCreators from "../../redux/actions/action-creators";
 import GeneralInfoRow from "./general-info-row";
 import ExpensesList from "./expenses-list";
 import PreloaderContainer from "../common/preloader-container";
+import Summary from "./month-summary";
 import guid from "uuid/v4";
 
 class BudgetMain extends React.Component {
@@ -16,7 +17,15 @@ class BudgetMain extends React.Component {
 
 	componentDidMount() {
 		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken);
-		this.props.getMonthExpenseLimits();
+		this.props.getMonthExpenseLimits(undefined, [
+			{
+				column: "month",
+				value: new Date().getMonth()
+			}, {
+				column: "year",
+				value: new Date().getFullYear()
+			}
+		]);
 	}
 
 	componentWillUnmount() {
@@ -27,11 +36,26 @@ class BudgetMain extends React.Component {
 		this.props.setGeneralInfoGroupCollapsed(key, isCollapsed);
 	}
 
+	getSummaryInfo() {
+		let count = 0,
+			amount = 0;
+		for (let info of this.props.generalInfo) {
+			count += info.count;
+			amount += info.amount;
+		}
+		return {
+			count,
+			amount,
+			income: this.props.monthLimit.income || 0,
+			limit: this.props.monthLimit.limit || 0
+		};
+	}
+
 	render() {
 		return (
 			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 				<div>
-					{this.props.monthLimits.map((l, i) => <p key = {i}>{l.income + " " + l.limit + " " + l.month + " " + l.year}</p>)}
+					<p>{(this.props.monthLimit.income || 0) + " " + (this.props.monthLimit.limit || 0)}</p>
 					{this.props.generalInfo.map(
 						({category, count, amount, displayValues}) => {
 							let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
@@ -50,6 +74,7 @@ class BudgetMain extends React.Component {
 							);
 						}
 					)}
+					<Summary {...this.getSummaryInfo()}/>
 				</div>
 			</PreloaderContainer>
 		);
@@ -59,7 +84,7 @@ class BudgetMain extends React.Component {
 BudgetMain.propTypes = {
 	generalInfo: PropTypes.array.isRequired,
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
-	monthLimits: PropTypes.array.isRequired,
+	monthLimit: PropTypes.object.isRequired,
 	getMonthExpenseLimits: PropTypes.func.isRequired,
 	generalInfoRowsCollapsedState: PropTypes.object.isRequired,
 	setGeneralInfoGroupCollapsed: PropTypes.func.isRequired,
@@ -71,7 +96,8 @@ const mapStateToProps = state => {
 	return {
 		generalInfo: state.budget.currentMonthGeneralInfo,
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
-		monthLimits: state.budget.monthLimits,
+		monthLimit: state.budget.monthLimits
+			.filter(l => l.month === new Date().getMonth() && l.year === new Date().getFullYear())[0] || {},
 		isLoading: state.isLoading
 	};
 };

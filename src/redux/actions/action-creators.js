@@ -118,9 +118,9 @@ const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
 };
 export {setGeneralInfoGroupCollapsed};
 
-const getMonthExpenseLimits = (isLoadingToken, month, year) => dispatch => {
+const getMonthExpenseLimits = (isLoadingToken, filters) => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.getMonthExpenseLimits().then(
+	return mockApi.getMonthExpenseLimits(filters).then(
 			limits => {
 				dispatch(setReceivedMonthExpenseLimits(limits));
 				dispatch(setIsLoading(isLoadingToken, false));
