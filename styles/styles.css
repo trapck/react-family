@@ -56,3 +56,13 @@
 .month-expense-summary-ok {
 	color: #3e8f3e;
 }
+
+.label-cover {
+	padding: 5px;
+}
+
+.label-cover-label-horizontal {
+	float: left;
+	margin-right: 20px;
+}
+

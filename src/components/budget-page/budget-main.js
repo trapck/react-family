@@ -7,12 +7,15 @@ import GeneralInfoRow from "./general-info-row";
 import ExpensesList from "./expenses-list";
 import PreloaderContainer from "../common/preloader-container";
 import Summary from "./month-summary";
+import NewExpense from "./new-expense";
 import guid from "uuid/v4";
 
 class BudgetMain extends React.Component {
 	constructor(props) {
 		super(props);
 		this.isLoadingToken = guid();
+		this.state = {isNewExpenseFormShown: false};
+		this.showNewExpenseForm = this.showNewExpenseForm.bind(this);
 	}
 
 	componentDidMount() {
@@ -51,32 +54,41 @@ class BudgetMain extends React.Component {
 		};
 	}
 
+	showNewExpenseForm() {
+		this.setState({isNewExpenseFormShown: !this.state.isNewExpenseFormShown});
+	}
+
 	render() {
 		return (
-			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-				<div>
-					<p>{(this.props.monthLimit.income || 0) + " " + (this.props.monthLimit.limit || 0)}</p>
-					{this.props.generalInfo.map(
-						({category, count, amount, displayValues}) => {
-							let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
-								isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
-									this.props.generalInfoRowsCollapsedState[category] :
-									true;
-							return (
-								<CollapsibleGroup key = {category}>
-									<GeneralInfoRow
-										generalInfoRowModel = {{category, count, amount, displayValues}}
-										isCollapsed = {isCollapsed}
-										onHeaderClick = {onClick}
-									/>
-									<ExpensesList category = {category} count = {count} amount = {amount} isSyncNeeded/>
-								</CollapsibleGroup>
-							);
-						}
-					)}
-					<Summary {...this.getSummaryInfo()}/>
-				</div>
-			</PreloaderContainer>
+			<div>
+				<button onClick = {this.showNewExpenseForm}>
+					{this.state.isNewExpenseFormShown ? "-" : "+"}
+				</button>
+				{this.state.isNewExpenseFormShown ? <NewExpense/> : null}
+				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
+					<div>
+						{this.props.generalInfo.map(
+							({category, count, amount, displayValues}) => {
+								let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
+									isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
+										this.props.generalInfoRowsCollapsedState[category] :
+										true;
+								return (
+									<CollapsibleGroup key = {category}>
+										<GeneralInfoRow
+											generalInfoRowModel = {{category, count, amount, displayValues}}
+											isCollapsed = {isCollapsed}
+											onHeaderClick = {onClick}
+										/>
+										<ExpensesList category = {category} count = {count} amount = {amount} isSyncNeeded/>
+									</CollapsibleGroup>
+								);
+							}
+						)}
+						<Summary {...this.getSummaryInfo()}/>
+					</div>
+				</PreloaderContainer>
+			</div>
 		);
 	}
 }
