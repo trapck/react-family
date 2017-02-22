@@ -9,7 +9,6 @@ class History extends React.Component {
 		this.onChange = this.onChange.bind(this);
 	}
 	onChange(value, e) {
-		console.log(value, e);
 		this.setState({textValue: value});
 	}
 	render() {

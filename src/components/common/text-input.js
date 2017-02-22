@@ -1,7 +1,7 @@
 import React, {PropTypes} from "react";
 
 const TextInput = props => {
-	const onChange = e => props.onChange(e.value, e);
+	const onChange = e => props.onChange(e.target.value, e);
 	return (
 		<div className = {props.containerClassName}>
 			<input className = {props.inputClassName} onChange = {onChange} value = {props.value} />
