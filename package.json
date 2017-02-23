@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"prestart": "babel-node other/start-message.js",
-		"start": "npm-run-all --parallel test:watch open:src lint:watch",
+		"start": "npm-run-all --parallel open:src lint:watch",
 		"open:src": "babel-node server/server.js",
 		"lint": "node_modules/.bin/esw webpack.config.* src server test other",
 		"lint:watch": "npm run lint -- --watch",
