@@ -3,6 +3,7 @@ import LabelCover from "../common/label-cover";
 import TextInput from "../common/text-input";
 import NumberInput from "../common/number-input";
 import DateInput from "../common/date-input";
+import DropDownInput from "../common/dropdown-input";
 
 class History extends React.Component {
 	constructor(props) {
@@ -15,6 +16,9 @@ class History extends React.Component {
 	}
 
 	render() {
+		let options = ["apple", "mango", "grapes", "melon", "strawberry"].map(function(fruit){
+			return {label: fruit, value: fruit};
+		});
 		return (
 			<div>
 				<div>History</div>
@@ -35,6 +39,14 @@ class History extends React.Component {
 				</LabelCover>
 				<LabelCover caption="Date">
 					<DateInput value = {this.state.date} onChange={this.onChange} tag = "date"/>
+				</LabelCover>
+				<LabelCover caption="DropDown">
+					<DropDownInput
+						options = {options}
+						onChange = {this.onChange}
+						defaultValue = {{label: "apple", value: "apple"}}
+						tag = "list"
+					/>
 				</LabelCover>
 			</div>
 		);

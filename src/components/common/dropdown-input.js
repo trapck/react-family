@@ -1,0 +1,45 @@
+import React, {PropTypes} from "react";
+import {SimpleSelect} from "react-selectize";
+import "react-selectize/themes/index.css";
+
+const DropDownInput = props => {
+	const onChange = (item = {}) => {
+		props.onChange(props.tag, item.value, item);
+	},
+		onBlur = e => {props.onBlur(e);};
+	return (
+		<div>
+			<SimpleSelect
+				className = {props.inputClassName}
+				defaultValue = {props.defaultValue}
+				onValueChange = {onChange}
+				onBlur = {onBlur}
+				options = {props.options}
+				placeholder = {props.placeholder}
+			/>
+		</div>
+	);
+};
+
+
+DropDownInput.propTypes = {
+	options: PropTypes.array.isRequired,
+	defaultValue: PropTypes.object,
+	onChange: PropTypes.func,
+	onBlur: PropTypes.func,
+	validateFn: PropTypes.func,
+	containerClassName: PropTypes.string,
+	inputClassName: PropTypes.string,
+	tag: PropTypes.string,
+	placeholder: PropTypes.string
+};
+
+DropDownInput.defaultProps = {
+	options: [],
+	onChange: Function.prototype,
+	onBlur: Function.prototype,
+	containerClassName: "text-input-container",
+	inputClassName: "text-input"
+};
+
+export default DropDownInput;
