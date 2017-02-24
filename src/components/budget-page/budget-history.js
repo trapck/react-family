@@ -2,6 +2,7 @@ import React from "react";
 import LabelCover from "../common/label-cover";
 import TextInput from "../common/text-input";
 import NumberInput from "../common/number-input";
+import DateInput from "../common/date-input";
 
 class History extends React.Component {
 	constructor(props) {
@@ -31,6 +32,9 @@ class History extends React.Component {
 				</LabelCover>
 				<LabelCover caption="Positive number">
 					<NumberInput value = {this.state.number} onChange={this.onChange} tag = "number"/>
+				</LabelCover>
+				<LabelCover caption="Date">
+					<DateInput value = {this.state.date} onChange={this.onChange} tag = "date"/>
 				</LabelCover>
 			</div>
 		);
