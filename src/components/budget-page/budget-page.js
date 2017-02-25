@@ -1,7 +1,7 @@
 import React, {PropTypes} from "react";
 import Header from "./budget-header";
 
-const BudgetPage = (props) => {
+const BudgetPage = props => {
 	return (
 		<div>
 			<Header/>

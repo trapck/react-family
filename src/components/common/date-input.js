@@ -18,7 +18,7 @@ const DateInput = props => {
 
 DateInput.propTypes = {
 	value: PropTypes.object,
-	onChange: PropTypes.func.isRequired,
+	onChange: PropTypes.func,
 	tag: PropTypes.string
 };
 

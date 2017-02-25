@@ -18,16 +18,20 @@ class NumberInput  extends TextInput {
 	}
 
 	onBlur(e) {
-		e.target.value = (Number(e.target.value) || 0).toString();
+		e.target.value = (Number(e.target.value) || 0).toFixed(this.props.isInteger ? 0 : this.props.precision);
 		this.onChange(e);
 	}
 }
 
 NumberInput.propTypes = {
 	isInteger: PropTypes.bool,
-	isNegativeAllowed: PropTypes.bool
+	isNegativeAllowed: PropTypes.bool,
+	precision: PropTypes.number
 };
 
-NumberInput.defaultProps = Object.assign({}, TextInput.defaultProps, {value: 0});
+NumberInput.defaultProps = Object.assign({}, TextInput.defaultProps, {
+	value: 0,
+	precision: 2
+});
 
 export default NumberInput;

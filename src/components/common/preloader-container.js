@@ -1,7 +1,7 @@
 import React, {PropTypes} from "react";
 import Preloader from "./preloader";
 
-const container = (props) => {
+const container = props => {
 	return props.isLoading.hasOwnProperty(props.isLoadingToken) &&
 		props.isLoading[props.isLoadingToken] ?
 		<Preloader/> :

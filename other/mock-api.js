@@ -217,6 +217,25 @@ const api = {
 			}
 		}
 		return new Promise((resolve, reject) => setTimeout(() => resolve(limits), 1000));
+	},
+
+	getDropDownList(column, filters, includeColumns) {
+		let options = dbData[column.linkTo.entityName]
+			.filter(createFilterFunction(column.linkTo.entityName, filters))
+			.filter(e => !e.isNotVisibleInList)
+			.map(e => {
+				let item = {
+					value: e.id,
+					label: e[column.linkTo.columnName].toString()
+				};
+				if (includeColumns) {
+					for (let c of includeColumns) {
+						item[c] = e[c];
+					}
+				}
+				return item;
+			});
+		return new Promise((resolve, reject) => setTimeout(() => resolve(options), 1000));
 	}
 };
 

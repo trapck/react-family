@@ -171,8 +171,8 @@ export default {
 		},
 		{
 			id: "67439829-9a81-4b24-abb3-05719b3b4018",
-			title: "isNotVisibleForChoose",
-			caption: "Isn't visible for choose",
+			title: "isNotVisibleInList",
+			caption: "Isn't visible in list",
 			entity: "66be585d-c017-4316-8f0d-56724f17f765",
 			type: ColumnTypes.BOOLEAN,
 			isDisplayValue: false
@@ -347,7 +347,8 @@ export default {
 			caption: "Description",
 			entity: "61f64abc-1c5f-49bd-bab2-e90bde96e938",
 			type: ColumnTypes.STRING,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isMultiLine: true
 		}
 	]
 };

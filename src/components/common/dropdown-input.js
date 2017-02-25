@@ -6,7 +6,8 @@ const DropDownInput = props => {
 	const onChange = (item = {}) => {
 		props.onChange(props.tag, item.value, item);
 	},
-		onBlur = e => {props.onBlur(e);};
+		onBlur = e => {props.onBlur(e);},
+		onOpenChange = isOpened => {props.onOpenChange(isOpened);};
 	return (
 		<div>
 			<SimpleSelect
@@ -14,6 +15,7 @@ const DropDownInput = props => {
 				defaultValue = {props.defaultValue}
 				onValueChange = {onChange}
 				onBlur = {onBlur}
+				onOpenChange = {onOpenChange}
 				options = {props.options}
 				placeholder = {props.placeholder}
 			/>
@@ -27,6 +29,7 @@ DropDownInput.propTypes = {
 	defaultValue: PropTypes.object,
 	onChange: PropTypes.func,
 	onBlur: PropTypes.func,
+	onOpenChange: PropTypes.func,
 	validateFn: PropTypes.func,
 	containerClassName: PropTypes.string,
 	inputClassName: PropTypes.string,
@@ -38,6 +41,7 @@ DropDownInput.defaultProps = {
 	options: [],
 	onChange: Function.prototype,
 	onBlur: Function.prototype,
+	onOpenChange: Function.prototype,
 	containerClassName: "text-input-container",
 	inputClassName: "text-input"
 };
