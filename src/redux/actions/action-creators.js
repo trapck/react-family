@@ -136,3 +136,37 @@ const setReceivedMonthExpenseLimits = (limits) => {
 		limits
 	};
 };
+
+const addNewExpense = expense => {
+	return {
+		type: actionTypes.ADD_NEW_EXPENSE,
+		expense
+	};
+};
+export {addNewExpense};
+
+
+const newExpenseChange = (column, value, e) => {
+	return {
+		type: actionTypes.NEW_EXPENSE_CHANGE,
+		column,
+		value,
+		e
+	};
+};
+export {newExpenseChange};
+
+const clearNewExpense = () => {
+	return {
+		type: actionTypes.CLEAR_NEW_EXPENSE
+	};
+};
+export {clearNewExpense};
+
+
+const toggleNewExpenseVisible = () => {
+	return {
+		type: actionTypes.TOGGLE_NEW_EXPENSE_VISIBLE
+	};
+};
+export {toggleNewExpenseVisible};

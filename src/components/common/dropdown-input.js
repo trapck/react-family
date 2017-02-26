@@ -4,7 +4,7 @@ import "react-selectize/themes/index.css";
 
 const DropDownInput = props => {
 	const onChange = (item = {}) => {
-		props.onChange(props.tag, item.value, item);
+		props.onChange(props.tag, {label: item.label, value: item.value}, item);
 	},
 		onBlur = e => {props.onBlur(e);},
 		onOpenChange = isOpened => {props.onOpenChange(isOpened);};
@@ -12,7 +12,7 @@ const DropDownInput = props => {
 		<div>
 			<SimpleSelect
 				className = {props.inputClassName}
-				defaultValue = {props.defaultValue}
+				value = {props.value}
 				onValueChange = {onChange}
 				onBlur = {onBlur}
 				onOpenChange = {onOpenChange}
@@ -26,7 +26,7 @@ const DropDownInput = props => {
 
 DropDownInput.propTypes = {
 	options: PropTypes.array.isRequired,
-	defaultValue: PropTypes.object,
+	value: PropTypes.object,
 	onChange: PropTypes.func,
 	onBlur: PropTypes.func,
 	onOpenChange: PropTypes.func,

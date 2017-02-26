@@ -14,8 +14,6 @@ class BudgetMain extends React.Component {
 	constructor(props) {
 		super(props);
 		this.isLoadingToken = guid();
-		this.state = {isNewExpenseFormShown: false};
-		this.showNewExpenseForm = this.showNewExpenseForm.bind(this);
 	}
 
 	componentDidMount() {
@@ -54,17 +52,13 @@ class BudgetMain extends React.Component {
 		};
 	}
 
-	showNewExpenseForm() {
-		this.setState({isNewExpenseFormShown: !this.state.isNewExpenseFormShown});
-	}
-
 	render() {
 		return (
 			<div>
-				<button onClick = {this.showNewExpenseForm}>
-					{this.state.isNewExpenseFormShown ? "-" : "+"}
+				<button onClick = {this.props.toggleNewExpenseVisible}>
+					{this.props.isNewExpenseVisible ? "-" : "+"}
 				</button>
-				{this.state.isNewExpenseFormShown ? <NewExpense/> : null}
+				{this.props.isNewExpenseVisible ? <NewExpense/> : null}
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					<div>
 						{this.props.generalInfo.map(
@@ -101,7 +95,9 @@ BudgetMain.propTypes = {
 	generalInfoRowsCollapsedState: PropTypes.object.isRequired,
 	setGeneralInfoGroupCollapsed: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
-	isLoading: PropTypes.object.isRequired
+	isLoading: PropTypes.object.isRequired,
+	isNewExpenseVisible: PropTypes.bool,
+	toggleNewExpenseVisible: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -110,7 +106,8 @@ const mapStateToProps = state => {
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimit: state.budget.monthLimits
 			.filter(l => l.month === new Date().getMonth() && l.year === new Date().getFullYear())[0] || {},
-		isLoading: state.isLoading
+		isLoading: state.isLoading,
+		isNewExpenseVisible: state.budget.ui.isNewExpenseVisible
 	};
 };
 

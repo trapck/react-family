@@ -16,8 +16,10 @@ export default {
 		expenses: [],
 		currentMonthGeneralInfo: [],
 		monthLimits: [],
+		newExpense: {},
 		ui: {
-			isGeneralInfoRowCollapsed: {}
+			isGeneralInfoRowCollapsed: {},
+			isNewExpenseVisible: false
 		}
 	}
 };

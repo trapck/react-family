@@ -21,13 +21,22 @@ class InputByColumnType extends React.Component {
 		const column = entityStructure[this.props.entityName].columns[this.props.columnName];
 		if (column.type === entityColumnTypes.LOOKUP) {
 			mockApi.getDropDownList(column, this.props.lookupInfo.filters, this.props.lookupInfo.includeColumns).then(
-				list => this.setState(Object.assign({}, this.state, {
-					lookupInfo: Object.assign({}, this.state.lookupInfo, {
-						options: list
-					})
-				}))
+				list => {
+					if (!this.isUnmount) {
+						this.setState(Object.assign({}, this.state, {
+							lookupInfo: Object.assign({}, this.state.lookupInfo, {
+								options: list
+							})
+						}));
+					}
+				}
 			);
 		}
+	}
+
+
+	componentWillUnmount() {
+		this.isUnmount = true;
 	}
 
 	getTextInput(column) {
@@ -89,6 +98,10 @@ InputByColumnType.propTypes = {
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 	onChange: PropTypes.func.isRequired,
 	lookupInfo: PropTypes.object
+};
+
+InputByColumnType.defaultProps = {
+	lookupInfo: {}
 };
 
 
