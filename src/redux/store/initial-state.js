@@ -16,7 +16,9 @@ export default {
 		expenses: [],
 		currentMonthGeneralInfo: [],
 		monthLimits: [],
-		newExpense: {},
+		newExpense: {
+			date: new Date()
+		},
 		ui: {
 			isGeneralInfoRowCollapsed: {},
 			isNewExpenseVisible: false

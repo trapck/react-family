@@ -13,6 +13,24 @@ const generalInfoReducer = (state = initialState.budget.currentMonthGeneralInfo,
 			}
 			return action.info;
 		}
+		case actionTypes.ADD_EXPENSE_TO_MONTH_GENERAL_INFO:
+		{
+			let info = state.filter(e => e.category === action.expense.category)[0];
+			if (info) {
+				info.count++;
+				info.amount += action.expense.amount;
+			} else {
+				info = {
+					category: action.expense.category,
+					amount: action.expense.amount,
+					count: 1,
+					displayValues: {
+						category: action.expense.displayValues.category
+					}
+				};
+			}
+			return [...state.filter(e => e.category !== action.expense.category), info];
+		}
 		default:
 			return state;
 	}

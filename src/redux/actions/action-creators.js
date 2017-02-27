@@ -29,8 +29,8 @@ export {removeIsLoading};
 const getUsers = () => {
 	return dispatch => {
 		return mockApi.getUsers().then(
-				users => dispatch(setReceivedUsers(users),
-					ex => rejectCallback(ex)
+			users => dispatch(setReceivedUsers(users),
+				ex => rejectCallback(ex)
 			)
 		);
 	};
@@ -72,11 +72,11 @@ export {getExpenseComments};
 const getExpenses = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getExpenses(filters).then(
-			expenses => {
+		expenses => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedExpenses(expenses, filters));
 		},
-			ex => rejectCallback(ex, isLoadingToken, dispatch)
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenses};
@@ -92,14 +92,22 @@ const setReceivedExpenses = (expenses = [], filters = []) => {
 const getCurrentMonthGeneralInfo = (filters, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getCurrentMonthGeneralInfo(filters).then(
-			info => {
+		info => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedCurrentMonthGeneralInfo(info, filters));
 		},
-			ex => rejectCallback(ex, isLoadingToken, dispatch)
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getCurrentMonthGeneralInfo};
+
+const addExpenseToCurrentMonthGeneralInfo = expense => {
+	return {
+		type: actionTypes.ADD_EXPENSE_TO_MONTH_GENERAL_INFO,
+		expense
+	};
+};
+export {addExpenseToCurrentMonthGeneralInfo};
 
 const setReceivedCurrentMonthGeneralInfo = (info, filters = []) => {
 	return {
@@ -121,11 +129,11 @@ export {setGeneralInfoGroupCollapsed};
 const getMonthExpenseLimits = (isLoadingToken, filters) => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getMonthExpenseLimits(filters).then(
-			limits => {
+		limits => {
 			dispatch(setReceivedMonthExpenseLimits(limits));
 			dispatch(setIsLoading(isLoadingToken, false));
 		},
-			ex => rejectCallback(ex, isLoadingToken, dispatch)
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getMonthExpenseLimits};
@@ -137,13 +145,16 @@ const setReceivedMonthExpenseLimits = (limits) => {
 	};
 };
 
-const addNewExpense = expense => dispatch => {
+const addNewExpense = (expense, isLoadingToken = "") => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.addExpense(expense).then(
-			expense => {
+		expense => {
+			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(registerNewExpenseInState(expense));
+			dispatch(addExpenseToCurrentMonthGeneralInfo(expense));
 			dispatch(clearNewExpense());
 		},
-			ex => rejectCallback(ex)
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {addNewExpense};

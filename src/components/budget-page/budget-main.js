@@ -110,7 +110,12 @@ BudgetMain.propTypes = {
 
 const mapStateToProps = state => {
 	return {
-		generalInfo: state.budget.currentMonthGeneralInfo,
+		generalInfo: state.budget.currentMonthGeneralInfo
+			.sort((a,b) => {
+				if (a.displayValues.category > b.displayValues.category ) return 1;
+				else if (a.displayValues.category < b.displayValues.category ) return -1;
+				else return 0;
+			}),
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimit: state.budget.monthLimits
 			.filter(l => l.month === new Date().getMonth() && l.year === new Date().getFullYear())[0] || {},

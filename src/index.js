@@ -6,6 +6,7 @@ import {Provider} from "react-redux";
 import Routes from "./routes/routes";
 import mockApi from "../other/mock-api";
 import storeCreator from "./redux/store/store-creator";
+import "../node_modules/toastr/build/toastr.min.css";
 import "../styles/styles.css";
 
 // TODO: implement async current user request. Think about certain place, where make it

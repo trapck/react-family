@@ -8,11 +8,6 @@ class DateInput extends React.Component {
 		this.onChange = this.onChange.bind(this);
 	}
 
-	componentWillMount() {
-		// To fix date default date in state
-		this.props.onChange(this.props.tag, new Date());
-	}
-
 	onChange(dateString, {dateMoment}) {
 		this.props.onChange(this.props.tag, new Date(dateMoment._d));
 	}
@@ -36,7 +31,6 @@ DateInput.propTypes = {
 };
 
 DateInput.defaultProps = {
-	value: new Date(),
 	onChange: Function.prototype,
 	tag: ""
 };

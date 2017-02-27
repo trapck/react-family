@@ -250,7 +250,7 @@ const api = {
 		return new Promise(
 			(resolve, reject) =>
 				setTimeout(
-					resolve(
+					() => resolve(
 						Object.assign({}, createObjectWithDisplayValues("expense", newExpense, dbData))
 					),
 					1000)
