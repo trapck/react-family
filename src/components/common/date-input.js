@@ -6,7 +6,9 @@ const DateInput = props => {
 	const onChange = (dateString, {dateMoment}) => {
 		props.onChange(props.tag, new Date(dateMoment._d));
 	};
-	// TODO: check error if value was not changed
+	/*if (!props.value) {
+		props.onChange(props.tag, new Date());
+	}*/
 	return (<DateField
 		forceValidDate
 		onChange = {onChange}
@@ -24,7 +26,7 @@ DateInput.propTypes = {
 };
 
 DateInput.defaultProps = {
-	value: new Date(),
+	onChange: Function.prototype,
 	tag: ""
 };
 
