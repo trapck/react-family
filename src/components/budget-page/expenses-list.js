@@ -65,19 +65,10 @@ ExpensesList.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-	let filterExpensesFn;
-	if (ownProps.dateFilterValue) {
-		filterExpensesFn = e =>
-		e.category === ownProps.category && getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue);
-	} else {
-		filterExpensesFn = e => e.category === ownProps.category;
-	}
 	return {
 		expenses: state.budget.expenses.filter(e =>
-				e.category === ownProps.category &&
-				ownProps.dateFilterValue
-					? getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue)
-					: true
+			e.category === ownProps.category &&
+			(ownProps.dateFilterValue ?  getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue) : true)
 		),
 		isLoading: state.isLoading
 	};
