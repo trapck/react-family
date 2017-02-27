@@ -1,5 +1,6 @@
 "use strict";
-import {createObjectWithDisplayValues, createFilterFunction} from "./utils";
+import {createObjectWithDisplayValues, createFilterFunction, getValueByColumnType} from "./utils";
+import guid from "uuid/v4";
 
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
@@ -236,6 +237,24 @@ const api = {
 				return item;
 			});
 		return new Promise((resolve, reject) => setTimeout(() => resolve(options), 1000));
+	},
+
+	addExpense(expense) {
+		let newExpense = {
+			id: guid()
+		};
+		for (let column in expense) {
+			newExpense[column] = getValueByColumnType("expense", column, expense[column]);
+		}
+		dbData.expense.push(Object.assign({}, newExpense));
+		return new Promise(
+			(resolve, reject) =>
+				setTimeout(
+					resolve(
+						Object.assign({}, createObjectWithDisplayValues("expense", newExpense, dbData))
+					),
+					1000)
+		);
 	}
 };
 

@@ -1,6 +1,5 @@
 import initialState from "../../store/initial-state";
 import actionTypes from "../../actions/action-types";
-import guid from "uuid/v4";
 
 const expenses = (state = [], action = {}) => {
 	switch (action.type) {
@@ -12,8 +11,8 @@ const expenses = (state = [], action = {}) => {
 			}
 			return action.expenses || []; // TODO: import immutable state checker
 		}
-		case actionTypes.ADD_NEW_EXPENSE:
-			return [...state, Object.assign({}, action.expense, {id: guid()})];
+		case actionTypes.REGISTER_NEW_EXPENSE_IN_STATE:
+			return [...state, Object.assign({}, action.expense)];
 		default:
 			return state;
 	}

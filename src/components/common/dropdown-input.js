@@ -4,7 +4,7 @@ import "react-selectize/themes/index.css";
 
 const DropDownInput = props => {
 	const onChange = (item = {}) => {
-		props.onChange(props.tag, {label: item.label, value: item.value}, item);
+		props.onChange(props.tag, {label: item.label, value: item.value, isDropDown: true}, item);
 	},
 		onBlur = e => {props.onBlur(e);},
 		onOpenChange = isOpened => {props.onOpenChange(isOpened);};

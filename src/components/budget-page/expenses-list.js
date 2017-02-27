@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
-import {getEntityColumnsCaptions} from "../../../other/utils";
+import {getEntityColumnsCaptions, getDateColumnEqualityComparisonResult} from "../../../other/utils";
 import guid from "uuid/v4";
 
 class ExpensesList extends React.Component {
@@ -15,10 +15,16 @@ class ExpensesList extends React.Component {
 
 	componentDidMount() {
 		let categoryFilter = {
-			column: "category",
-			value: this.props.category
-		},
+				column: "category",
+				value: this.props.category
+			},
 			filters = [categoryFilter];
+		if (this.props.dateFilterValue) {
+			filters.push({
+				column: "date",
+				value: this.props.dateFilterValue
+			});
+		}
 		this.props.getExpenses(filters, this.isLoadingToken);
 		if (this.props.isSyncNeeded) {
 			this.props.getCurrentMonthGeneralInfo(filters);
@@ -54,12 +60,25 @@ ExpensesList.propTypes = {
 	isSyncNeeded: PropTypes.bool,
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
-	isLoading: PropTypes.object.isRequired
+	isLoading: PropTypes.object.isRequired,
+	dateFilterValue: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => {
+	let filterExpensesFn;
+	if (ownProps.dateFilterValue) {
+		filterExpensesFn = e =>
+		e.category === ownProps.category && getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue);
+	} else {
+		filterExpensesFn = e => e.category === ownProps.category;
+	}
 	return {
-		expenses: state.budget.expenses.filter(e => e.category === ownProps.category),
+		expenses: state.budget.expenses.filter(e =>
+				e.category === ownProps.category &&
+				ownProps.dateFilterValue
+					? getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue)
+					: true
+		),
 		isLoading: state.isLoading
 	};
 };

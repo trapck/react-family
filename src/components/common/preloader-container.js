@@ -2,10 +2,17 @@ import React, {PropTypes} from "react";
 import Preloader from "./preloader";
 
 const container = props => {
-	return props.isLoading.hasOwnProperty(props.isLoadingToken) &&
-		props.isLoading[props.isLoadingToken] ?
-		<Preloader/> :
-		props.children;
+	const isLoading = props.isLoading.hasOwnProperty(props.isLoadingToken) && props.isLoading[props.isLoadingToken];
+	return (
+		<div>
+			<div style = {{display: isLoading ? "block" : "none"}}>
+				<Preloader/>
+			</div>
+			<div style = {{display: isLoading ? "none" : "block"}}>
+				{props.children}
+			</div>
+		</div>
+	);
 };
 
 container.propTypes = {

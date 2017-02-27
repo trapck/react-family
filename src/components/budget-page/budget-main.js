@@ -74,7 +74,15 @@ class BudgetMain extends React.Component {
 											isCollapsed = {isCollapsed}
 											onHeaderClick = {onClick}
 										/>
-										<ExpensesList category = {category} count = {count} amount = {amount} isSyncNeeded/>
+										<ExpensesList
+											category = {category}
+											count = {count}
+											amount = {amount}
+											dateFilterValue = {{
+												M: new Date().getMonth(),
+												Y: new Date().getFullYear()
+											}}
+											isSyncNeeded/>
 									</CollapsibleGroup>
 								);
 							}

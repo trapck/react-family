@@ -122,8 +122,8 @@ const getMonthExpenseLimits = (isLoadingToken, filters) => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getMonthExpenseLimits(filters).then(
 			limits => {
-				dispatch(setReceivedMonthExpenseLimits(limits));
-				dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedMonthExpenseLimits(limits));
+			dispatch(setIsLoading(isLoadingToken, false));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
@@ -137,14 +137,24 @@ const setReceivedMonthExpenseLimits = (limits) => {
 	};
 };
 
-const addNewExpense = expense => {
-	return {
-		type: actionTypes.ADD_NEW_EXPENSE,
-		expense
-	};
+const addNewExpense = expense => dispatch => {
+	return mockApi.addExpense(expense).then(
+			expense => {
+			dispatch(registerNewExpenseInState(expense));
+			dispatch(clearNewExpense());
+		},
+			ex => rejectCallback(ex)
+	);
 };
 export {addNewExpense};
 
+const registerNewExpenseInState = expense => {
+	return {
+		type: actionTypes.REGISTER_NEW_EXPENSE_IN_STATE,
+		expense
+	};
+};
+export {registerNewExpenseInState};
 
 const newExpenseChange = (column, value, e) => {
 	return {

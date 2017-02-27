@@ -14,8 +14,8 @@ export {getFormatedDate};
 
 const getEntityColumns = (entityName, ignoreColumns = []) => {
 	return Object.keys(entityStructure[entityName].columns).
-	filter(k => ignoreColumns.indexOf(k) === -1).
-	map(k => entityStructure[entityName].columns[k]);
+		filter(k => ignoreColumns.indexOf(k) === -1).
+		map(k => entityStructure[entityName].columns[k]);
 };
 export {getEntityColumns};
 
@@ -46,13 +46,14 @@ const getDateColumnEqualityComparisonResult = (value, comparisonObject) => {
 		result = value.getDate() === comparisonObject.D;
 	}
 	if (comparisonObject.M) {
-		result = value.getMonth() === comparisonObject.M;
+		result = result && value.getMonth() === comparisonObject.M;
 	}
 	if (comparisonObject.Y) {
-		result = value.getFullYear() === comparisonObject.Y;
+		result = result && value.getFullYear() === comparisonObject.Y;
 	}
 	return result;
 };
+export {getDateColumnEqualityComparisonResult};
 
 const getEqualComparisonResult = (entityName, entity, condition) => {
 	let result, values;
@@ -86,3 +87,14 @@ const createFilterFunction = (entityName, filters) => {
 	};
 };
 export {createFilterFunction};
+
+const getValueByColumnType = (entityName, columnName, value) => {
+	switch(entityStructure[entityName].columns[columnName].type) {
+		case entityColumnTypes.NUMBER: return Number(value) || 0;
+		case entityColumnTypes.DATE: return new Date(value);
+		case entityColumnTypes.LOOKUP: return value.value || "";
+		case entityColumnTypes.BOOLEAN: return Boolean(value);
+		default: return value;
+	}
+};
+export {getValueByColumnType};
