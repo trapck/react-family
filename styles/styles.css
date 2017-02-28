@@ -23,6 +23,7 @@
 .children-body {
 	clear: both;
 	width: 70%;
+	height: 500px;
 	margin: 20px auto;
 	border: 1px solid #1b6d85;
 }
@@ -64,4 +65,8 @@
 .label-cover-label-horizontal {
 	float: left;
 	margin-right: 20px;
+}
+
+.budget-settings-nav {
+	float: left;
 }

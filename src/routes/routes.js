@@ -15,7 +15,10 @@ export default (
 		<Route path = "budget" component = {BudgetPage}>
 			<IndexRoute component = {BudgetMain}/>
 			<Route path = "history" component = {BudgetHistory}/>
-			<Route path = "settings" component = {BudgetSettings}/>
+			<Route path = "settings" component = {BudgetSettings}>
+				<Route path = "categories" component = {ExpenseCategoriesManager}/>
+				<Route path = "limit" component = {ExpenseLimitManager}/>
+			</Route>
 		</Route>
 		<Route path = "next" component = {Next}/>
 		<Route path = "*" component = {NotFoundPage}/>

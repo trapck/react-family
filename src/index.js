@@ -13,6 +13,7 @@ import "../styles/styles.css";
 let currentUser = mockApi.getCurrentUser();
 const store = storeCreator.create({
 	currentUser
+
 });
 
 ReactDom.render(
