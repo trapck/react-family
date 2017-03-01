@@ -5,6 +5,8 @@ import BudgetPage from "../components/budget-page/budget-page";
 import BudgetMain from "../components/budget-page/budget-main";
 import BudgetHistory from "../components/budget-page/budget-history";
 import BudgetSettings from "../components/budget-page/budget-settings";
+import ExpenseCategoriesManager from "../components/budget-page/expense-categories-manager";
+import MonthExpenseLimitManager from "../components/budget-page/month-expenselimit-manager";
 import HomePage from "../components/home-page/home-page";
 import Next from "../components/next/next";
 import NotFoundPage from "../components/not-found-page/not-found-page";
@@ -17,7 +19,7 @@ export default (
 			<Route path = "history" component = {BudgetHistory}/>
 			<Route path = "settings" component = {BudgetSettings}>
 				<Route path = "categories" component = {ExpenseCategoriesManager}/>
-				<Route path = "limit" component = {ExpenseLimitManager}/>
+				<Route path = "limit" component = {MonthExpenseLimitManager}/>
 			</Route>
 		</Route>
 		<Route path = "next" component = {Next}/>

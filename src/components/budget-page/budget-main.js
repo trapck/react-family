@@ -18,7 +18,7 @@ class BudgetMain extends React.Component {
 
 	componentDidMount() {
 		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken);
-		this.props.getMonthExpenseLimits(undefined, [
+		this.props.getMonthExpenseLimits([
 			{
 				column: "month",
 				value: new Date().getMonth()

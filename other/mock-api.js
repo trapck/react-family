@@ -36,7 +36,8 @@ let expenseCategories = [
 	},
 	{
 		id: "e51395b9-22f4-4d96-8efb-94d50181acc7",
-		title: "Category22"
+		title: "Category22",
+		isNotVisibleInList: true
 	},
 	{
 		id: "b5f515f8-1a45-418d-95b6-41c5cfe71920",
@@ -159,9 +160,10 @@ const api = {
 		return createObjectWithDisplayValues("user", currentUser, dbData);
 	},
 
-	getExpenseCategories() {
-		let expenseCategories = dbData.expenseCategory.
-		map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
+	getExpenseCategories(filters) {
+		let expenseCategories = dbData.expenseCategory
+			.filter(createFilterFunction("expenseCategory", filters))
+			.map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
 		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenseCategories]), 1000));
 	},
 

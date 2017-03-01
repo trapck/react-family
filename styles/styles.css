@@ -37,8 +37,14 @@
 	background-color: #bbbbbb;
 }
 
+.expenses-categories-table {
+	margin-left: 20px;
+}
+
 .expenses-table th,
-.expenses-table td {
+.expenses-table td,
+.expenses-categories-table th,
+.expenses-categories-table td {
 	padding: 5px 10px;
 }
 

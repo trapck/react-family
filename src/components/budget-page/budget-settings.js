@@ -1,13 +1,17 @@
 import React, {PropTypes} from "react";
 import BudgetSettingsNav from "./budget-settings-nav";
 
-const Settings = () => {
+const Settings = (props) => {
 	return (
 		<div>
 			<BudgetSettingsNav />
-			<div>Body</div>
+			{props.children}
 		</div>
 	);
+};
+
+Settings.propTypes = {
+	children: PropTypes.object
 };
 
 export default Settings;
