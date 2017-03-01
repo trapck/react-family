@@ -6,7 +6,7 @@ const BudgetSettingsNav = () => {
 		<div className = "budget-settings-nav">
 			<Link to = "/budget/settings/categories" className = "link" activeClassName = "link_active">Categories</Link>
 			<br/>
-			<Link to = "/budget/settings/limit" className = "link" activeClassName = "link_active">Month limit</Link>
+			<Link to = "/budget/settings/limits" className = "link" activeClassName = "link_active">Month limit</Link>
 		</div>
 	);
 };
