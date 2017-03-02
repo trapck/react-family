@@ -19,12 +19,13 @@ class EditableValue extends React.Component {
 
 	getEditComponent() {
 		return (
-			<div onBlur = {this.onEditBlur}>
+			<div>
 				<InputByColumnType
 					entityName = {this.props.entityName}
 					columnName = {this.props.columnName}
 					value = {this.state.editValue}
 					onChange = {this.onEditChange}
+					onBlur = {this.onEditBlur}
 					isLabelHidden
 				/>
 			</div>
@@ -35,7 +36,7 @@ class EditableValue extends React.Component {
 		this.setState(Object.assign({}, this.state, {editValue: value}));
 	}
 
-	onEditBlur() {
+	onEditBlur(column, value, e) {
 		this.setState(Object.assign({}, this.state, {isEditMode: false}));
 	}
 
@@ -48,14 +49,20 @@ class EditableValue extends React.Component {
 	}
 
 	render() {
+		// TODO: autoFocus on input render
 		return this.state.isEditMode ? this.getEditComponent() : this.getLabelComponent();
 	}
 }
 
 EditableValue.propTypes = {
-	children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+	children: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.number]).isRequired,
 	entityName: PropTypes.string.isRequired,
 	columnName: PropTypes.string.isRequired,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number])
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number]),
+	onBlur: PropTypes.func
+};
+
+EditableValue.defaultProps = {
+	onBlur: Function.prototype
 };
 export default EditableValue;

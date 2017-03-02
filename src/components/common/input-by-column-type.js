@@ -90,6 +90,7 @@ class InputByColumnType extends React.Component {
 			React.cloneElement(this.getComponent(column), {
 				value: this.props.value,
 				onChange: this.props.onChange,
+				onBlur: this.props.onBlur,
 				tag: this.props.columnName
 			})
 		);
@@ -101,12 +102,14 @@ InputByColumnType.propTypes = {
 	columnName: PropTypes.string.isRequired,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number]),
 	onChange: PropTypes.func.isRequired,
+	onBlur: PropTypes.func.isRequired,
 	lookupInfo: PropTypes.object,
 	isLabelHidden: PropTypes.bool
 };
 
 InputByColumnType.defaultProps = {
-	lookupInfo: {}
+	lookupInfo: {},
+	onBlur: Function.prototype
 };
 
 

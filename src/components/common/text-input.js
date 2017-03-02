@@ -1,6 +1,6 @@
 import React, {PropTypes} from "react";
 
-class TextInput  extends React.Component {
+class TextInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onChange = this.onChange.bind(this);
@@ -20,7 +20,7 @@ class TextInput  extends React.Component {
 	}
 
 	onBlur(e) {
-		this.props.onBlur(e);
+		this.props.onBlur(this.props.tag, e.target.value, e);
 	}
 
 	render() {

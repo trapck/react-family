@@ -18,6 +18,7 @@ class NumberInput  extends TextInput {
 	}
 
 	onBlur(e) {
+		super.onBlur(e);
 		e.target.value = (Number(e.target.value) || 0).toFixed(this.props.isInteger ? 0 : this.props.precision);
 		this.onChange(e);
 	}

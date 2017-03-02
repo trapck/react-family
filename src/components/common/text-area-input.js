@@ -20,7 +20,7 @@ class TextAreaInput  extends React.Component {
 	}
 
 	onBlur(e) {
-		this.props.onBlur(e);
+		this.props.onBlur(this.props.tag, e.target.value, e);
 	}
 
 	render() {

@@ -1,51 +1,43 @@
 import React, {PropTypes} from "react";
-import {getFormatedDate} from "../../../other/utils";
+import {getFormatedDate, getTextValueByColumnType, getEditValueByColumnType} from "../../../other/utils";
 import EditableValue from "../common/editable-value";
+import entityStructure from "../../static-data/entity-info/entity-sctructure";
+import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
 
-const Expense = (props) => {
-	return (
-		<tr>
-			<td>
-				<EditableValue entityName = "expense" columnName ="title" value = {props.expense.title}>
-					{props.expense.title}
-				</EditableValue>
-			</td>
-			<td>
-				<EditableValue
-					entityName = "expense"
-					columnName ="category"
-					value = {{value: props.expense.category, label: props.expense.displayValues.category}}
-				>
-					{props.expense.displayValues.category}
-				</EditableValue>
-			</td>
-			<td>
-				<EditableValue entityName = "expense" columnName ="amount" value = {props.expense.amount}>
-					{props.expense.amount.toFixed(2)}
-				</EditableValue>
-			</td>
-			<td>
-				<EditableValue entityName = "expense" columnName ="date" value = {props.expense.date}>
-					{getFormatedDate(props.expense.date)}
-				</EditableValue>
-			</td>
-			<td>
-				<EditableValue
-					entityName = "expense"
-					columnName ="author"
-					value = {{value: props.expense.author, label: props.expense.displayValues.author}}
-				>
-					{props.expense.displayValues.author}
-				</EditableValue>
-			</td>
-			<td>
-				<EditableValue entityName = "expense" columnName ="description" value = {props.expense.description}>
-					{props.expense.description}
-				</EditableValue>
-			</td>
-		</tr>
-	);
-};
+class Expense extends React.Component {
+	constructor(props) {
+		super(props);
+		this.onBlur = this.onBlur.bind(this);
+	}
+
+	onBlur() {
+
+	}
+
+	render() {
+		return (
+			<tr>
+				{
+					Object.keys(entityStructure.expense.columns)
+						.filter(key => !entityStructure.expense.columns[key].isSystem)
+						.map(key => {
+							return (
+								<td key={entityStructure.expense.columns[key].id}>
+									<EditableValue
+										entityName="expense"
+										columnName={key}
+										value={getEditValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
+									>
+										{getTextValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
+									</EditableValue>
+								</td>
+							);
+						})
+				}
+			</tr>
+		);
+	}
+}
 
 Expense.propTypes = {
 	expense: PropTypes.object.isRequired

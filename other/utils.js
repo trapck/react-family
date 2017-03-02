@@ -98,3 +98,22 @@ const getValueByColumnType = (entityName, columnName, value) => {
 	}
 };
 export {getValueByColumnType};
+
+const getTextValueByColumnType = (entityName, columnName, value, entity) => {
+	switch(entityStructure[entityName].columns[columnName].type) {
+		case entityColumnTypes.NUMBER: return String(value);
+		case entityColumnTypes.DATE: return getFormatedDate(value);
+		case entityColumnTypes.LOOKUP: return entity ? entity.displayValues[columnName] : value;
+		case entityColumnTypes.BOOLEAN: return value ? "+" : "-";
+		default: return value;
+	}
+};
+export {getTextValueByColumnType};
+
+const getEditValueByColumnType = (entityName, columnName, value, entity) => {
+	switch(entityStructure[entityName].columns[columnName].type) {
+		case entityColumnTypes.LOOKUP: return {value: entity[columnName], label: entity.displayValues[columnName]};
+		default: return value;
+	}
+};
+export {getEditValueByColumnType};
