@@ -55,12 +55,25 @@ export {setCurrentUser};
 
 
 // Budget actions
-const getExpenseCategories = () => {
-	return {
-		type: actionTypes.GET_EXPENSE_CATEGORIES
-	};
+const getExpenseCategories = (filters = [], isLoadingToken = "") => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.getExpenseCategories(filters).then(
+		categories => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedExpenseCategories(categories, filters));
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
 };
 export {getExpenseCategories};
+
+const setReceivedExpenseCategories = (categories = [], filters = []) => {
+	return {
+		type: actionTypes.SET_RECEIVED_EXPENSE_CATEGORIES,
+		categories,
+		filters
+	};
+};
 
 const getExpenseComments = () => {
 	return {
@@ -89,7 +102,7 @@ const setReceivedExpenses = (expenses = [], filters = []) => {
 	};
 };
 
-const getCurrentMonthGeneralInfo = (filters, isLoadingToken = "") => dispatch => {
+const getCurrentMonthGeneralInfo = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getCurrentMonthGeneralInfo(filters).then(
 		info => {
@@ -126,7 +139,7 @@ const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
 };
 export {setGeneralInfoGroupCollapsed};
 
-const getMonthExpenseLimits = (isLoadingToken, filters) => dispatch => {
+const getMonthExpenseLimits = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getMonthExpenseLimits(filters).then(
 		limits => {

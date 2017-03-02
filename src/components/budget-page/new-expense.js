@@ -16,6 +16,10 @@ class NewExpense extends React.Component {
 		this.isLoadingToken = guid();
 	}
 
+	componentWillUnmount() {
+		this.props.removeIsLoading(this.isLoadingToken);
+	}
+
 	onChange(column, value, e) {
 		this.props.newExpenseChange(column, value, e);
 	}
@@ -57,6 +61,7 @@ NewExpense.propTypes = {
 	newExpenseChange: PropTypes.func.isRequired,
 	clearNewExpense: PropTypes.func.isRequired,
 	addNewExpense: PropTypes.func.isRequired,
+	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired
 };
 
