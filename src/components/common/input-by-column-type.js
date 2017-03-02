@@ -84,17 +84,14 @@ class InputByColumnType extends React.Component {
 
 	render() {
 		const column = entityStructure[this.props.entityName].columns[this.props.columnName];
-		return (
-			<LabelCover caption={column.caption}>
-				{
-					React.cloneElement(this.getComponent(column), {
-						value: this.props.value,
-						onChange: this.props.onChange,
-						tag: this.props.columnName
-					})
-				}
-			</LabelCover>
-
+		return React.createElement(
+			this.props.isLabelHidden ? "div" : LabelCover,
+			this.props.isLabelHidden ? undefined : {caption: column.caption},
+			React.cloneElement(this.getComponent(column), {
+				value: this.props.value,
+				onChange: this.props.onChange,
+				tag: this.props.columnName
+			})
 		);
 	}
 }
@@ -102,9 +99,10 @@ class InputByColumnType extends React.Component {
 InputByColumnType.propTypes = {
 	entityName: PropTypes.string.isRequired,
 	columnName: PropTypes.string.isRequired,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.object, PropTypes.bool, PropTypes.number]),
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number]),
 	onChange: PropTypes.func.isRequired,
-	lookupInfo: PropTypes.object
+	lookupInfo: PropTypes.object,
+	isLabelHidden: PropTypes.bool
 };
 
 InputByColumnType.defaultProps = {
