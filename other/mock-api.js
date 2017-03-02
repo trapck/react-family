@@ -257,6 +257,23 @@ const api = {
 					),
 					1000)
 		);
+	},
+	addExpenseCategory(expenseCategory) {
+		let newExpenseCategory = {
+			id: guid()
+		};
+		for (let column in expenseCategory) {
+			newExpenseCategory[column] = getValueByColumnType("expenseCategory", column, expenseCategory[column]);
+		}
+		dbData.expenseCategory.push(Object.assign({}, newExpenseCategory));
+		return new Promise(
+			(resolve, reject) =>
+				setTimeout(
+					() => resolve(
+						Object.assign({}, createObjectWithDisplayValues("expenseCategory", newExpenseCategory, dbData))
+					),
+					1000)
+		);
 	}
 };
 

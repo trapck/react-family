@@ -19,9 +19,13 @@ export default {
 		newExpense: {
 			date: new Date()
 		},
-		ui: {
-			isGeneralInfoRowCollapsed: {},
-			isNewExpenseVisible: false
-		}
-	}
+		newExpenseCategory: {
+			isNotVisibleInList: false
+		},
+			ui: {
+	isGeneralInfoRowCollapsed: {},
+	isNewExpenseVisible: false,
+		isNewExpenseCategoryVisible: false
+}
+}
 };

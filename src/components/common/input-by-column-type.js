@@ -7,6 +7,7 @@ import NumberInput from "./number-input";
 import DateInput from "./date-input";
 import DropDownInput from "./dropdown-input";
 import TextAreaInput from "./text-area-input";
+import BooleanInput from "./boolean-input";
 import mockApi from "../../../other/mock-api";
 
 class InputByColumnType extends React.Component {
@@ -60,6 +61,10 @@ class InputByColumnType extends React.Component {
 		);
 	}
 
+	getBooleanDownInput(column) {
+		return <BooleanInput/>;
+	}
+
 	getComponent(column) {
 		switch (column.type) {
 			case entityColumnTypes.STRING:
@@ -70,6 +75,8 @@ class InputByColumnType extends React.Component {
 				return this.getDateInput(column);
 			case entityColumnTypes.LOOKUP:
 				return this.getDropDownInput(column);
+			case entityColumnTypes.BOOLEAN:
+				return this.getBooleanDownInput(column);
 			default:
 				return this.getTextInput(column);
 		}
@@ -95,7 +102,7 @@ class InputByColumnType extends React.Component {
 InputByColumnType.propTypes = {
 	entityName: PropTypes.string.isRequired,
 	columnName: PropTypes.string.isRequired,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.object, PropTypes.bool, PropTypes.number]),
 	onChange: PropTypes.func.isRequired,
 	lookupInfo: PropTypes.object
 };

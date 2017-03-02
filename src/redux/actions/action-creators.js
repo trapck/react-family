@@ -197,6 +197,44 @@ const clearNewExpense = () => {
 };
 export {clearNewExpense};
 
+const addNewExpenseCategory = (expenseCategory, isLoadingToken = "") => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.addExpenseCategory(expenseCategory).then(
+			expenseCategory => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(registerNewExpenseCategoryInState(expenseCategory));
+			dispatch(clearNewExpenseCategory());
+		},
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {addNewExpenseCategory};
+
+const registerNewExpenseCategoryInState = expenseCategory => {
+	return {
+		type: actionTypes.REGISTER_NEW_EXPENSE_CATEGORY_IN_STATE,
+		expenseCategory
+	};
+};
+export {registerNewExpenseCategoryInState};
+
+const newExpenseCategoryChange = (column, value, e) => {
+	return {
+		type: actionTypes.NEW_EXPENSE_CATEGORY_CHANGE,
+		column,
+		value,
+		e
+	};
+};
+export {newExpenseCategoryChange};
+
+const clearNewExpenseCategory = () => {
+	return {
+		type: actionTypes.CLEAR_NEW_EXPENSE_CATEGORY
+	};
+};
+export {clearNewExpenseCategory};
+
 
 const toggleNewExpenseVisible = () => {
 	return {
@@ -204,3 +242,10 @@ const toggleNewExpenseVisible = () => {
 	};
 };
 export {toggleNewExpenseVisible};
+
+const toggleNewExpenseCategoryVisible = () => {
+	return {
+		type: actionTypes.TOGGLE_NEW_EXPENSE_CATEGORY_VISIBLE
+	};
+};
+export {toggleNewExpenseCategoryVisible};
