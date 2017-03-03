@@ -7,7 +7,7 @@ const newExpenseReducer = (state = {}, action = {}) => {
 			return Object.assign({}, state, {[action.column]: action.value});
 		case actionTypes.CLEAR_NEW_EXPENSE:
 			return {
-				date: new Date()
+				date: new Date(new Date().setHours(0, 0, 0, 0))
 			};
 		default:
 			return state;

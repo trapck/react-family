@@ -51,7 +51,7 @@ let expenses = [
 		title: "Expense1",
 		category: "27c78078-9f41-45d9-90dd-ad8d7a437fa2", // Cat1
 		amount: 100,
-		date: new Date(),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "a8b10cfc-c418-4141-b28e-b5f31e18a660", // Denis
 		description: "Description1"
 	},
@@ -60,7 +60,7 @@ let expenses = [
 		title: "Expense2",
 		category: "e51395b9-22f4-4d96-8efb-94d50181acc7", // Cate22
 		amount: 100,
-		date: new Date(Date.now() - 24 * 3600),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "187a85fe-4197-40c3-9e9c-9f238816dbc4", // Inna
 		description: "Description2"
 	},
@@ -69,7 +69,7 @@ let expenses = [
 		title: "Expense3",
 		category: "e51395b9-22f4-4d96-8efb-94d50181acc7", // cate22
 		amount: 100,
-		date: new Date(Date.now() - 24 * 3600),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "187a85fe-4197-40c3-9e9c-9f238816dbc4", // Inna
 		description: "Description3"
 	},
@@ -78,7 +78,7 @@ let expenses = [
 		title: "Expense4",
 		category: "b5f515f8-1a45-418d-95b6-41c5cfe71920", // cate333
 		amount: 100,
-		date: new Date(Date.now() - 2 * 24 * 3600),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "889baa49-4ed7-4366-9f45-7ad339f37422", // Alisa
 		description: "Description4"
 	},
@@ -87,7 +87,7 @@ let expenses = [
 		title: "Expense5",
 		category: "b5f515f8-1a45-418d-95b6-41c5cfe71920", // Cate333
 		amount: 100,
-		date: new Date(Date.now() - 2 * 24 * 3600),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "889baa49-4ed7-4366-9f45-7ad339f37422", // Alisa
 		description: "Description5"
 	},
@@ -96,7 +96,7 @@ let expenses = [
 		title: "Expense6",
 		category: "b5f515f8-1a45-418d-95b6-41c5cfe71920", // Cate 333
 		amount: 100,
-		date: new Date(Date.now() - 2 * 24 * 3600),
+		date: new Date(new Date().setHours(0, 0, 0, 0)),
 		author: "a8b10cfc-c418-4141-b28e-b5f31e18a660", // Denis
 		description: "Description6"
 	}
@@ -241,32 +241,50 @@ const api = {
 		return new Promise((resolve, reject) => setTimeout(() => resolve(options), 1000));
 	},
 
-	addEntity(entityName, entity) {
-		let newEntity = {
-			id: guid()
-		};
-		for (let column in entity) {
-			newEntity[column] = getValueByColumnType(entityName, column, entity[column]);
+	addEntities(entityName, entities) {
+		let addedEntities = [];
+		for (let entity of entities) {
+			let newEntity = {
+				id: guid()
+			};
+			for (let column in entity) {
+				newEntity[column] = getValueByColumnType(entityName, column, entity[column]);
+			}
+			dbData[entityName].push(Object.assign({}, newEntity));
+			addedEntities.push(
+				Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, newEntity), dbData))
+			);
 		}
-		dbData[entityName].push(Object.assign({}, newEntity));
 		return new Promise(
 			(resolve, reject) =>
 				setTimeout(
 					() => resolve(
-						Object.assign({}, createObjectWithDisplayValues(entityName, newEntity, dbData))
+						addedEntities
 					),
 					1000)
 		);
+
 	},
 
-	updateEntity(entityName, updateMap) {
+	/**
+	 * Updates entity by array of columnMap objects
+	 * @param {string} entityName
+	 * @param {Object[]} updateMap
+	 * @param {string} updateMap[].id
+	 * @param {Object[]} updateMap[].values
+	 * @param {string} updateMap[].values[].columnName
+	 * @param {string|number|object|boolean} updateMap[].values[].columnValue
+	 * @returns {Promise}
+	 */
+
+	updateEntityByColumnMap(entityName, updateMap) {
 		let updatedEntities = [];
 		for (let entity of updateMap) {
 			let dbEntity = dbData[entityName].filter(e => e.id === entity.id)[0];
 			if (dbEntity) {
 				for (let value of entity.values) {
 					if (dbEntity.hasOwnProperty(value.columnName)) {
-						dbEntity[value.columnName] = getValueByColumnType(entityName, value.columnName, entity[value.columnValue]);
+						dbEntity[value.columnName] = getValueByColumnType(entityName, value.columnName, value.columnValue);
 					}
 				}
 				updatedEntities.push(

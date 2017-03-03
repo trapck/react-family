@@ -160,11 +160,14 @@ const setReceivedMonthExpenseLimits = (limits) => {
 
 const addNewExpense = (expense, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.addEntity("expense", expense).then(
-			expense => {
+	return mockApi.addEntities("expense", [expense]).then(
+			expenses => {
+				if (!expenses.length) {
+					alert("Expense was not added");
+				}
 			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(registerNewExpenseInState(expense));
-			dispatch(addExpenseToCurrentMonthGeneralInfo(expense));
+			dispatch(registerNewExpenseInState(expenses[0]));
+			dispatch(addExpenseToCurrentMonthGeneralInfo(expenses[0]));
 			dispatch(clearNewExpense());
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -197,14 +200,14 @@ const clearNewExpense = () => {
 };
 export {clearNewExpense};
 
-
-	// TODO: describe updateMap
-
 const updateExpense = (updateMap, isLoadingToken = "") => dispatch =>{
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.updateEntity("expense", updateMap).then(
+	return mockApi.updateEntityByColumnMap("expense", updateMap).then(
 			expenses => {
-			// TODO: check number of updated expenses. notify if some were not updated
+				// TODO: implement nice information window
+				if (updateMap.length !== expenses.length) {
+					alert(`${updateMap.length - expenses.length} of ${updateMap.length} were not updated`);
+				}
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(registerUpdatedExpenseInState(expenses));
 			dispatch(getCurrentMonthGeneralInfo());
@@ -214,20 +217,24 @@ const updateExpense = (updateMap, isLoadingToken = "") => dispatch =>{
 };
 export {updateExpense};
 
-const registerUpdatedExpenseInState = expense => {
+const registerUpdatedExpenseInState = expenses => {
 	return {
 		type: actionTypes.REGISTER_UPDATED_EXPENSE_IN_STATE,
-		expense
+		expenses
 	};
 };
 export {registerUpdatedExpenseInState};
 
 const addNewExpenseCategory = (expenseCategory, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.addEntity("expenseCategory", expenseCategory).then(
-			expenseCategory => {
+	return mockApi.addEntities("expenseCategory", [expenseCategory]).then(
+			expenseCategories => {
+				// TODO: implement nice information window
+				if (!expenseCategories.length) {
+					alert("Expense category was not added");
+				}
 			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(registerNewExpenseCategoryInState(expenseCategory));
+			dispatch(registerNewExpenseCategoryInState(expenseCategories[0]));
 			dispatch(clearNewExpenseCategory());
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)

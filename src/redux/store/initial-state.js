@@ -17,7 +17,7 @@ export default {
 		currentMonthGeneralInfo: [],
 		monthLimits: [],
 		newExpense: {
-			date: new Date()
+			date: new Date(new Date().setHours(0, 0, 0, 0))
 		},
 		newExpenseCategory: {
 			isNotVisibleInList: false

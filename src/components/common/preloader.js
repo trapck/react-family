@@ -1,9 +1,17 @@
 import React, {PropTypes} from "react";
 
-const preloader = () => {
+const Preloader = (props) => {
 	return (
-		<p>loading ...</p>
+		<div>{props.message}</div>
 	);
 };
 
-export default preloader;
+Preloader.propTypes = {
+	message: PropTypes.string
+};
+
+Preloader.defaultProps = {
+	message: "Loading ..."
+};
+
+export default Preloader;

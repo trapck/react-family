@@ -31,27 +31,27 @@ class NewExpense extends React.Component {
 
 	render() {
 		return (
-			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-				<div>
-					<button onClick = {this.saveNewExpense}>Save</button>
-					<button onClick = {this.props.clearNewExpense}>Clear</button>
+				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					<div>
-						{
-							Object.keys(entityStructure.expense.columns)
-								.filter(c => !entityStructure.expense.columns[c].isSystem)
-								.map(
-									c => <InputByColumnType
-										key = {c}
-										entityName = "expense"
-										columnName = {c}
-										value = {this.props.newExpense[c]}
-										onChange = {this.onChange}
-									/>
-								)
-						}
+						<button onClick = {this.saveNewExpense}>Save</button>
+						<button onClick = {this.props.clearNewExpense}>Clear</button>
+						<div>
+							{
+								Object.keys(entityStructure.expense.columns)
+									.filter(c => !entityStructure.expense.columns[c].isSystem)
+									.map(
+										c => <InputByColumnType
+											key = {c}
+											entityName = "expense"
+											columnName = {c}
+											value = {this.props.newExpense[c]}
+											onChange = {this.onChange}
+										/>
+									)
+							}
+						</div>
 					</div>
-				</div>
-			</PreloaderContainer>
+				</PreloaderContainer>
 		);
 	}
 }

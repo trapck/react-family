@@ -1,5 +1,6 @@
 import React, {PropTypes} from "react";
 import InputByColumnType from "./input-by-column-type";
+import {getValueByColumnType} from "../../../other/utils";
 
 class EditableValue extends React.Component {
 	constructor(props) {
@@ -35,9 +36,19 @@ class EditableValue extends React.Component {
 		this.setState(Object.assign({}, this.state, {editValue: value}));
 	}
 
+	notifyParentIfValueChanged() {
+		let oldValue = getValueByColumnType(this.props.entityName, this.props.columnName, this.props.value),
+			newValue = getValueByColumnType(this.props.entityName, this.props.columnName, this.state.editValue);
+		oldValue = oldValue.getTime ? oldValue.getTime() : oldValue;
+		newValue = newValue.getTime ? newValue.getTime() : newValue;
+		if (oldValue !== newValue) {
+			this.props.onBlur(this.props.columnName, this.state.editValue);
+		}
+	}
+
 	onEditBlur(column, value, e) {
 		this.setState(Object.assign({}, this.state, {isEditMode: false}));
-		this.props.onBlur(this.props.columnName, this.state.editValue);
+		this.notifyParentIfValueChanged();
 	}
 
 	getLabelComponent() {
@@ -63,6 +74,7 @@ EditableValue.propTypes = {
 };
 
 EditableValue.defaultProps = {
-	onBlur: Function.prototype
+	onBlur: Function.prototype,
+	children: ""
 };
 export default EditableValue;

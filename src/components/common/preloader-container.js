@@ -1,12 +1,12 @@
 import React, {PropTypes} from "react";
 import Preloader from "./preloader";
 
-const container = props => {
+const PrealoaderContainer = props => {
 	const isLoading = props.isLoading.hasOwnProperty(props.isLoadingToken) && props.isLoading[props.isLoadingToken];
 	return (
 		<div>
 			<div style = {{display: isLoading ? "block" : "none"}}>
-				<Preloader/>
+				<Preloader message = {props.message}/>
 			</div>
 			<div style = {{display: isLoading ? "none" : "block"}}>
 				{props.children}
@@ -15,10 +15,11 @@ const container = props => {
 	);
 };
 
-container.propTypes = {
-	children: PropTypes.object.isRequired,
+PrealoaderContainer.propTypes = {
+	children: PropTypes.object,
 	isLoading: PropTypes.object.isRequired,
-	isLoadingToken: PropTypes.string.isRequired
+	isLoadingToken: PropTypes.string.isRequired,
+	message: PropTypes.string
 };
 
-export default container;
+export default PrealoaderContainer;

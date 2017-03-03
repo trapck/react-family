@@ -5,11 +5,13 @@ import PreloaderContainer from "../common/preloader-container";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
 import {getEntityColumnsCaptions, getDateColumnEqualityComparisonResult} from "../../../other/utils";
+import toastr from "toastr";
 import guid from "uuid/v4";
 
 class ExpensesList extends React.Component {
 	constructor(props) {
 		super(props);
+		this.onExpenseValueUpdated = this.onExpenseValueUpdated.bind(this);
 		this.isLoadingToken = guid();
 	}
 
@@ -35,18 +37,41 @@ class ExpensesList extends React.Component {
 		this.props.removeIsLoading(this.isLoadingToken);
 	}
 
+	onExpenseValueUpdated(id, columnName, columnValue) {
+		this.props.updateExpense([
+			{
+				id,
+				values: [
+					{
+						columnName,
+						columnValue
+					}
+				]
+			}
+		], this.isLoadingToken).then(() => {
+			toastr.success("Expense updated");
+			this.props.removeIsLoading(this.isLoadingToken);
+		});
+	}
+
 	render() {
 		return (
-			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-				<table className = "expenses-table">
-					<tbody>
-					<tr>
-						{getEntityColumnsCaptions("expense", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
-					</tr>
-					{this.props.expenses.map(e => <Expense key={e.id} expense={e}/>)}
-					</tbody>
-				</table>
-			</PreloaderContainer>
+			<div>
+				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
+					<table className = "expenses-table">
+						<tbody>
+						<tr>
+							{getEntityColumnsCaptions("expense", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
+						</tr>
+						{this.props.expenses.map(e => <Expense
+							key={e.id}
+							expense={e}
+							onExpenseValueChange={this.onExpenseValueUpdated}
+						/>)}
+						</tbody>
+					</table>
+				</PreloaderContainer>
+			</div>
 		);
 	}
 }
@@ -54,6 +79,7 @@ class ExpensesList extends React.Component {
 ExpensesList.propTypes = {
 	expenses: PropTypes.array.isRequired,
 	getExpenses: PropTypes.func.isRequired,
+	updateExpense: PropTypes.func.isRequired,
 	count: PropTypes.number,
 	amount: PropTypes.number,
 	category: PropTypes.string.isRequired,
