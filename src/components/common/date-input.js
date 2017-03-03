@@ -6,15 +6,10 @@ class DateInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onChange = this.onChange.bind(this);
-		this.onBlur = this.onBlur.bind(this);
 	}
 
 	onChange(dateString, {dateMoment}) {
 		this.props.onChange(this.props.tag, new Date(dateMoment._d));
-	}
-
-	onBlur() {
-		debugger;
 	}
 
 	render() {

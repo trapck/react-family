@@ -10,8 +10,8 @@ class Expense extends React.Component {
 		this.onBlur = this.onBlur.bind(this);
 	}
 
-	onBlur() {
-
+	onBlur(column, value) {
+		debugger;
 	}
 
 	render() {
@@ -26,6 +26,7 @@ class Expense extends React.Component {
 									<EditableValue
 										entityName="expense"
 										columnName={key}
+										onBlur={this.onBlur}
 										value={getEditValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
 									>
 										{getTextValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}

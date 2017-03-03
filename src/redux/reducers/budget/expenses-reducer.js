@@ -13,6 +13,8 @@ const expenses = (state = [], action = {}) => {
 		}
 		case actionTypes.REGISTER_NEW_EXPENSE_IN_STATE:
 			return [...state, Object.assign({}, action.expense)];
+		case actionTypes.REGISTER_UPDATED_EXPENSE_IN_STATE:
+			return [...state.filter(e => action.expenses.map(e => e.id).indexOf(e.id) === -1), ...action.expenses];
 		default:
 			return state;
 	}

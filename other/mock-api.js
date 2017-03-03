@@ -241,38 +241,42 @@ const api = {
 		return new Promise((resolve, reject) => setTimeout(() => resolve(options), 1000));
 	},
 
-	addExpense(expense) {
-		let newExpense = {
+	addEntity(entityName, entity) {
+		let newEntity = {
 			id: guid()
 		};
-		for (let column in expense) {
-			newExpense[column] = getValueByColumnType("expense", column, expense[column]);
+		for (let column in entity) {
+			newEntity[column] = getValueByColumnType(entityName, column, entity[column]);
 		}
-		dbData.expense.push(Object.assign({}, newExpense));
+		dbData[entityName].push(Object.assign({}, newEntity));
 		return new Promise(
 			(resolve, reject) =>
 				setTimeout(
 					() => resolve(
-						Object.assign({}, createObjectWithDisplayValues("expense", newExpense, dbData))
+						Object.assign({}, createObjectWithDisplayValues(entityName, newEntity, dbData))
 					),
 					1000)
 		);
 	},
-	addExpenseCategory(expenseCategory) {
-		let newExpenseCategory = {
-			id: guid()
-		};
-		for (let column in expenseCategory) {
-			newExpenseCategory[column] = getValueByColumnType("expenseCategory", column, expenseCategory[column]);
+
+	updateEntity(entityName, updateMap) {
+		let updatedEntities = [];
+		for (let entity of updateMap) {
+			let dbEntity = dbData[entityName].filter(e => e.id === entity.id)[0];
+			if (dbEntity) {
+				for (let value of entity.values) {
+					if (dbEntity.hasOwnProperty(value.columnName)) {
+						dbEntity[value.columnName] = getValueByColumnType(entityName, value.columnName, entity[value.columnValue]);
+					}
+				}
+				updatedEntities.push(
+					Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, dbEntity), dbData))
+				);
+			}
 		}
-		dbData.expenseCategory.push(Object.assign({}, newExpenseCategory));
 		return new Promise(
 			(resolve, reject) =>
-				setTimeout(
-					() => resolve(
-						Object.assign({}, createObjectWithDisplayValues("expenseCategory", newExpenseCategory, dbData))
-					),
-					1000)
+				setTimeout(() => resolve(updatedEntities), 1000)
 		);
 	}
 };

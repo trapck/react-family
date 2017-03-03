@@ -19,13 +19,12 @@ class EditableValue extends React.Component {
 
 	getEditComponent() {
 		return (
-			<div>
+			<div onBlur = {this.onEditBlur}>
 				<InputByColumnType
 					entityName = {this.props.entityName}
 					columnName = {this.props.columnName}
 					value = {this.state.editValue}
 					onChange = {this.onEditChange}
-					onBlur = {this.onEditBlur}
 					isLabelHidden
 				/>
 			</div>
@@ -38,6 +37,7 @@ class EditableValue extends React.Component {
 
 	onEditBlur(column, value, e) {
 		this.setState(Object.assign({}, this.state, {isEditMode: false}));
+		this.props.onBlur(this.props.columnName, this.state.editValue);
 	}
 
 	getLabelComponent() {

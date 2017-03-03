@@ -29,8 +29,8 @@ export {removeIsLoading};
 const getUsers = () => {
 	return dispatch => {
 		return mockApi.getUsers().then(
-			users => dispatch(setReceivedUsers(users),
-				ex => rejectCallback(ex)
+				users => dispatch(setReceivedUsers(users),
+					ex => rejectCallback(ex)
 			)
 		);
 	};
@@ -58,11 +58,11 @@ export {setCurrentUser};
 const getExpenseCategories = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getExpenseCategories(filters).then(
-		categories => {
+			categories => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedExpenseCategories(categories, filters));
 		},
-		ex => rejectCallback(ex, isLoadingToken, dispatch)
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenseCategories};
@@ -85,11 +85,11 @@ export {getExpenseComments};
 const getExpenses = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getExpenses(filters).then(
-		expenses => {
+			expenses => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedExpenses(expenses, filters));
 		},
-		ex => rejectCallback(ex, isLoadingToken, dispatch)
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenses};
@@ -105,11 +105,11 @@ const setReceivedExpenses = (expenses = [], filters = []) => {
 const getCurrentMonthGeneralInfo = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getCurrentMonthGeneralInfo(filters).then(
-		info => {
+			info => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedCurrentMonthGeneralInfo(info, filters));
 		},
-		ex => rejectCallback(ex, isLoadingToken, dispatch)
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getCurrentMonthGeneralInfo};
@@ -142,11 +142,11 @@ export {setGeneralInfoGroupCollapsed};
 const getMonthExpenseLimits = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getMonthExpenseLimits(filters).then(
-		limits => {
+			limits => {
 			dispatch(setReceivedMonthExpenseLimits(limits));
 			dispatch(setIsLoading(isLoadingToken, false));
 		},
-		ex => rejectCallback(ex, isLoadingToken, dispatch)
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getMonthExpenseLimits};
@@ -160,14 +160,14 @@ const setReceivedMonthExpenseLimits = (limits) => {
 
 const addNewExpense = (expense, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.addExpense(expense).then(
-		expense => {
+	return mockApi.addEntity("expense", expense).then(
+			expense => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(registerNewExpenseInState(expense));
 			dispatch(addExpenseToCurrentMonthGeneralInfo(expense));
 			dispatch(clearNewExpense());
 		},
-		ex => rejectCallback(ex, isLoadingToken, dispatch)
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {addNewExpense};
@@ -197,9 +197,34 @@ const clearNewExpense = () => {
 };
 export {clearNewExpense};
 
+
+	// TODO: describe updateMap
+
+const updateExpense = (updateMap, isLoadingToken = "") => dispatch =>{
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.updateEntity("expense", updateMap).then(
+			expenses => {
+			// TODO: check number of updated expenses. notify if some were not updated
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(registerUpdatedExpenseInState(expenses));
+			dispatch(getCurrentMonthGeneralInfo());
+		},
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {updateExpense};
+
+const registerUpdatedExpenseInState = expense => {
+	return {
+		type: actionTypes.REGISTER_UPDATED_EXPENSE_IN_STATE,
+		expense
+	};
+};
+export {registerUpdatedExpenseInState};
+
 const addNewExpenseCategory = (expenseCategory, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.addExpenseCategory(expenseCategory).then(
+	return mockApi.addEntity("expenseCategory", expenseCategory).then(
 			expenseCategory => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(registerNewExpenseCategoryInState(expenseCategory));
