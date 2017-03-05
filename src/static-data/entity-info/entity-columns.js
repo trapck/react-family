@@ -210,15 +210,18 @@ export default {
 			caption: "Month",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
 			type: ColumnTypes.NUMBER,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isEditDisabled: true,
+			displayValueTransformFn: v => v + 1 > 9 ? String(v + 1) : "0" +(v + 1)
 		},
 		{
-			id: "a8280def-53f0-44fd-9e4c-6f65a2b16074",
+			id: "b3387d6b-69fd-4420-94da-43eb6feb7f5d",
 			title: "year",
 			caption: "Year",
 			entity: "32d342b7-c909-4bf5-b82b-c6cf9f80f013",
 			type: ColumnTypes.NUMBER,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isEditDisabled: true
 		},
 
 		// expenseComment

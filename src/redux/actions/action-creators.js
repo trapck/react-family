@@ -158,6 +158,30 @@ const setReceivedMonthExpenseLimits = (limits) => {
 	};
 };
 
+const updateMonthExpenseLimit = (updateMap, isLoadingToken = "") => dispatch =>{
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.updateEntityByColumnMap("monthExpenseLimit", updateMap).then(
+		limits => {
+			// TODO: implement nice information window
+			if (updateMap.length !== limits.length) {
+				alert(`${updateMap.length - limits.length} of ${updateMap.length} were not updated`);
+			}
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(registerUpdatedMonthExpenseLimitsInState(limits));
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {updateMonthExpenseLimit};
+
+const registerUpdatedMonthExpenseLimitsInState = limits => {
+	return {
+		type: actionTypes.REGISTER_UPDATED__MONTH_EXPENSE_LIMIT_IN_STATE,
+		limits
+	};
+};
+export {registerUpdatedMonthExpenseLimitsInState};
+
 const addNewExpense = (expense, isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.addEntities("expense", [expense]).then(

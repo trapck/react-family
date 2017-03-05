@@ -61,7 +61,7 @@ class InputByColumnType extends React.Component {
 		);
 	}
 
-	getBooleanDownInput(column) {
+	getBooleanInput(column) {
 		return <BooleanInput/>;
 	}
 
@@ -76,7 +76,7 @@ class InputByColumnType extends React.Component {
 			case entityColumnTypes.LOOKUP:
 				return this.getDropDownInput(column);
 			case entityColumnTypes.BOOLEAN:
-				return this.getBooleanDownInput(column);
+				return this.getBooleanInput(column);
 			default:
 				return this.getTextInput(column);
 		}

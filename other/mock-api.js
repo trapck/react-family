@@ -104,18 +104,21 @@ let expenses = [
 
 let monthExpenseLimits = [
 	{
+		id: "78217de4-0960-467b-b7f8-3f7b0db76df3",
 		income: 200,
 		limit: 150,
 		month:currentMonth - 2,
 		year: currentYear
 	},
 	{
+		id: "d0b2cd82-786c-40a5-87c0-bd16af13e6f6",
 		income: 2000,
 		limit: 1500,
 		month:currentMonth - 1,
 		year: currentYear
 	},
 	{
+		id: "3ddd0612-8a11-4fd4-96f8-91ede2789f94",
 		income: 20000,
 		limit: 15000,
 		month:currentMonth,
@@ -132,6 +135,7 @@ let dbData = {
 
 const addLimitToDb = (month, year) => {
 	let limit = {
+		id: guid(),
 		month,
 		year,
 		income: 0,

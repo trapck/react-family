@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import InputByColumnType from "./input-by-column-type";
 import {getValueByColumnType} from "../../../other/utils";
+import entityStructure from "../../static-data/entity-info/entity-sctructure";
 
 class EditableValue extends React.Component {
 	constructor(props) {
@@ -15,7 +16,9 @@ class EditableValue extends React.Component {
 	}
 
 	onLabelClick() {
-		this.setState(Object.assign({}, this.state, {isEditMode: true}));
+		if (!entityStructure[this.props.entityName].columns[this.props.columnName].isEditDisabled) {
+			this.setState(Object.assign({}, this.state, {isEditMode: true}));
+		}
 	}
 
 	getEditComponent() {

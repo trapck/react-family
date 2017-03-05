@@ -37,14 +37,17 @@
 	background-color: #bbbbbb;
 }
 
-.expenses-categories-table {
+.expenses-categories-table,
+.month-expense-limits-table{
 	margin-left: 20px;
 }
 
 .expenses-table th,
 .expenses-table td,
 .expenses-categories-table th,
-.expenses-categories-table td {
+.expenses-categories-table td,
+.month-expense-limits-table td,
+.month-expense-limits-table th{
 	padding: 5px 10px;
 }
 
@@ -53,7 +56,7 @@
 }
 
 .month-expense-summary-danger {
-	color: #761c19;
+	color: #cc0000;
 }
 
 .month-expense-summary-warning {

@@ -100,6 +100,9 @@ const getValueByColumnType = (entityName, columnName, value) => {
 export {getValueByColumnType};
 
 const getTextValueByColumnType = (entityName, columnName, value, entity) => {
+	if (entityStructure[entityName].columns[columnName].displayValueTransformFn) {
+		return entityStructure[entityName].columns[columnName].displayValueTransformFn(value);
+	}
 	switch(entityStructure[entityName].columns[columnName].type) {
 		case entityColumnTypes.NUMBER: return String(value);
 		case entityColumnTypes.DATE: return getFormatedDate(value);

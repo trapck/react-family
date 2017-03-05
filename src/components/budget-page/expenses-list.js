@@ -15,7 +15,7 @@ class ExpensesList extends React.Component {
 		this.isLoadingToken = guid();
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		let categoryFilter = {
 				column: "category",
 				value: this.props.category
@@ -66,7 +66,7 @@ class ExpensesList extends React.Component {
 						{this.props.expenses.map(e => <Expense
 							key={e.id}
 							expense={e}
-							onExpenseValueChange={this.onExpenseValueUpdated}
+							onValueChange={this.onExpenseValueUpdated}
 						/>)}
 						</tbody>
 					</table>

@@ -11,8 +11,7 @@ class Expense extends React.Component {
 	}
 
 	onBlur(column, value) {
-		// TODO: implement isLoading
-		this.props.onExpenseValueChange(this.props.expense.id, column, value);
+		this.props.onValueChange(this.props.expense.id, column, value);
 	}
 
 	render() {
@@ -43,11 +42,11 @@ class Expense extends React.Component {
 
 Expense.propTypes = {
 	expense: PropTypes.object.isRequired,
-	onExpenseValueChange: PropTypes.func
+	onValueChange: PropTypes.func
 };
 
 Expense.defaultProps = {
-	onExpenseValueChange: Function.prototype
+	onValueChange: Function.prototype
 };
 
 export default Expense;

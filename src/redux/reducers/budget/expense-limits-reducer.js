@@ -12,6 +12,8 @@ const expenseLimitsReducer = (state = initialState.monthLimits, action = {}) => 
 			}
 			return newLimits;
 		}
+		case actionTypes.REGISTER_UPDATED__MONTH_EXPENSE_LIMIT_IN_STATE:
+			return [...state.filter(e => action.limits.map(e => e.id).indexOf(e.id) === -1), ...action.limits];
 		default:
 			return state;
 	}
