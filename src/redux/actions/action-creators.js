@@ -291,6 +291,29 @@ const clearNewExpenseCategory = () => {
 };
 export {clearNewExpenseCategory};
 
+const updateExpenseCategory = (updateMap, isLoadingToken = "") => dispatch =>{
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.updateEntityByColumnMap("expenseCategory", updateMap).then(
+			expenseCategories => {
+			// TODO: implement nice information window
+			if (updateMap.length !== expenseCategories.length) {
+				alert(`${updateMap.length - expenseCategories.length} of ${updateMap.length} were not updated`);
+			}
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(registerUpdatedExpenseCategoryInState(expenseCategories));
+		},
+			ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {updateExpenseCategory};
+
+const registerUpdatedExpenseCategoryInState = expenseCategories => {
+	return {
+		type: actionTypes.REGISTER_UPDATED_EXPENSE_CATEGORY_IN_STATE,
+		expenseCategories
+	};
+};
+export {registerUpdatedExpenseCategoryInState};
 
 const toggleNewExpenseVisible = () => {
 	return {

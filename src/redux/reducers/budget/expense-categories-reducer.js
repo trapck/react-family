@@ -14,6 +14,11 @@ const expenseCategoriesReducer = (state = initialState.expenseCategories, action
 		}
 		case actionTypes.REGISTER_NEW_EXPENSE_CATEGORY_IN_STATE:
 			return [...state, Object.assign({}, action.expenseCategory)];
+		case actionTypes.REGISTER_UPDATED_EXPENSE_CATEGORY_IN_STATE:
+			return [
+				...state.filter(e => action.expenseCategories.map(e => e.id).indexOf(e.id) === -1),
+				...action.expenseCategories
+			];
 		default:
 			return state;
 	}
