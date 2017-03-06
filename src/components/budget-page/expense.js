@@ -17,6 +17,7 @@ class Expense extends React.Component {
 	render() {
 		return (
 			<tr>
+				{this.props.additionalLeftCells.map((c, i) => <td key = {i}>{c}</td>)}
 				{
 					Object.keys(entityStructure.expense.columns)
 						.filter(key => !entityStructure.expense.columns[key].isSystem)
@@ -35,6 +36,7 @@ class Expense extends React.Component {
 							);
 						})
 				}
+				{this.props.additionalRightCells.map((c, i) => <td key = {i}>{c}</td>)}
 			</tr>
 		);
 	}
@@ -42,11 +44,15 @@ class Expense extends React.Component {
 
 Expense.propTypes = {
 	expense: PropTypes.object.isRequired,
-	onValueChange: PropTypes.func
+	onValueChange: PropTypes.func,
+	additionalLeftCells: PropTypes.array,
+	additionalRightCells: PropTypes.array
 };
 
 Expense.defaultProps = {
-	onValueChange: Function.prototype
+	onValueChange: Function.prototype,
+	additionalLeftCells: [],
+	additionalRightCells: []
 };
 
 export default Expense;

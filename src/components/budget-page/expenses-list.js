@@ -2,6 +2,7 @@ import React, {PropTypes} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
+import DeleteIcon from "../common/delete-icon";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
 import {getEntityColumnsCaptions, getDateColumnEqualityComparisonResult} from "../../../other/utils";
@@ -12,6 +13,7 @@ class ExpensesList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onExpenseValueUpdated = this.onExpenseValueUpdated.bind(this);
+		this.onDeleteExpenseClick = this.onDeleteExpenseClick.bind(this);
 		this.isLoadingToken = guid();
 	}
 
@@ -54,6 +56,16 @@ class ExpensesList extends React.Component {
 		});
 	}
 
+	onDeleteExpenseClick(args) {
+		this.props.deleteExpense([{
+			column: "id",
+			value: args.id
+		}], this.isLoadingToken).then(() => {
+			toastr.success("Expense deleted");
+			this.props.removeIsLoading(this.isLoadingToken);
+		});
+	}
+
 	render() {
 		return (
 			<div>
@@ -63,11 +75,19 @@ class ExpensesList extends React.Component {
 						<tr>
 							{getEntityColumnsCaptions("expense", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
 						</tr>
-						{this.props.expenses.map(e => <Expense
-							key={e.id}
-							expense={e}
-							onValueChange={this.onExpenseValueUpdated}
-						/>)}
+						{this.props.expenses.map(e => {
+							const additionalRightCells = [
+								<DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
+							];
+							return (
+								<Expense
+									key={e.id}
+									expense={e}
+									onValueChange={this.onExpenseValueUpdated}
+									additionalRightCells={additionalRightCells}
+									/>
+							);
+						})}
 						</tbody>
 					</table>
 				</PreloaderContainer>
@@ -80,6 +100,7 @@ ExpensesList.propTypes = {
 	expenses: PropTypes.array.isRequired,
 	getExpenses: PropTypes.func.isRequired,
 	updateExpense: PropTypes.func.isRequired,
+	deleteExpense: PropTypes.func.isRequired,
 	count: PropTypes.number,
 	amount: PropTypes.number,
 	category: PropTypes.string.isRequired,

@@ -15,6 +15,8 @@ const expenses = (state = [], action = {}) => {
 			return [...state, Object.assign({}, action.expense)];
 		case actionTypes.REGISTER_UPDATED_EXPENSE_IN_STATE:
 			return [...state.filter(e => action.expenses.map(e => e.id).indexOf(e.id) === -1), ...action.expenses];
+		case actionTypes.REMOVE_DELETED_EXPENSES_FROM_STATE:
+			return [...state.filter(e => action.deletedIds.indexOf(e.id) === -1)];
 		default:
 			return state;
 	}

@@ -166,21 +166,14 @@ const api = {
 		return createObjectWithDisplayValues("user", currentUser, dbData);
 	},
 
-	getExpenseCategories(filters) {
-		let expenseCategories = dbData.expenseCategory
-			.filter(createFilterFunction("expenseCategory", filters))
-			.map(ec => createObjectWithDisplayValues("expenseCategory", ec, dbData));
-		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenseCategories]), 1000));
+	getEntities(entityName, filters = []) {
+		let entities = dbData[entityName]
+			.filter(createFilterFunction(entityName, filters))
+			.map(e => createObjectWithDisplayValues(entityName, e, dbData));
+		return new Promise((resolve, reject) => setTimeout(() => resolve([...entities]), 1000));
 	},
 
-	getExpenses(filters) {
-		let expenses = dbData.expense
-			.filter(createFilterFunction("expense", filters))
-			.map(e => createObjectWithDisplayValues("expense", e, dbData));
-		return new Promise((resolve, reject) => setTimeout(() => resolve([...expenses]), 1000));
-	},
-
-	getMonthGeneralInfo(filters) {
+	getMonthGeneralInfo(filters = []) {
 		const expenses = dbData.expense.filter(createFilterFunction("expense", filters));
 		let checkedCategories = [],
 			result = [];
@@ -214,7 +207,7 @@ const api = {
 		return this.getMonthGeneralInfo(newFilters);
 	},
 
-	getMonthExpenseLimits(filters) {
+	getMonthExpenseLimits(filters = []) {
 		let limits = dbData.monthExpenseLimit.filter(createFilterFunction("monthExpenseLimit", filters));
 		if (!limits.length) {
 			if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
@@ -283,7 +276,7 @@ const api = {
 	 * @returns {Promise}
 	 */
 
-	updateEntityByColumnMap(entityName, updateMap) {
+	updateEntitiesByColumnMap(entityName, updateMap) {
 		let updatedEntities = [];
 		for (let entity of updateMap) {
 			let dbEntity = dbData[entityName].filter(e => e.id === entity.id)[0];
@@ -302,6 +295,13 @@ const api = {
 			(resolve, reject) =>
 				setTimeout(() => resolve(updatedEntities), 1000)
 		);
+	},
+
+	deleteEntities(entityName, filters = []) {
+		const entities = dbData[entityName].filter(createFilterFunction("expense", filters)),
+			newEntities = dbData[entityName].filter(e => entities.indexOf(e) === -1);
+		dbData[entityName] = newEntities;
+		return new Promise((resolve, reject) => setTimeout(() => resolve(entities.map(e => e.id)), 1000));
 	}
 };
 
