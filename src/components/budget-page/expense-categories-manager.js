@@ -10,23 +10,12 @@ import guid from "uuid/v4";
 class ExpenseCategoriesManager extends React.Component {
 	constructor(props) {
 		super(props);
-		this.isLoadingToken = guid();
-	}
-
-	componentWillMount() {
-		this.props.getExpenseCategories(undefined, this.isLoadingToken);
-	}
-
-	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
 	}
 
 	render() {
 		return (
 			<div>
-				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-					<ExpenseCategoriesList expenseCategories = {this.props.expenseCategories}/>
-				</PreloaderContainer>
+				<ExpenseCategoriesList/>
 				<div>
 					<button onClick = {this.props.toggleNewExpenseCategoryVisible}>
 						{this.props.isNewExpenseCategoryVisible ? "-" : "+"}
@@ -38,18 +27,12 @@ class ExpenseCategoriesManager extends React.Component {
 	}
 }
 ExpenseCategoriesManager.propTypes = {
-	expenseCategories: PropTypes.array.isRequired,
-	getExpenseCategories: PropTypes.func.isRequired,
-	removeIsLoading: PropTypes.func.isRequired,
-	isLoading: PropTypes.object.isRequired,
 	isNewExpenseCategoryVisible: PropTypes.bool,
 	toggleNewExpenseCategoryVisible: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
 	return {
-		isLoading: state.isLoading,
-		expenseCategories: state.budget.expenseCategories,
 		isNewExpenseCategoryVisible: state.budget.ui.isNewExpenseCategoryVisible
 	};
 };

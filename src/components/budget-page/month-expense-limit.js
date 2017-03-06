@@ -4,6 +4,8 @@ import EditableValue from "../common/editable-value";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
 import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
 
+
+//TODO: think about generalizing list item components
 class MonthExpenseLimit extends React.Component {
 	constructor(props) {
 		super(props);

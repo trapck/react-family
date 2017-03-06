@@ -32,7 +32,8 @@ let currentUser = {
 let expenseCategories = [
 	{
 		id: "27c78078-9f41-45d9-90dd-ad8d7a437fa2",
-		title: "Category1"
+		title: "Category1",
+		isNotVisibleInList: false
 	},
 	{
 		id: "e51395b9-22f4-4d96-8efb-94d50181acc7",
@@ -41,7 +42,8 @@ let expenseCategories = [
 	},
 	{
 		id: "b5f515f8-1a45-418d-95b6-41c5cfe71920",
-		title: "Category333"
+		title: "Category333",
+		isNotVisibleInList: false
 	}
 ];
 
