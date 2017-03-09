@@ -2,6 +2,8 @@ import entityColumns from "../src/static-data/entity-info/entity-columns";
 import entityColumnTypes from "../src/static-data/entity-info/entity-column-types";
 import entities from "../src/static-data/entity-info/entities";
 import entityStructure from "../src/static-data/entity-info/entity-sctructure";
+import entityRelations from "../src/static-data/entity-info/entity-relations";
+import entityColumns from "../src/static-data/entity-info/entity-columns";
 import comparisonTypes from "../src/static-data/comparison-types";
 
 const getFormatedDate = (date) => {
@@ -120,3 +122,52 @@ const getEditValueByColumnType = (entityName, columnName, value, entity) => {
 	}
 };
 export {getEditValueByColumnType};
+
+const findRelatedEntities = (entityName, id, db) => {
+	const relatedColumns = entityColumns.data
+			.filter(
+				e => entityRelations.data
+				.filter(e => e.linkTo === entityStructure[entityName].id)
+				.map(e => e.column).indexOf(e) !== -1
+		).map(c => {
+				return {
+					title: c.title,
+					entity: c.entity
+				};
+			}),
+		relatedEntities = {};
+	for (let column of relatedColumns) {
+		if (!relatedEntities.hasOwnProperty(column.entity)) {
+			const entityName = enties.data.filter(e => e.id === column.entity)[0];
+			if (!entityName) continue;
+			relatedEntities[column.entity] = {
+				entityName: entityName,
+				columns: []
+			};
+		}
+		relatedEntities[column.entity].columns.push(column.title);
+	}
+	let relatedEntitiesInDb = [],
+		isFound = false;
+	for (let entity in relatedEntities) {
+		if (db.hasOwnProperty(relatedEntities[entity].entityName)) {
+			for (let row of db[relatedEntities[entity].entityName]) {
+				for (let column of relatedEntities[entity].columns) {
+					if (row[column] === id) {
+						relatedEntitiesInDb.push(relatedEntities[entity].entityName);
+						isFound = true;
+						break;
+					}
+				}
+				if (isFound) {
+					isFound = false;
+					break;
+				}
+			}
+		}
+	}
+	return [...relatedEntitiesInDb];
+};
+export {findRelatedEntities};
+
+
