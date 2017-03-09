@@ -1,4 +1,3 @@
-import entityColumns from "../src/static-data/entity-info/entity-columns";
 import entityColumnTypes from "../src/static-data/entity-info/entity-column-types";
 import entities from "../src/static-data/entity-info/entities";
 import entityStructure from "../src/static-data/entity-info/entity-sctructure";
@@ -16,8 +15,8 @@ export {getFormatedDate};
 
 const getEntityColumns = (entityName, ignoreColumns = []) => {
 	return Object.keys(entityStructure[entityName].columns).
-		filter(k => ignoreColumns.indexOf(k) === -1).
-		map(k => entityStructure[entityName].columns[k]);
+	filter(k => ignoreColumns.indexOf(k) === -1).
+	map(k => entityStructure[entityName].columns[k]);
 };
 export {getEntityColumns};
 
@@ -124,21 +123,22 @@ const getEditValueByColumnType = (entityName, columnName, value, entity) => {
 export {getEditValueByColumnType};
 
 const findRelatedEntities = (entityName, id, db) => {
+	// TODO: cascade delete
+	const entityRelationsColumns = entityRelations.data
+		.filter(e => e.linkTo === entityStructure[entityName].id)
+		.map(e => e.column);
 	const relatedColumns = entityColumns.data
-			.filter(
-				e => entityRelations.data
-				.filter(e => e.linkTo === entityStructure[entityName].id)
-				.map(e => e.column).indexOf(e) !== -1
-		).map(c => {
-				return {
-					title: c.title,
-					entity: c.entity
-				};
-			}),
+		.filter(e => entityRelationsColumns.indexOf(e.id) !== -1)
+		.map(c => {
+			return {
+				title: c.title,
+				entity: c.entity
+			};
+		}),
 		relatedEntities = {};
 	for (let column of relatedColumns) {
 		if (!relatedEntities.hasOwnProperty(column.entity)) {
-			const entityName = enties.data.filter(e => e.id === column.entity)[0];
+			const entityName = entities.data.filter(e => e.id === column.entity).map(e => e.title)[0];
 			if (!entityName) continue;
 			relatedEntities[column.entity] = {
 				entityName: entityName,
@@ -169,5 +169,11 @@ const findRelatedEntities = (entityName, id, db) => {
 	return [...relatedEntitiesInDb];
 };
 export {findRelatedEntities};
+
+const getCantDeleteByIntegrityConstraintMessage = deleteResult => {
+	return `Can't delete ${deleteResult.notDeleted.length} record(s).` +
+		`Found related records in ${deleteResult.relatedEntities.join(",")}`;
+};
+export {getCantDeleteByIntegrityConstraintMessage};
 
 

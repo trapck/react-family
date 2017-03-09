@@ -1,5 +1,6 @@
 import actionTypes from "./action-types";
 import mockApi from "../../../other/mock-api";
+import {getCantDeleteByIntegrityConstraintMessage} from "../../../other/utils";
 
 const rejectCallback = (ex, isLoadingToken, dispatch) => {
 	dispatch(setIsLoading(isLoadingToken, false));
@@ -257,11 +258,18 @@ const deleteExpense = (filters, isLoadingToken = "") => dispatch =>{
 	}
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.deleteEntities("expense", filters).then(
-			deletedIds => {
+		result => {
 			// TODO: implement info about number of deleted items, duplicate info for insert/update
 			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(removeDeletedExpensesFromState(deletedIds));
-			dispatch(getCurrentMonthGeneralInfo());
+			if (result.notDeleted.length) {
+				alert(getCantDeleteByIntegrityConstraintMessage(result));
+			}
+			if (result.deleted.length) {
+				dispatch(removeDeletedExpensesFromState(result.deleted.map(c => c.id)));
+				dispatch(getCurrentMonthGeneralInfo());
+			} else {
+				return Promise.reject();
+			}
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
@@ -342,6 +350,41 @@ const registerUpdatedExpenseCategoryInState = expenseCategories => {
 	};
 };
 export {registerUpdatedExpenseCategoryInState};
+
+const deleteExpenseCategory = (filters, isLoadingToken = "") => dispatch =>{
+	//TODO: implement nice filters validation
+	if (!filters) {
+		alert("Filters are empty !");
+		return;
+	}
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.deleteEntities("expenseCategory", filters).then(
+		result => {
+			// TODO: implement info about number of deleted items, duplicate info for insert/update
+			dispatch(setIsLoading(isLoadingToken, false));
+			if (result.notDeleted.length) {
+				alert(getCantDeleteByIntegrityConstraintMessage(result));
+			}
+			if (result.deleted.length) {
+				dispatch(removeDeletedExpenseCategoriesFromState(result.deleted.map(c => c.id)));
+				dispatch(getCurrentMonthGeneralInfo());
+			} else {
+				return Promise.reject();
+			}
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {deleteExpenseCategory};
+
+const removeDeletedExpenseCategoriesFromState = (deletedIds = []) => {
+	return {
+		type: actionTypes.REMOVE_DELETED_EXPENSE_CATEGORY_FROM_STATE,
+		deletedIds
+	};
+};
+export {removeDeletedExpenseCategoriesFromState};
+
 
 const toggleNewExpenseVisible = () => {
 	return {

@@ -19,6 +19,8 @@ const expenseCategoriesReducer = (state = initialState.expenseCategories, action
 				...state.filter(e => action.expenseCategories.map(e => e.id).indexOf(e.id) === -1),
 				...action.expenseCategories
 			];
+		case actionTypes.REMOVE_DELETED_EXPENSE_CATEGORY_FROM_STATE:
+			return [...state.filter(e => action.deletedIds.indexOf(e.id) === -1)];
 		default:
 			return state;
 	}

@@ -1,6 +1,12 @@
 "use strict";
-import {createObjectWithDisplayValues, createFilterFunction, getValueByColumnType} from "./utils";
+
 import guid from "uuid/v4";
+import {
+	createObjectWithDisplayValues,
+	createFilterFunction,
+	getValueByColumnType,
+	findRelatedEntities
+} from "./utils";
 
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
@@ -299,9 +305,26 @@ const api = {
 
 	deleteEntities(entityName, filters = []) {
 		const entities = dbData[entityName].filter(createFilterFunction("expense", filters)),
-			newEntities = dbData[entityName].filter(e => entities.indexOf(e) === -1);
-		dbData[entityName] = newEntities;
-		return new Promise((resolve, reject) => setTimeout(() => resolve(entities.map(e => e.id)), 1000));
+			allRelatedEntities = [],
+			notDeleted = [];
+		for (let e of entities) {
+			let relatedEntities = findRelatedEntities(entityName, e.id, dbData);
+			if (relatedEntities.length) {
+				notDeleted.push(e);
+				for (let r of relatedEntities) {
+					if (allRelatedEntities.indexOf(r) === -1) {
+						allRelatedEntities.push(r);
+					}
+				}
+			}
+		}
+		const deleted = entities.filter(e => notDeleted.map(e => e.id).indexOf(e.id) === -1);
+		dbData[entityName] = dbData[entityName].filter(e => deleted.map(e => e.id).indexOf(e.id) === -1);
+		return new Promise((resolve, reject) => setTimeout(() => resolve({
+			deleted: [...deleted],
+			notDeleted: [...notDeleted],
+			relatedEntities: allRelatedEntities
+		}), 1000));
 	}
 };
 

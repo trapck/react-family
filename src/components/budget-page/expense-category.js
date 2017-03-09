@@ -17,8 +17,10 @@ class ExpenseCategory extends React.Component {
 	}
 
 	render() {
+		// TODO: implement general way for entity row and additional cells
 		return (
 			<tr>
+				{this.props.additionalLeftCells.map((c, i) => <td key = {i}>{c}</td>)}
 				{
 					Object.keys(entityStructure.expenseCategory.columns)
 						.filter(key => !entityStructure.expenseCategory.columns[key].isSystem)
@@ -49,6 +51,7 @@ class ExpenseCategory extends React.Component {
 							);
 						})
 				}
+				{this.props.additionalRightCells.map((c, i) => <td key = {i}>{c}</td>)}
 			</tr>
 		);
 	}
@@ -56,11 +59,15 @@ class ExpenseCategory extends React.Component {
 
 ExpenseCategory.propTypes = {
 	expenseCategory: PropTypes.object.isRequired,
-	onValueChange: PropTypes.func
+	onValueChange: PropTypes.func,
+	additionalLeftCells: PropTypes.array,
+	additionalRightCells: PropTypes.array
 };
 
 ExpenseCategory.defaultProps = {
-	onValueChange: Function.prototype
+	onValueChange: Function.prototype,
+	additionalLeftCells: [],
+	additionalRightCells: []
 };
 
 export default ExpenseCategory;
