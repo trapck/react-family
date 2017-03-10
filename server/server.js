@@ -3,6 +3,7 @@ import webpack from "webpack";
 import path from "path";
 import config from "../webpack.config.dev";
 import open from "open";
+import fs from "fs";
 
 /* eslint-disable no-console */
 
@@ -16,6 +17,10 @@ app.use(require("webpack-dev-middleware")(compiler, {
 }));
 
 app.use(require("webpack-hot-middleware")(compiler));
+
+app.get("/getJSON", function(req, res) {
+	res.send(fs.readFileSync(path.join( __dirname, "../package.json")));
+});
 
 app.get("*", function(req, res) {
 	res.sendFile(path.join( __dirname, "../src/index.html"));

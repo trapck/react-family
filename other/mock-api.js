@@ -173,6 +173,20 @@ const api = {
 	},
 
 	getEntities(entityName, filters = []) {
+		let xhr = new XMLHttpRequest();
+		xhr.open('GET', 'http://localhost:3000/getJSON');
+		xhr.send(); // (1)
+		xhr.onreadystatechange = function() { // (3)
+			if (xhr.readyState != 4) return;
+			debugger;
+			if (xhr.status != 200) {
+				alert(xhr.status + ': ' + xhr.statusText);
+			} else {
+				alert(xhr.responseText);
+			}
+
+		};
+
 		let entities = dbData[entityName]
 			.filter(createFilterFunction(entityName, filters))
 			.map(e => createObjectWithDisplayValues(entityName, e, dbData));
