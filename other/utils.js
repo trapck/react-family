@@ -211,7 +211,7 @@ const postDbBranchToServer = (entity, data) => {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {
 				if (xhr.status === 200) {
-					rej(xhr.status + ': ' + xhr.statusText);
+					rej(xhr.status + ": " + xhr.statusText);
 				} else {
 					res(JSON.parse(xhr.responseText));
 				}

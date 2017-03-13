@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(require("webpack-hot-middleware")(compiler));
-
+// TODO: implement make backup
 app.post("/syncDb", function(req, res) {
 	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
 		entityName = req.body.entity,
