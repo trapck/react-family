@@ -176,4 +176,47 @@ const getCantDeleteByIntegrityConstraintMessage = deleteResult => {
 };
 export {getCantDeleteByIntegrityConstraintMessage};
 
+const syncDb = (entityName, data, db) => {
+	db[entityName] = data;
+};
+export {syncDb};
 
+const getDbBranchFromServer = (entityName) => {
+	let xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://localhost:3000/syncDb?entity=" + entityName);
+	xhr.send();
+	return new Promise((res, rej) => {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					rej(xhr.status + ': ' + xhr.statusText);
+				} else {
+					res(JSON.parse(xhr.responseText));
+				}
+			}
+		};
+	});
+};
+export {getDbBranchFromServer};
+
+const postDbBranchToServer = (entity, data) => {
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://localhost:3000");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.send({
+		entity,
+		data
+	});
+	return new Promise((res, rej) => {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					rej(xhr.status + ': ' + xhr.statusText);
+				} else {
+					res(JSON.parse(xhr.responseText));
+				}
+			}
+		};
+	});
+};
+export {postDbBranchToServer};

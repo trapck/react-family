@@ -4,6 +4,8 @@ import path from "path";
 import config from "../webpack.config.dev";
 import open from "open";
 import fs from "fs";
+import bodyParser from "body-parser";
+import {syncDb} from "../other/utils";
 
 /* eslint-disable no-console */
 
@@ -15,11 +17,26 @@ app.use(require("webpack-dev-middleware")(compiler, {
 	noInfo: true,
 	publicPath: config.output.publicPath
 }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
 app.use(require("webpack-hot-middleware")(compiler));
 
-app.get("/getJSON", function(req, res) {
-	res.send(fs.readFileSync(path.join( __dirname, "../package.json")));
+app.post("/syncDb", function(req, res) {
+	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
+		entityName = req.body.entity,
+		data = req.body.data;
+	syncDb(entityName, data, db);
+	fs.writeFileSync(path.join( __dirname, "db.json"), JSON.stringify(db));
+	res.send(JSON.stringify({success: true}));
+});
+
+app.get("/syncDb", function(req, res) {
+	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
+		entityName = req.query.entity;
+	res.send(JSON.stringify({[entityName]: db[entityName]}));
 });
 
 app.get("*", function(req, res) {

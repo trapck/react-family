@@ -5,7 +5,10 @@ import {
 	createObjectWithDisplayValues,
 	createFilterFunction,
 	getValueByColumnType,
-	findRelatedEntities
+	findRelatedEntities,
+	getDbBranchFromServer,
+	postDbBranchToServer,
+	syncDb
 } from "./utils";
 
 const currentMonth = new Date().getMonth();
@@ -144,6 +147,7 @@ let dbData = {
 };
 
 const addLimitToDb = (month, year) => {
+	const entityName = "monthExpenseLimit";
 	let limit = {
 		id: guid(),
 		month,
@@ -161,64 +165,73 @@ const addLimitToDb = (month, year) => {
 			limit.limit = lastMonth.limit;
 		}
 	}
-	monthExpenseLimits.push(limit);
-	return limit;
+	let newLimits = [...dbData.monthExpenseLimit, limit];
+	return new Promise((res, rej) => {
+		postDbBranchToServer(entityName, newLimits).then(
+			response => {
+				if (response.success) {
+					dbData.monthExpenseLimit = newLimits
+				}
+				res(limit);
+			}
+		);
+	});
 };
 
 const api = {
-	getUsers() {
-		// TODO: SyncDb - move to getEntities
-		let users = dbData.user.map(u => createObjectWithDisplayValues("user", u, dbData));
-		return new Promise((resolve, reject) => setTimeout(() =>resolve([...users]), 1000));
-	},
 	getCurrentUser() {
-		// TODO: SyncDb - get users first
-		return createObjectWithDisplayValues("user", currentUser, dbData);
+		return new Promise((res, rej) => {
+			getDbBranchFromServer("user").then(
+				({user}) => {
+					syncDb("user", user, dbData);
+					res(createObjectWithDisplayValues("user", currentUser, dbData));
+				}
+			);
+		});
 	},
 
 	getEntities(entityName, filters = []) {
-		// TODO: SyncDb - get certain entities from db and merge them to local db
-		let xhr = new XMLHttpRequest();
-		xhr.open('GET', 'http://localhost:3000/getJSON');
-		xhr.send(); // (1)
-		xhr.onreadystatechange = function() { // (3)
-			if (xhr.readyState != 4) return;
-			debugger;
-			if (xhr.status != 200) {
-				alert(xhr.status + ': ' + xhr.statusText);
-			} else {
-				alert(xhr.responseText);
-			}
-
-		};
-
-		let entities = dbData[entityName]
-			.filter(createFilterFunction(entityName, filters))
-			.map(e => createObjectWithDisplayValues(entityName, e, dbData));
-		return new Promise((resolve, reject) => setTimeout(() => resolve([...entities]), 1000));
+		return new Promise((res, rej) => {
+			getDbBranchFromServer(entityName).then(
+				response => {
+					syncDb(entityName, response[entityName], dbData);
+					let entities = dbData[entityName]
+						.filter(createFilterFunction(entityName, filters))
+						.map(e => createObjectWithDisplayValues(entityName, e, dbData));
+					res([...entities]);
+				}
+			);
+		});
 	},
 
 	getMonthGeneralInfo(filters = []) {
-		// TODO: SyncDb get expenses first
-		const expenses = dbData.expense.filter(createFilterFunction("expense", filters));
-		let checkedCategories = [],
-			result = [];
-		expenses.forEach(
-			(expense) => {
-				if (checkedCategories.indexOf(expense.category) === -1) {
-					checkedCategories.push(expense.category);
-					result.push({
-						category: expense.category,
-						count: expenses.filter(item => item.category === expense.category).length,
-						amount: expenses
-							.filter(item => item.category === expense.category)
-							.reduce((total, item) => total + item.amount, 0)
-					});
+		const entityName = "expense";
+		return new Promise((res, rej) => {
+			getDbBranchFromServer(entityName).then(
+				response => {
+					syncDb(entityName, response[entityName], dbData);
+					const expenses = dbData.expense.filter(createFilterFunction("expense", filters));
+					let checkedCategories = [],
+						result = [];
+					expenses.forEach(
+						(expense) => {
+							if (checkedCategories.indexOf(expense.category) === -1) {
+								checkedCategories.push(expense.category);
+								result.push({
+									category: expense.category,
+									count: expenses.filter(item => item.category === expense.category).length,
+									amount: expenses
+										.filter(item => item.category === expense.category)
+										.reduce((total, item) => total + item.amount, 0)
+								});
+							}
+						}
+					);
+					result = result.map(e => createObjectWithDisplayValues("expense", e, dbData));
+					res([...result]);
 				}
-			}
-		);
-		result = result.map(e => createObjectWithDisplayValues("expense", e, dbData));
-		return new Promise((resolve, reject) => setTimeout(() => resolve([...result]), 1000));
+			);
+		});
 	},
 
 	getCurrentMonthGeneralInfo(filters = []) {
@@ -234,42 +247,60 @@ const api = {
 	},
 
 	getMonthExpenseLimits(filters = []) {
-		// TODO: SyncDb - move to getEntities
-		let limits = dbData.monthExpenseLimit.filter(createFilterFunction("monthExpenseLimit", filters));
-		if (!limits.length) {
-			if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
-				let month = filters.filter(f => f.column === "month")[0].value,
-					year = filters.filter(f => f.column === "year")[0].value;
-				if (!Number.isNaN(month - year)) {
-					limits = [addLimitToDb(month, year)];
+		const entityName = "monthExpenseLimit";
+		return new Promise((res, rej) => {
+			getDbBranchFromServer(entityName).then(
+				response => {
+					syncDb(entityName, response[entityName], dbData);
+					let limits = dbData.monthExpenseLimit.filter(createFilterFunction("monthExpenseLimit", filters));
+					if (!limits.length) {
+						if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
+							let month = filters.filter(f => f.column === "month")[0].value,
+								year = filters.filter(f => f.column === "year")[0].value;
+							if (!Number.isNaN(month - year)) {
+								addLimitToDb(month, year).then(
+									limit => res([limit])
+								);
+							} else {
+								rej("error format");
+							}
+						} else {
+							rej("error format");
+						}
+					} else {
+						res(limits);
+					}
 				}
-			}
-		}
-		return new Promise((resolve, reject) => setTimeout(() => resolve(limits), 1000));
+			);
+		});
 	},
 
 	getDropDownList(column, filters, includeColumns) {
-		// TODO: SyncDb - get entities first
-		let options = dbData[column.linkTo.entityName]
-			.filter(createFilterFunction(column.linkTo.entityName, filters))
-			.filter(e => !e.isNotVisibleInList)
-			.map(e => {
-				let item = {
-					value: e.id,
-					label: e[column.linkTo.columnName].toString()
-				};
-				if (includeColumns) {
-					for (let c of includeColumns) {
-						item[c] = e[c];
-					}
-				}
-				return item;
-			});
-		return new Promise((resolve, reject) => setTimeout(() => resolve(options), 1000));
+		return getEntities(column.linkTo.entityName, filters).then(
+			() => {
+				let options = dbData[column.linkTo.entityName]
+					.filter(createFilterFunction(column.linkTo.entityName, filters))
+					.filter(e => !e.isNotVisibleInList)
+					.map(e => {
+						let item = {
+							value: e.id,
+							label: e[column.linkTo.columnName].toString()
+						};
+						if (includeColumns) {
+							for (let c of includeColumns) {
+								item[c] = e[c];
+							}
+						}
+						return item;
+					});
+				Promise.resolve(options);
+			}
+		);
 	},
 
 	addEntities(entityName, entities) {
-		let addedEntities = [];
+		let addedEntities = [],
+			oldData = [...dbData[entityName]];
 		for (let entity of entities) {
 			let newEntity = {
 				id: guid()
@@ -282,16 +313,17 @@ const api = {
 				Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, newEntity), dbData))
 			);
 		}
-		// TODO: SyncDb write data to server
-		return new Promise(
-			(resolve, reject) =>
-				setTimeout(
-					() => resolve(
-						addedEntities
-					),
-					1000)
-		);
-
+		return new Promise((res, rej) => {
+			postDbBranchToServer(entityName, dbData[entityName]).then(
+				response => {
+					if (!response.success) {
+						dbData[entityName] = oldData;
+						addedEntities = [];
+					}
+					res(addedEntities);
+				}
+			);
+		});
 	},
 
 	/**

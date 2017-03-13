@@ -29,7 +29,7 @@ export {removeIsLoading};
 
 const getUsers = () => {
 	return dispatch => {
-		return mockApi.getUsers().then(
+		return mockApi.getEntities("user").then(
 				users => dispatch(setReceivedUsers(users),
 					ex => rejectCallback(ex)
 			)
