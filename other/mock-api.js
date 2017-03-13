@@ -134,6 +134,8 @@ let monthExpenseLimits = [
 	}
 ];
 
+// TODO: SyncDB - leave only data that is not used (Users)
+
 let dbData = {
 	user: users,
 	expenseCategory: expenseCategories,
@@ -165,14 +167,17 @@ const addLimitToDb = (month, year) => {
 
 const api = {
 	getUsers() {
+		// TODO: SyncDb - move to getEntities
 		let users = dbData.user.map(u => createObjectWithDisplayValues("user", u, dbData));
 		return new Promise((resolve, reject) => setTimeout(() =>resolve([...users]), 1000));
 	},
 	getCurrentUser() {
+		// TODO: SyncDb - get users first
 		return createObjectWithDisplayValues("user", currentUser, dbData);
 	},
 
 	getEntities(entityName, filters = []) {
+		// TODO: SyncDb - get certain entities from db and merge them to local db
 		let xhr = new XMLHttpRequest();
 		xhr.open('GET', 'http://localhost:3000/getJSON');
 		xhr.send(); // (1)
@@ -194,6 +199,7 @@ const api = {
 	},
 
 	getMonthGeneralInfo(filters = []) {
+		// TODO: SyncDb get expenses first
 		const expenses = dbData.expense.filter(createFilterFunction("expense", filters));
 		let checkedCategories = [],
 			result = [];
@@ -228,6 +234,7 @@ const api = {
 	},
 
 	getMonthExpenseLimits(filters = []) {
+		// TODO: SyncDb - move to getEntities
 		let limits = dbData.monthExpenseLimit.filter(createFilterFunction("monthExpenseLimit", filters));
 		if (!limits.length) {
 			if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
@@ -242,6 +249,7 @@ const api = {
 	},
 
 	getDropDownList(column, filters, includeColumns) {
+		// TODO: SyncDb - get entities first
 		let options = dbData[column.linkTo.entityName]
 			.filter(createFilterFunction(column.linkTo.entityName, filters))
 			.filter(e => !e.isNotVisibleInList)
@@ -274,6 +282,7 @@ const api = {
 				Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, newEntity), dbData))
 			);
 		}
+		// TODO: SyncDb write data to server
 		return new Promise(
 			(resolve, reject) =>
 				setTimeout(
@@ -311,6 +320,7 @@ const api = {
 				);
 			}
 		}
+		// TODO: SyncDb write data to server
 		return new Promise(
 			(resolve, reject) =>
 				setTimeout(() => resolve(updatedEntities), 1000)
@@ -334,6 +344,7 @@ const api = {
 		}
 		const deleted = entities.filter(e => notDeleted.map(e => e.id).indexOf(e.id) === -1);
 		dbData[entityName] = dbData[entityName].filter(e => deleted.map(e => e.id).indexOf(e.id) === -1);
+		// TODO: SyncDb delete data from server
 		return new Promise((resolve, reject) => setTimeout(() => resolve({
 			deleted: [...deleted],
 			notDeleted: [...notDeleted],
