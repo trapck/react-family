@@ -9,12 +9,7 @@ import storeCreator from "./redux/store/store-creator";
 import "../node_modules/toastr/build/toastr.min.css";
 import "../styles/styles.css";
 
-// TODO: implement async current user request. Think about certain place, where make it
-let currentUser = mockApi.getCurrentUser();
-const store = storeCreator.create({
-	currentUser
-
-});
+const store = storeCreator.create();
 
 ReactDom.render(
 	<Provider store = {store}>

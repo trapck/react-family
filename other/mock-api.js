@@ -280,26 +280,28 @@ const api = {
 	},
 
 	getDropDownList(column, filters, includeColumns) {
-		return this.getEntities(column.linkTo.entityName, filters).then(
-			() => {
-				let options = dbData[column.linkTo.entityName]
-					.filter(createFilterFunction(column.linkTo.entityName, filters))
-					.filter(e => !e.isNotVisibleInList)
-					.map(e => {
-						let item = {
-							value: e.id,
-							label: e[column.linkTo.columnName].toString()
-						};
-						if (includeColumns) {
-							for (let c of includeColumns) {
-								item[c] = e[c];
+		return new Promise((res, rej) => {
+			this.getEntities(column.linkTo.entityName, filters).then(
+				() => {
+					let options = dbData[column.linkTo.entityName]
+						.filter(createFilterFunction(column.linkTo.entityName, filters))
+						.filter(e => !e.isNotVisibleInList)
+						.map(e => {
+							let item = {
+								value: e.id,
+								label: e[column.linkTo.columnName].toString()
+							};
+							if (includeColumns) {
+								for (let c of includeColumns) {
+									item[c] = e[c];
+								}
 							}
-						}
-						return item;
-					});
-				Promise.resolve(options);
-			}
-		);
+							return item;
+						});
+					res(options);
+				}
+			);
+		});
 	},
 
 	addEntities(entityName, entities) {
@@ -371,43 +373,45 @@ const api = {
 	},
 
 	deleteEntities(entityName, filters = []) {
-		return this.getEntities(entityName, filters).then(
-			() => {
-				let entities = dbData[entityName].filter(createFilterFunction("expense", filters)),
-					allRelatedEntities = [],
-					notDeleted = [],
-					oldData = [...dbData[entityName]];
-				for (let e of entities) {
-					let relatedEntities = findRelatedEntities(entityName, e.id, dbData);
-					if (relatedEntities.length) {
-						notDeleted.push(e);
-						for (let r of relatedEntities) {
-							if (allRelatedEntities.indexOf(r) === -1) {
-								allRelatedEntities.push(r);
+		return new Promise((res, rej) => {
+			this.getEntities(entityName, filters).then(
+				() => {
+					let entities = dbData[entityName].filter(createFilterFunction("expense", filters)),
+						allRelatedEntities = [],
+						notDeleted = [],
+						oldData = [...dbData[entityName]];
+					for (let e of entities) {
+						let relatedEntities = findRelatedEntities(entityName, e.id, dbData);
+						if (relatedEntities.length) {
+							notDeleted.push(e);
+							for (let r of relatedEntities) {
+								if (allRelatedEntities.indexOf(r) === -1) {
+									allRelatedEntities.push(r);
+								}
 							}
 						}
 					}
-				}
-				let deleted = entities.filter(e => notDeleted.map(e => e.id).indexOf(e.id) === -1);
-				dbData[entityName] = dbData[entityName].filter(e => deleted.map(e => e.id).indexOf(e.id) === -1);
+					let deleted = entities.filter(e => notDeleted.map(e => e.id).indexOf(e.id) === -1);
+					dbData[entityName] = dbData[entityName].filter(e => deleted.map(e => e.id).indexOf(e.id) === -1);
 
-				postDbBranchToServer(entityName, dbData[entityName]).then(
-					response => {
-						if (!response.success) {
-							dbData[entityName] = oldData;
-							deleted = [];
-							notDeleted = [];
-							allRelatedEntities = [];
+					postDbBranchToServer(entityName, dbData[entityName]).then(
+							response => {
+							if (!response.success) {
+								dbData[entityName] = oldData;
+								deleted = [];
+								notDeleted = [];
+								allRelatedEntities = [];
+							}
+							res({
+								deleted: [...deleted],
+								notDeleted: [...notDeleted],
+								relatedEntities: allRelatedEntities
+							});
 						}
-						Promise.resolve({
-							deleted: [...deleted],
-							notDeleted: [...notDeleted],
-							relatedEntities: allRelatedEntities
-						});
-					}
-				);
-			}
-		);
+					);
+				}
+			);
+		});
 	}
 };
 

@@ -16,6 +16,7 @@ class BudgetMain extends React.Component {
 		this.isLoadingToken = guid();
 	}
 
+	// TODO: realize month to show selection
 	componentDidMount() {
 		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken);
 		this.props.getMonthExpenseLimits([

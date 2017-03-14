@@ -6,6 +6,7 @@ import entityColumns from "../src/static-data/entity-info/entity-columns";
 import comparisonTypes from "../src/static-data/comparison-types";
 
 const getFormatedDate = (date) => {
+	date = new Date(date);
 	let day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate(),
 		month = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1),
 		year = date.getFullYear();
@@ -30,6 +31,7 @@ const getLookupDisplayValue = (value, entityName, columnName, dbData) => {
 };
 export {getLookupDisplayValue};
 
+// TODO: implement lookup data loading
 const createObjectWithDisplayValues = (entityName, entity, dbData) => {
 	let resultObject = Object.assign({displayValues: {}}, entity);
 	for (let column in entity) {
@@ -42,6 +44,7 @@ const createObjectWithDisplayValues = (entityName, entity, dbData) => {
 export {createObjectWithDisplayValues};
 
 const getDateColumnEqualityComparisonResult = (value, comparisonObject) => {
+	value = new Date(value);
 	let result = true;
 	if (comparisonObject.D) {
 		result = value.getDate() === comparisonObject.D;
@@ -188,7 +191,7 @@ const getDbBranchFromServer = (entityName) => {
 	return new Promise((res, rej) => {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
+				if (xhr.status !== 200) {
 					rej(xhr.status + ': ' + xhr.statusText);
 				} else {
 					res(JSON.parse(xhr.responseText));
@@ -201,16 +204,16 @@ export {getDbBranchFromServer};
 
 const postDbBranchToServer = (entity, data) => {
 	let xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://localhost:3000");
+	xhr.open("POST", "http://localhost:3000/syncDb");
 	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.send({
+	xhr.send(JSON.stringify({
 		entity,
 		data
-	});
+	}));
 	return new Promise((res, rej) => {
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {
-				if (xhr.status === 200) {
+				if (xhr.status !== 200) {
 					rej(xhr.status + ": " + xhr.statusText);
 				} else {
 					res(JSON.parse(xhr.responseText));

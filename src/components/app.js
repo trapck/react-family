@@ -10,6 +10,10 @@ class App extends React.Component {
 		super(props);
 	}
 
+	componentWillMount() {
+		this.props.getCurrentUser();
+	}
+
 	render() {
 		return (
 			<div>
@@ -24,7 +28,8 @@ class App extends React.Component {
 
 App.propTypes = {
 	children: PropTypes.object.isRequired,
-	currentUser: PropTypes.object.isRequired
+	currentUser: PropTypes.object.isRequired,
+	getCurrentUser: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => {

@@ -47,13 +47,22 @@ const setReceivedUsers = (users = []) => {
 export {setReceivedUsers};
 
 
-const setCurrentUser = () => {
+const getCurrentUser = () => dispatch => {
+	return mockApi.getCurrentUser().then(
+			user => {
+			dispatch(setCurrentUser(user));
+		},
+			ex => rejectCallback(ex)
+	);
+};
+export {getCurrentUser};
+
+const setCurrentUser = (user) => {
 	return {
-		type: actionTypes.SET_CURRENT_USER
+		type: actionTypes.SET_CURRENT_USER,
+		user
 	};
 };
-export {setCurrentUser};
-
 
 // Budget actions
 const getExpenseCategories = (filters = [], isLoadingToken = "") => dispatch => {

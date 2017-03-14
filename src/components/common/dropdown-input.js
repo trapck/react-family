@@ -7,6 +7,7 @@ const DropDownInput = props => {
 		props.onChange(props.tag, {label: item.label, value: item.value, isDropDown: true}, item);
 	},
 		onBlur = (item = {}) => {
+			item.value = item.value || {};
 			props.onBlur(props.tag, {label: item.value.label, value: item.value.value, isDropDown: true}, item);
 		},
 		onOpenChange = isOpened => {props.onOpenChange(isOpened);};
