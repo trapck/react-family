@@ -8,7 +8,8 @@ import {
 	findRelatedEntities,
 	getDbBranchFromServer,
 	postDbBranchToServer,
-	syncDb
+	syncDb,
+	selectDisplayValues
 } from "./utils";
 
 const currentMonth = new Date().getMonth();
@@ -183,12 +184,18 @@ const api = {
 		return new Promise((res, rej) => {
 			getDbBranchFromServer("user").then(
 				({user}) => {
-					syncDb("user", user, dbData);
-					res(createObjectWithDisplayValues("user", {
+					let fakeUser = {
 						id: "a8b10cfc-c418-4141-b28e-b5f31e18a660",
 						name: "Denis",
 						nickName: "trap-ck"
-					}, dbData));
+					};
+					syncDb("user", user, dbData);
+					selectDisplayValues([
+						{
+							name: "user",
+							entities: [fakeUser]
+						}
+					], dbData).then(() => res(createObjectWithDisplayValues("user", fakeUser, dbData)));
 				}
 			);
 		});
@@ -199,10 +206,13 @@ const api = {
 			getDbBranchFromServer(entityName).then(
 				response => {
 					syncDb(entityName, response[entityName], dbData);
-					let entities = dbData[entityName]
-						.filter(createFilterFunction(entityName, filters))
-						.map(e => createObjectWithDisplayValues(entityName, e, dbData));
-					res([...entities]);
+					let entities = dbData[entityName].filter(createFilterFunction(entityName, filters));
+					selectDisplayValues([
+						{
+							name: entityName,
+							entities
+						}
+					], dbData).then(() => res([...entities.map(e => createObjectWithDisplayValues(entityName, e, dbData))]));
 				}
 			);
 		});
@@ -231,8 +241,12 @@ const api = {
 							}
 						}
 					);
-					result = result.map(e => createObjectWithDisplayValues("expense", e, dbData));
-					res([...result]);
+					selectDisplayValues([
+						{
+							name: "expense",
+							entities: result
+						}
+					], dbData).then(() => res([...result.map(e => createObjectWithDisplayValues("expense", e, dbData))]));
 				}
 			);
 		});
@@ -315,9 +329,7 @@ const api = {
 				newEntity[column] = getValueByColumnType(entityName, column, entity[column]);
 			}
 			dbData[entityName].push(Object.assign({}, newEntity));
-			addedEntities.push(
-				Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, newEntity), dbData))
-			);
+			addedEntities.push(Object.assign({}, newEntity));
 		}
 		return new Promise((res, rej) => {
 			postDbBranchToServer(entityName, dbData[entityName]).then(
@@ -326,7 +338,12 @@ const api = {
 						dbData[entityName] = oldData;
 						addedEntities = [];
 					}
-					res(addedEntities);
+					selectDisplayValues([
+						{
+							name: entityName,
+							entities: addedEntities
+						}
+					], dbData).then(() => res([...addedEntities.map(e => createObjectWithDisplayValues(entityName, e, dbData))]));
 				}
 			);
 		});
@@ -354,9 +371,7 @@ const api = {
 						dbEntity[value.columnName] = getValueByColumnType(entityName, value.columnName, value.columnValue);
 					}
 				}
-				updatedEntities.push(
-					Object.assign({}, createObjectWithDisplayValues(entityName, Object.assign({}, dbEntity), dbData))
-				);
+				updatedEntities.push(Object.assign({}, dbEntity));
 			}
 		}
 		return new Promise((res, rej) => {
@@ -366,7 +381,13 @@ const api = {
 						dbData[entityName] = oldData;
 						updatedEntities = [];
 					}
-					res(updatedEntities);
+					selectDisplayValues([
+						{
+							name: entityName,
+							entities: updatedEntities
+						}
+					], dbData).then(() => res([...updatedEntities.map(e => createObjectWithDisplayValues(entityName, e, dbData))]));
+
 				}
 			);
 		});

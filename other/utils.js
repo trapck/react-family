@@ -223,3 +223,72 @@ const postDbBranchToServer = (entity, data) => {
 	});
 };
 export {postDbBranchToServer};
+
+const prepareDataToCreateDisplayValues = (entityName, entity, resultObject = {}) => {
+	for (let column in entity) {
+		if (entity[column]) {
+			if ((entityStructure[entityName].columns[column] || {}).type === entityColumnTypes.LOOKUP) {
+				let linkToName = entityStructure[entityName].columns[column].linkTo.entityName;
+				if (!resultObject[linkToName]) {
+					resultObject[linkToName] = [];
+				}
+				if (resultObject[linkToName].indexOf(entity[column] === -1)) {
+					resultObject[linkToName].push(entity[column]);
+				}
+			}
+		}
+	}
+};
+export {prepareDataToCreateDisplayValues};
+
+const selectDisplayValues = (objects, db) => {
+	let preparedData = {};
+	for (let obj of objects) {
+		let entityName = obj.name;
+		for (let entity of obj.entities) {
+			prepareDataToCreateDisplayValues(entityName, entity, preparedData);
+		}
+	}
+	if (!Object.keys(preparedData).length) {
+		return Promise.resolve();
+	}
+	const data = [];
+	for (let entity in preparedData) {
+		data.push({
+				entityName: entity,
+				filters: [
+					{
+						column: "id",
+						value: preparedData[entity]
+					}
+				]
+			});
+	}
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://localhost:3000/select");
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.send(JSON.stringify({data}));
+	return new Promise((res, rej) => {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4) {
+				if (xhr.status !== 200) {
+					rej(xhr.status + ": " + xhr.statusText);
+				} else {
+					let result = JSON.parse(xhr.responseText);
+					for (let entityName in result.data) {
+						for (let record of result.data[entityName]) {
+							writeEntityToDb(entityName, record, db);
+						}
+					}
+					res();
+				}
+			}
+		};
+	});
+};
+export {selectDisplayValues};
+
+const writeEntityToDb = (entityName, entity, db) => {
+	db[entityName] = [...db[entityName].filter(e => e.id !== entity.id), entity];
+};
+export {writeEntityToDb};
