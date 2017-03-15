@@ -56,7 +56,6 @@ class InputByColumnType extends React.Component {
 		return (
 			<DropDownInput
 				options = {this.state.lookupInfo.options}
-				defaultValue = {this.props.value}
 			/>
 		);
 	}

@@ -65,6 +65,23 @@ const setCurrentUser = (user) => {
 };
 
 // Budget actions
+const setCurrentMonth = number => {
+	return {
+		type: actionTypes.SET_CURRENT_MONTH,
+		number
+	};
+};
+export {setCurrentMonth};
+
+const setCurrentYear = year => {
+	return {
+		type: actionTypes.SET_CURRENT_YEAR,
+		year
+	};
+};
+export {setCurrentYear};
+
+
 const getExpenseCategories = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getEntities("expenseCategory", filters).then(
@@ -114,7 +131,7 @@ const setReceivedExpenses = (expenses = [], filters = []) => {
 
 const getCurrentMonthGeneralInfo = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
-	return mockApi.getCurrentMonthGeneralInfo(filters).then(
+	return mockApi.getMonthGeneralInfo(filters).then(
 			info => {
 			dispatch(setIsLoading(isLoadingToken, false));
 			dispatch(setReceivedCurrentMonthGeneralInfo(info, filters));

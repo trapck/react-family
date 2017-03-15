@@ -21,10 +21,12 @@ export default {
 		newExpenseCategory: {
 			isNotVisibleInList: false
 		},
-			ui: {
-	isGeneralInfoRowCollapsed: {},
-	isNewExpenseVisible: false,
-		isNewExpenseCategoryVisible: false
-}
-}
+		ui: {
+			isGeneralInfoRowCollapsed: {},
+			isNewExpenseVisible: false,
+			isNewExpenseCategoryVisible: false,
+			currentMonth: months.data.filter(m => m.number === new Date().getMonth())[0],
+			currentYear: new Date().getFullYear()
+		}
+	}
 };

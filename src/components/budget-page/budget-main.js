@@ -1,11 +1,14 @@
 import React, {PropTypes} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import months from "../../static-data/months";
 import CollapsibleGroup from "../common/collapsible-group";
 import * as actionCreators from "../../redux/actions/action-creators";
 import GeneralInfoRow from "./general-info-row";
 import ExpensesList from "./expenses-list";
+import BudgetMainDateFilter from "./budget-main-date-filter";
 import PreloaderContainer from "../common/preloader-container";
+import DropDownInput from "../common/dropdown-input";
 import Summary from "./month-summary";
 import NewExpense from "./new-expense";
 import guid from "uuid/v4";
@@ -14,20 +17,23 @@ class BudgetMain extends React.Component {
 	constructor(props) {
 		super(props);
 		this.isLoadingToken = guid();
+		this.onCurrentMonthChange = this.onCurrentMonthChange.bind(this);
+		this.onCurrentYearChange = this.onCurrentYearChange.bind(this);
 	}
 
-	// TODO: realize month to show selection
+
 	componentDidMount() {
-		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken);
-		this.props.getMonthExpenseLimits([
+		const currentMonthFilters = [
 			{
 				column: "month",
-				value: new Date().getMonth()
+				value: this.props.currentMonth.number
 			}, {
 				column: "year",
-				value: new Date().getFullYear()
+				value: this.props.currentYear
 			}
-		]);
+		];
+		this.props.getCurrentMonthGeneralInfo(currentMonthFilters, this.isLoadingToken);
+		this.props.getMonthExpenseLimits(currentMonthFilters);
 	}
 
 	componentWillUnmount() {
@@ -53,9 +59,23 @@ class BudgetMain extends React.Component {
 		};
 	}
 
+	onCurrentMonthChange(tag, value) {
+		this.props.setCurrentMonth(Number.isInteger(value.value) ? value.value : new Date().getMonth());
+	}
+
+	onCurrentYearChange(e) {
+		this.props.setCurrentYear(Number(e.target.value) || new Date().getFullYear());
+	}
+
 	render() {
 		return (
 			<div>
+				<BudgetMainDateFilter
+					monthValue = {{label: this.props.currentMonth.title, value: this.props.currentMonth.number}}
+					yearValue = {this.props.currentYear}
+					onMonthChange = {this.onCurrentMonthChange}
+					onYearChange = {this.onCurrentYearChange}
+					/>
 				<button onClick = {this.props.toggleNewExpenseVisible}>
 					{this.props.isNewExpenseVisible ? "-" : "+"}
 				</button>
@@ -74,14 +94,14 @@ class BudgetMain extends React.Component {
 											generalInfoRowModel = {{category, count, amount, displayValues}}
 											isCollapsed = {isCollapsed}
 											onHeaderClick = {onClick}
-										/>
+											/>
 										<ExpensesList
 											category = {category}
 											count = {count}
 											amount = {amount}
 											dateFilterValue = {{
-												M: new Date().getMonth(),
-												Y: new Date().getFullYear()
+												M: this.props.currentMonth.number,
+												Y: this.props.currentYear
 											}}
 											isSyncNeeded/>
 									</CollapsibleGroup>
@@ -106,7 +126,11 @@ BudgetMain.propTypes = {
 	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired,
 	isNewExpenseVisible: PropTypes.bool,
-	toggleNewExpenseVisible: PropTypes.func.isRequired
+	toggleNewExpenseVisible: PropTypes.func.isRequired,
+	currentMonth: PropTypes.object.isRequired,
+	setCurrentMonth: PropTypes.func.isRequired,
+	currentYear: PropTypes.number.isRequired,
+	setCurrentYear: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -120,9 +144,11 @@ const mapStateToProps = state => {
 			}),
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimit: state.budget.monthLimits
-			.filter(l => l.month === new Date().getMonth() && l.year === new Date().getFullYear())[0] || {},
+			.filter(l => l.month === state.budget.ui.currentMonth && l.year === state.budget.ui.currentYear)[0] || {},
 		isLoading: state.isLoading,
-		isNewExpenseVisible: state.budget.ui.isNewExpenseVisible
+		isNewExpenseVisible: state.budget.ui.isNewExpenseVisible,
+		currentMonth: state.budget.ui.currentMonth,
+		currentYear: state.budget.ui.currentYear
 	};
 };
 

@@ -85,3 +85,17 @@
 	color: red;
 	cursor: pointer;
 }
+
+.current-month-edit-container,
+.current-year-edit-container {
+	display: inline-block;
+}
+
+.current-year-edit-container {
+	padding-left: 10px;
+}
+
+.current-year-edit {
+	height: 30px;
+	width: 70px;
+}

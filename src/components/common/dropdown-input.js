@@ -12,7 +12,7 @@ const DropDownInput = props => {
 		},
 		onOpenChange = isOpened => {props.onOpenChange(isOpened);};
 	return (
-		<div>
+		<div className = {props.containerClassName}>
 			<SimpleSelect
 				className = {props.inputClassName}
 				value = {props.value}
