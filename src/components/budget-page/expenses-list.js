@@ -31,7 +31,9 @@ class ExpensesList extends React.Component {
 		}
 		this.props.getExpenses(filters, this.isLoadingToken);
 		if (this.props.isSyncNeeded) {
-			this.props.getCurrentMonthGeneralInfo(filters);
+			this.props.getCurrentMonthGeneralInfo(
+				filters, undefined, (this.props.dateFilterValue || {}).M, (this.props.dateFilterValue || {}).Y
+			);
 		}
 	}
 
@@ -50,7 +52,10 @@ class ExpensesList extends React.Component {
 					}
 				]
 			}
-		], this.isLoadingToken).then(() => {
+		],
+			this.isLoadingToken,
+			this.props.currentMonth,
+			this.props.currentYear).then(() => {
 			toastr.success("Expense updated");
 			this.props.removeIsLoading(this.isLoadingToken);
 		});
@@ -58,12 +63,15 @@ class ExpensesList extends React.Component {
 
 	onDeleteExpenseClick(args) {
 		this.props.deleteExpense([{
-			column: "id",
-			value: args.id
-		}], this.isLoadingToken).then(() => {
-			toastr.success("Expense deleted");
-			this.props.removeIsLoading(this.isLoadingToken);
-		});
+				column: "id",
+				value: args.id
+			}],
+			this.isLoadingToken,
+			this.props.currentMonth,
+			this.props.currentYear).then(() => {
+				toastr.success("Expense deleted");
+				this.props.removeIsLoading(this.isLoadingToken);
+			});
 	}
 
 	render() {
@@ -108,7 +116,9 @@ ExpensesList.propTypes = {
 	getCurrentMonthGeneralInfo: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired,
-	dateFilterValue: PropTypes.object
+	dateFilterValue: PropTypes.object,
+	currentMonth: PropTypes.object.isRequired,
+	currentYear: PropTypes.number.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {
@@ -117,7 +127,9 @@ const mapStateToProps = (state, ownProps) => {
 			e.category === ownProps.category &&
 			(ownProps.dateFilterValue ?  getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue) : true)
 		),
-		isLoading: state.isLoading
+		isLoading: state.isLoading,
+		currentMonth: state.budget.ui.currentMonth.number,
+		currentYear: state.budget.ui.currentYear
 	};
 };
 

@@ -23,16 +23,18 @@ class BudgetMain extends React.Component {
 
 
 	componentDidMount() {
-		const currentMonthFilters = [
-			{
-				column: "month",
-				value: this.props.currentMonth.number
-			}, {
-				column: "year",
-				value: this.props.currentYear
-			}
-		];
-		this.props.getCurrentMonthGeneralInfo(currentMonthFilters, this.isLoadingToken);
+		const currentMonth = this.props.currentMonth.number,
+			currentYear = this.props.currentYear,
+			currentMonthFilters = [
+				{
+					column: "month",
+					value: currentMonth
+				}, {
+					column: "year",
+					value: currentYear
+				}
+			];
+		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken, currentMonth, currentYear);
 		this.props.getMonthExpenseLimits(currentMonthFilters);
 	}
 
