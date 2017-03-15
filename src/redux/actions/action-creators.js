@@ -461,3 +461,10 @@ const toggleNewExpenseCategoryVisible = () => {
 	};
 };
 export {toggleNewExpenseCategoryVisible};
+
+const toggleShowCurrentMonthLimitOnly = () => {
+	return {
+		type: actionTypes.TOGGLE_SHOW_CURRENT_MONTH_LIMIT_ONLY
+	};
+};
+export {toggleShowCurrentMonthLimitOnly};

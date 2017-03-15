@@ -7,10 +7,8 @@ class MonthExpenseLimitManager extends React.Component{
 	}
 
 	render() {
-		// TODO: implement isShowCurrentMonthOnly checkBox
-		const isShowCurrentMonthOnly = false;
 		return (
-			<MonthExpenseLimitsList isShowCurrentMonthOnly={isShowCurrentMonthOnly}/>
+			<MonthExpenseLimitsList/>
 		);
 	}
 }

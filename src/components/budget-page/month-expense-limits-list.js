@@ -2,6 +2,8 @@ import React, {PropTypes} from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
+import LabelCover from "../common/label-cover";
+import BooleanInput from "../common/boolean-input";
 import * as actionCreators from "../../redux/actions/action-creators";
 import MonthExpenseLimit from "./month-expense-limit";
 import {getEntityColumnsCaptions} from "../../../other/utils";
@@ -12,20 +14,12 @@ class MonthExpenseLimitsList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onLimitValueUpdated = this.onLimitValueUpdated.bind(this);
+		this.onCurrentMonthOnlyChange = this.onCurrentMonthOnlyChange.bind(this);
 		this.isLoadingToken = guid();
 	}
 
 	componentWillMount() {
 		let filters = [];
-		if (this.props.isShowCurrentMonthOnly) {
-			filters.push({
-				column: "month",
-				value: new Date().getMonth()
-			}, {
-				column: "year",
-				value: new Date().getFullYear()
-			});
-		}
 		this.props.getMonthExpenseLimits(filters, this.isLoadingToken);
 	}
 
@@ -50,9 +44,19 @@ class MonthExpenseLimitsList extends React.Component {
 		});
 	}
 
+	onCurrentMonthOnlyChange(tag, value) {
+		this.props.toggleShowCurrentMonthLimitOnly(value);
+	}
+
 	render() {
 		return (
 			<div>
+				<LabelCover caption = "Current month only" isHorizontal>
+					<BooleanInput
+						value = {this.props.isShowCurrentMonthLimitOnly}
+						onChange = {this.onCurrentMonthOnlyChange}
+					/>
+				</LabelCover>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					<table className = "month-expense-limits-table">
 						<tbody>
@@ -78,16 +82,19 @@ MonthExpenseLimitsList.propTypes = {
 	updateMonthExpenseLimit: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired,
-	isShowCurrentMonthOnly: PropTypes.bool
+	isShowCurrentMonthLimitOnly: PropTypes.bool,
+	toggleShowCurrentMonthLimitOnly: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
 	return {
 		isLoading: state.isLoading,
-		monthExpenseLimits: (ownProps.isShowCurrentMonthOnly ?
-			state.budget.monthLimits.filter(l => l.month === new Date().getMonth() && l.year === new Date().getFullYear()) :
-			state.budget.monthLimits).
-			sort((a,b) => (a.year + a.month) - (b.year + b.month))
+		monthExpenseLimits: (state.budget.ui.isShowCurrentMonthLimitOnly ?
+			state.budget.monthLimits.filter(
+					l => l.month === state.budget.ui.currentMonth.number && l.year === state.budget.ui.currentYear
+				) :
+			state.budget.monthLimits).sort((a,b) => (a.year + a.month) - (b.year + b.month)),
+		isShowCurrentMonthLimitOnly: state.budget.ui.isShowCurrentMonthLimitOnly
 	};
 };
 

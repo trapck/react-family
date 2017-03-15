@@ -25,6 +25,7 @@ export default {
 			isGeneralInfoRowCollapsed: {},
 			isNewExpenseVisible: false,
 			isNewExpenseCategoryVisible: false,
+			isShowCurrentMonthLimitOnly: true,
 			currentMonth: months.data.filter(m => m.number === new Date().getMonth())[0],
 			currentYear: new Date().getFullYear()
 		}
