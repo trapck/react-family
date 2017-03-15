@@ -62,11 +62,47 @@ class BudgetMain extends React.Component {
 	}
 
 	onCurrentMonthChange(tag, value) {
+		const currentMonth = Number.isInteger(value.value) ? value.value : new Date().getMonth(),
+			currentYear = this.props.currentYear,
+			currentMonthFilters = [
+				{
+					column: "month",
+					value: currentMonth
+				}, {
+					column: "year",
+					value: currentYear
+				}
+			];
 		this.props.setCurrentMonth(Number.isInteger(value.value) ? value.value : new Date().getMonth());
+		this.props.getCurrentMonthGeneralInfo(
+			undefined,
+			this.isLoadingToken,
+			currentMonth,
+			currentYear
+		);
+		this.props.getMonthExpenseLimits(currentMonthFilters);
 	}
 
 	onCurrentYearChange(e) {
+		const currentMonth = this.props.currentMonth.number,
+			currentYear = Number(e.target.value) || new Date().getFullYear(),
+			currentMonthFilters = [
+				{
+					column: "month",
+					value: currentMonth
+				}, {
+					column: "year",
+					value: currentYear
+				}
+			];
 		this.props.setCurrentYear(Number(e.target.value) || new Date().getFullYear());
+		this.props.getCurrentMonthGeneralInfo(
+			undefined,
+			this.isLoadingToken,
+			currentMonth,
+			currentYear
+		);
+		this.props.getMonthExpenseLimits(currentMonthFilters);
 	}
 
 	render() {
@@ -146,7 +182,7 @@ const mapStateToProps = state => {
 			}),
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimit: state.budget.monthLimits
-			.filter(l => l.month === state.budget.ui.currentMonth && l.year === state.budget.ui.currentYear)[0] || {},
+			.filter(l => l.month === state.budget.ui.currentMonth.number && l.year === state.budget.ui.currentYear)[0] || {},
 		isLoading: state.isLoading,
 		isNewExpenseVisible: state.budget.ui.isNewExpenseVisible,
 		currentMonth: state.budget.ui.currentMonth,

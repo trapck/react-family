@@ -275,12 +275,12 @@ const api = {
 						if (filters && filters.filter(f => f.column === "month" || f.column === "year").length === 2) {
 							let month = filters.filter(f => f.column === "month")[0].value,
 								year = filters.filter(f => f.column === "year")[0].value;
-							if (!Number.isNaN(month - year)) {
+							if (month === currentMonth && year === currentYear) {
 								addLimitToDb(month, year).then(
 									limit => res([limit])
 								);
 							} else {
-								rej("error format");
+								res([]);
 							}
 						} else {
 							rej("error format");

@@ -117,7 +117,7 @@ ExpensesList.propTypes = {
 	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired,
 	dateFilterValue: PropTypes.object,
-	currentMonth: PropTypes.object.isRequired,
+	currentMonth: PropTypes.number.isRequired,
 	currentYear: PropTypes.number.isRequired
 };
 

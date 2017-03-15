@@ -46,13 +46,13 @@ export {createObjectWithDisplayValues};
 const getDateColumnEqualityComparisonResult = (value, comparisonObject) => {
 	value = new Date(value);
 	let result = true;
-	if (comparisonObject.D) {
+	if (Number.isInteger(comparisonObject.D)) {
 		result = value.getDate() === comparisonObject.D;
 	}
-	if (comparisonObject.M) {
+	if (Number.isInteger(comparisonObject.M)) {
 		result = result && value.getMonth() === comparisonObject.M;
 	}
-	if (comparisonObject.Y) {
+	if (Number.isInteger(comparisonObject.Y)) {
 		result = result && value.getFullYear() === comparisonObject.Y;
 	}
 	return result;
@@ -119,6 +119,7 @@ export {getTextValueByColumnType};
 
 const getEditValueByColumnType = (entityName, columnName, value, entity) => {
 	switch(entityStructure[entityName].columns[columnName].type) {
+		case entityColumnTypes.DATE: return new Date(value);
 		case entityColumnTypes.LOOKUP: return {value: entity[columnName], label: entity.displayValues[columnName]};
 		default: return value;
 	}

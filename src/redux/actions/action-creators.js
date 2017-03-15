@@ -276,7 +276,7 @@ const clearNewExpense = () => {
 export {clearNewExpense};
 
 const updateExpense = (
-	filters = [],
+	updateMap = [],
 	isLoadingToken = "",
 	currentMonth = new Date().getMonth(),
 	currentYear = new Date().getFullYear()) => dispatch => {
