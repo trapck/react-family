@@ -64,6 +64,7 @@ class EditableValue extends React.Component {
 
 	render() {
 		// TODO: autoFocus on input render
+		// TODO: cant edit if value was empty first
 		return this.state.isEditMode ? this.getEditComponent() : this.getLabelComponent();
 	}
 }

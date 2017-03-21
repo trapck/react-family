@@ -5,6 +5,7 @@ import * as actionCreators from "../../redux/actions/action-creators";
 import InputByColumnType from "../common/input-by-column-type";
 import PreloaderContainer from "../common/preloader-container";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
+import validator from "../../helpers/form-validators/expense-validator";
 import guid from "uuid/v4";
 import toastr from "toastr";
 
@@ -25,6 +26,12 @@ class NewExpense extends React.Component {
 	}
 
 	saveNewExpense() {
+		const validationResult = validator.validate(this.props.newExpense);
+		if (validationResult.length) {
+			console.log(validationResult);
+			alert("validation failed");
+			return;
+		}
 		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken)
 			.then(() => toastr.success("New expense added"));
 	}

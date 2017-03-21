@@ -293,3 +293,28 @@ const writeEntityToDb = (entityName, entity, db) => {
 	db[entityName] = [...db[entityName].filter(e => e.id !== entity.id), entity];
 };
 export {writeEntityToDb};
+
+const coreValidator = {
+	validateRequired(value) {
+		return !!value;
+	},
+	validateStringLength(min, max, value) {
+		min = min || Number.NEGATIVE_INFINITY;
+		max = max || Number.POSITIVE_INFINITY;
+		length = (value || "").length;
+		return length >= min && length <= max;
+	},
+	validatePositiveNumber(value) {
+		return (value || 0) > 0;
+	},
+	validateRequiredLookup(value = {}) {
+		return value && value.value;
+	},
+	validateDateRange(min, max, value) {
+		min = min || Number.NEGATIVE_INFINITY;
+		max = max || Number.POSITIVE_INFINITY;
+		const time = new Date(value).getTime();
+		return time >= min && time <= max;
+	}
+};
+export {coreValidator};
