@@ -15,6 +15,9 @@ class NewExpense extends React.Component {
 		this.onChange = this.onChange.bind(this);
 		this.saveNewExpense = this.saveNewExpense.bind(this);
 		this.isLoadingToken = guid();
+		this.state = {
+			validationInfo: []
+		}
 	}
 
 	componentWillUnmount() {
@@ -28,9 +31,11 @@ class NewExpense extends React.Component {
 	saveNewExpense() {
 		const validationResult = validator.validate(this.props.newExpense);
 		if (validationResult.length) {
-			console.log(validationResult);
-			alert("validation failed");
+			this.setState(Object.assign({}, this.state, {validationInfo: [...validationResult]}));
 			return;
+		}
+		if (this.state.validationInfo.length) {
+			this.setState(Object.assign({}, this.state, {validationInfo: []}));
 		}
 		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken)
 			.then(() => toastr.success("New expense added"));
@@ -53,6 +58,9 @@ class NewExpense extends React.Component {
 											columnName = {c}
 											value = {this.props.newExpense[c]}
 											onChange = {this.onChange}
+											validationMessage = {
+												this.state.validationInfo.filter(i => i.name === c).map(i => i.message)[0] || ""
+											}
 										/>
 									)
 							}

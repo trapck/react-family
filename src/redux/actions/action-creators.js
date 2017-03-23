@@ -1,6 +1,9 @@
 import actionTypes from "./action-types";
 import mockApi from "../../../other/mock-api";
-import {getCantDeleteByIntegrityConstraintMessage} from "../../../other/utils";
+import {
+	getCantDeleteByIntegrityConstraintMessage,
+	setEntityDefaultValues
+} from "../../../other/utils";
 
 const rejectCallback = (ex, isLoadingToken, dispatch) => {
 	dispatch(setIsLoading(isLoadingToken, false));
@@ -228,6 +231,7 @@ const addNewExpense = (
 	isLoadingToken = "",
 	currentMonth = new Date().getMonth(),
 	currentYear = new Date().getFullYear()) => dispatch => {
+	expense = Object.assign({}, setEntityDefaultValues("expense"), expense);
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.addEntities("expense", [expense]).then(
 			expenses => {
@@ -344,6 +348,7 @@ export {removeDeletedExpensesFromState};
 
 
 const addNewExpenseCategory = (expenseCategory, isLoadingToken = "") => dispatch => {
+	expenseCategory = Object.assign({}, setEntityDefaultValues("expenseCategory"), expenseCategory);
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.addEntities("expenseCategory", [expenseCategory]).then(
 			expenseCategories => {

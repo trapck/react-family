@@ -8,6 +8,7 @@ import DateInput from "./date-input";
 import DropDownInput from "./dropdown-input";
 import TextAreaInput from "./text-area-input";
 import BooleanInput from "./boolean-input";
+import ValidationInfo from "./validation-info";
 import mockApi from "../../../other/mock-api";
 
 class InputByColumnType extends React.Component {
@@ -83,16 +84,22 @@ class InputByColumnType extends React.Component {
 
 	render() {
 		const column = entityStructure[this.props.entityName].columns[this.props.columnName];
-		return React.createElement(
-			this.props.isLabelHidden ? "div" : LabelCover,
-			this.props.isLabelHidden ? undefined : {caption: column.caption},
-			React.cloneElement(this.getComponent(column), {
-				value: this.props.value,
-				onChange: this.props.onChange,
-				onBlur: this.props.onBlur,
-				tag: this.props.columnName
-			})
-		);
+		return (
+			<div>
+				{
+					React.createElement(
+						this.props.isLabelHidden ? "div" : LabelCover,
+						this.props.isLabelHidden ? undefined : {caption: column.caption},
+						React.cloneElement(this.getComponent(column), {
+							value: this.props.value,
+							onChange: this.props.onChange,
+							onBlur: this.props.onBlur,
+							tag: this.props.columnName
+						}))
+				}
+				<ValidationInfo message = {this.props.validationMessage}/>
+			</div>
+		)
 	}
 }
 
@@ -103,12 +110,14 @@ InputByColumnType.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	onBlur: PropTypes.func.isRequired,
 	lookupInfo: PropTypes.object,
-	isLabelHidden: PropTypes.bool
+	isLabelHidden: PropTypes.bool,
+	validationMessage: PropTypes.string
 };
 
 InputByColumnType.defaultProps = {
 	lookupInfo: {},
-	onBlur: Function.prototype
+	onBlur: Function.prototype,
+	validationMessage: ""
 };
 
 

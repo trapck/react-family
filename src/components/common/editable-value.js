@@ -8,7 +8,8 @@ class EditableValue extends React.Component {
 		super(props);
 		this.state = {
 			isEditMode: false,
-			editValue: this.props.value
+			editValue: this.props.value,
+			validationMessage: ""
 		};
 		this.onLabelClick = this.onLabelClick.bind(this);
 		this.onEditChange = this.onEditChange.bind(this);
@@ -29,6 +30,7 @@ class EditableValue extends React.Component {
 					columnName = {this.props.columnName}
 					value = {this.state.editValue}
 					onChange = {this.onEditChange}
+					validationMessage = {this.state.validationMessage}
 					isLabelHidden
 				/>
 			</div>
@@ -42,21 +44,30 @@ class EditableValue extends React.Component {
 	notifyParentIfValueChanged() {
 		let oldValue = getValueByColumnType(this.props.entityName, this.props.columnName, this.props.value),
 			newValue = getValueByColumnType(this.props.entityName, this.props.columnName, this.state.editValue);
-		oldValue = oldValue.getTime ? oldValue.getTime() : oldValue;
-		newValue = newValue.getTime ? newValue.getTime() : newValue;
+		oldValue = oldValue && oldValue.getTime ? oldValue.getTime() : oldValue;
+		newValue = newValue && newValue.getTime ? newValue.getTime() : newValue;
 		if (oldValue !== newValue) {
 			this.props.onBlur(this.props.columnName, this.state.editValue);
 		}
 	}
 
 	onEditBlur(column, value, e) {
+		if (this.props.validator) {
+			const validationResult = this.props.validator.validateColumn(this.props.columnName, this.state.editValue);
+			if (!validationResult.success) {
+				this.setState(Object.assign({}, this.state, {validationMessage: validationResult.message}));
+				return;
+			} else {
+				this.setState(Object.assign({}, this.state, {validationMessage: ""}));
+			}
+		}
 		this.setState(Object.assign({}, this.state, {isEditMode: false}));
 		this.notifyParentIfValueChanged();
 	}
 
 	getLabelComponent() {
 		return (
-			<div onClick = {this.onLabelClick}>
+			<div onClick = {this.onLabelClick} style={{width: "inherit", minHeight: "1em"}}>
 				{this.props.children}
 			</div>
 		);
@@ -64,7 +75,6 @@ class EditableValue extends React.Component {
 
 	render() {
 		// TODO: autoFocus on input render
-		// TODO: cant edit if value was empty first
 		return this.state.isEditMode ? this.getEditComponent() : this.getLabelComponent();
 	}
 }
@@ -74,11 +84,14 @@ EditableValue.propTypes = {
 	entityName: PropTypes.string.isRequired,
 	columnName: PropTypes.string.isRequired,
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number]),
-	onBlur: PropTypes.func
+	onBlur: PropTypes.func,
+	validator: PropTypes.object,
+	validationMessage: PropTypes.string
 };
 
 EditableValue.defaultProps = {
 	onBlur: Function.prototype,
-	children: ""
+	children: "",
+	validationMessage: ""
 };
 export default EditableValue;

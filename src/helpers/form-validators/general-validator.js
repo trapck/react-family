@@ -13,5 +13,21 @@ export default {
 			}
 		}
 		return invalidColumns;
+	},
+	validateColumn(columnName, value, config){
+		let result = {
+			success: true,
+			message: ""
+		};
+		if (config.hasOwnProperty(columnName)) {
+			for (let validateFn of config[columnName].validators) {
+				if (!validateFn(value)) {
+					result.success = false;
+					result.message = config[columnName].message || "";
+					break;
+				}
+			}
+		}
+		return result;
 	}
 };

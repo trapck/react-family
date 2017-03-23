@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import {getFormatedDate, getTextValueByColumnType, getEditValueByColumnType} from "../../../other/utils";
 import EditableValue from "../common/editable-value";
+import validator from "../../helpers/form-validators/expense-validator";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
 import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
 
@@ -29,6 +30,7 @@ class Expense extends React.Component {
 										columnName={key}
 										onBlur={this.onBlur}
 										value={getEditValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
+									  validator={validator}
 									>
 										{getTextValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
 									</EditableValue>

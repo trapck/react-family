@@ -103,6 +103,29 @@ const getValueByColumnType = (entityName, columnName, value) => {
 };
 export {getValueByColumnType};
 
+const getDefaultValueByColumnType = (entityName, columnName) => {
+	switch(entityStructure[entityName].columns[columnName].type) {
+		case entityColumnTypes.STRING: return "";
+		case entityColumnTypes.NUMBER: return 0;
+		case entityColumnTypes.DATE: return new Date(new Date().setHours(0, 0, 0, 0));
+		case entityColumnTypes.LOOKUP: return "";
+		case entityColumnTypes.BOOLEAN: return false;
+		default: return;
+	}
+};
+export {getDefaultValueByColumnType};
+
+const setEntityDefaultValues = entityName => {
+	let result = {};
+	for (let column in entityStructure[entityName].columns) {
+		if (!entityStructure[entityName].columns[column].isSystem) {
+			result[column] = getDefaultValueByColumnType(entityName, column);
+		}
+	}
+	return result;
+};
+export {setEntityDefaultValues};
+
 const getTextValueByColumnType = (entityName, columnName, value, entity) => {
 	if (entityStructure[entityName].columns[columnName].displayValueTransformFn) {
 		return entityStructure[entityName].columns[columnName].displayValueTransformFn(value);
