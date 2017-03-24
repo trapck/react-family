@@ -20,6 +20,10 @@ class NewExpense extends React.Component {
 		}
 	}
 
+	componentDidMount() {
+		this.refs.title.refs.title.refs.input.focus();
+	}
+
 	componentWillUnmount() {
 		this.props.removeIsLoading(this.isLoadingToken);
 	}
@@ -53,6 +57,7 @@ class NewExpense extends React.Component {
 									.filter(c => !entityStructure.expense.columns[c].isSystem)
 									.map(
 										c => <InputByColumnType
+											ref = {c}
 											key = {c}
 											entityName = "expense"
 											columnName = {c}

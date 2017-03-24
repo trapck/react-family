@@ -5,6 +5,11 @@ class TextAreaInput  extends React.Component {
 		super(props);
 		this.onChange = this.onChange.bind(this);
 		this.onBlur = this.onBlur.bind(this);
+		this.onKeyPress = this.onKeyPress.bind(this);
+	}
+
+	componentDidMount() {
+		this.refs.input.focus();
 	}
 
 	validateChange(value) {
@@ -23,14 +28,22 @@ class TextAreaInput  extends React.Component {
 		this.props.onBlur(this.props.tag, e.target.value, e);
 	}
 
+	onKeyPress(e) {
+		if(e.key == "Enter"){
+			this.refs.input.blur();
+		}
+	}
+
 	render() {
 		return (
 			<div className={this.props.containerClassName}>
 				<textarea
+					ref="input"
 					cols={this.props.cols}
 					rows={this.props.rows}
 					className={this.props.inputClassName}
 					onChange={this.onChange}
+					onKeyPress={this.onKeyPress}
 					onBlur={this.onBlur}
 					value={this.props.value}
 					style={{resize: "none"}}

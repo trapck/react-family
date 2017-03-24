@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import {getTextValueByColumnType, getEditValueByColumnType} from "../../../other/utils";
 import EditableValue from "../common/editable-value";
+import validator from "../../helpers/form-validators/expense-limit-validator";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
 import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
 
@@ -36,6 +37,8 @@ class MonthExpenseLimit extends React.Component {
 											this.props.monthExpenseLimit[key],
 											this.props.monthExpenseLimit)
 										}
+										validator={validator}
+									  entity={this.props.monthExpenseLimit}
 									>
 										{
 											getTextValueByColumnType(

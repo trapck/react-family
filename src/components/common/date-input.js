@@ -6,17 +6,32 @@ class DateInput extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onChange = this.onChange.bind(this);
+		this.onKeyPress = this.onKeyPress.bind(this);
+	}
+
+	componentDidMount() {
+		this.refs.input.focus();
 	}
 
 	onChange(dateString, {dateMoment}) {
 		this.props.onChange(this.props.tag, new Date(dateMoment._d));
 	}
 
+	onKeyPress(e) {
+		if(e.key == "Enter"){
+			e.preventDefault();
+			e.stopPropagation();
+			this.refs.input.getInput().blur();
+		}
+	}
+
 	render() {
 		return (<DateField
 			forceValidDate
+			ref="input"
 			onChange={this.onChange}
 			onBlur={this.onBlur}
+			onKeyPress={this.onKeyPress}
 			value={this.props.value}
 			updateOnDateClick
 			expandOnFocus={false}

@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import {getTextValueByColumnType, getEditValueByColumnType} from "../../../other/utils";
 import EditableValue from "../common/editable-value";
+import validator from "../../helpers/form-validators/expense-category-validator";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
 import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
 
@@ -38,7 +39,8 @@ class ExpenseCategory extends React.Component {
 											this.props.expenseCategory[key],
 											this.props.expenseCategory)
 										}
-										>
+										validator={validator}
+									>
 										{
 											getTextValueByColumnType(
 												"expenseCategory",

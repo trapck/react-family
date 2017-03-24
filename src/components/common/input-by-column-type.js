@@ -91,6 +91,7 @@ class InputByColumnType extends React.Component {
 						this.props.isLabelHidden ? "div" : LabelCover,
 						this.props.isLabelHidden ? undefined : {caption: column.caption},
 						React.cloneElement(this.getComponent(column), {
+							ref: this.props.columnName,
 							value: this.props.value,
 							onChange: this.props.onChange,
 							onBlur: this.props.onBlur,

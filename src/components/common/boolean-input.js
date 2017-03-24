@@ -6,6 +6,12 @@ class BooleanInput  extends React.Component {
 		this.onChange = this.onChange.bind(this);
 	}
 
+	componentDidMount() {
+		if (!this.props.isFocusCanceled) {
+			this.refs.input.focus();
+		}
+	}
+
 	onChange(e) {
 		this.props.onChange(this.props.tag, e.target.checked, e);
 	}
@@ -14,6 +20,7 @@ class BooleanInput  extends React.Component {
 		return (
 			<div className={this.props.containerClassName}>
 				<input
+					ref="input"
 					className = {this.props.inputClassName}
 					type = "checkbox"
 					checked = {!!this.props.value}
@@ -29,7 +36,8 @@ BooleanInput.propTypes = {
 	value: PropTypes.bool,
 	containerClassName: PropTypes.string,
 	inputClassName: PropTypes.string,
-	tag: PropTypes.string
+	tag: PropTypes.string,
+	isFocusCanceled: PropTypes.bool
 };
 
 BooleanInput.defaultProps = {

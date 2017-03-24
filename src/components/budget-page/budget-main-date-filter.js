@@ -10,6 +10,7 @@ const BudgetMainDateFilter = props => {
 				options = {months.data.map(m => {return {label: m.title, value: m.number};})}
 				onChange = {props.onMonthChange}
 				containerClassName = {"current-month-edit-container"}
+				isFocusCanceled
 				/>
 			<div className = {"current-year-edit-container"}>
 				<input

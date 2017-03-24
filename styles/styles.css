@@ -34,18 +34,19 @@
 
 }
 
-.expenses-categories-table,
+.expense-categories-table,
 .month-expense-limits-table{
 	margin-left: 20px;
 }
 
 .expenses-table th,
 .expenses-table td,
-.expenses-categories-table th,
-.expenses-categories-table td,
+.expense-categories-table th,
+.expense-categories-table td,
 .month-expense-limits-table td,
 .month-expense-limits-table th{
 	padding: 5px 10px;
+	text-align: center;
 }
 
 .month-expense-summary {

@@ -328,7 +328,10 @@ const coreValidator = {
 		return length >= min && length <= max;
 	},
 	validatePositiveNumber(value) {
-		return (value || 0) > 0;
+		return Number(value) && value > 0;
+	},
+	validateNotNegativeNumber(value) {
+		return Number(value) && value >= 0;
 	},
 	validateRequiredLookup(value = {}) {
 		return value && value.value;

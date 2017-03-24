@@ -15,13 +15,13 @@ class ExpenseCategoriesManager extends React.Component {
 	render() {
 		return (
 			<div>
-				<ExpenseCategoriesList/>
 				<div>
 					<button onClick = {this.props.toggleNewExpenseCategoryVisible}>
 						{this.props.isNewExpenseCategoryVisible ? "-" : "+"}
 					</button>
 					{this.props.isNewExpenseCategoryVisible ? <NewExpenseCategory/> : null}
 				</div>
+				<ExpenseCategoriesList/>
 			</div>
 		);
 	}

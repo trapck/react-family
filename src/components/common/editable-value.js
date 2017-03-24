@@ -53,15 +53,17 @@ class EditableValue extends React.Component {
 
 	onEditBlur(column, value, e) {
 		if (this.props.validator) {
-			const validationResult = this.props.validator.validateColumn(this.props.columnName, this.state.editValue);
+			const validationResult = this.props.validator.validateColumn(
+				this.props.columnName, this.state.editValue, this.props.entity
+			);
 			if (!validationResult.success) {
 				this.setState(Object.assign({}, this.state, {validationMessage: validationResult.message}));
 				return;
 			} else {
-				this.setState(Object.assign({}, this.state, {validationMessage: ""}));
+				this.setState(Object.assign({}, this.state, {validationMessage: "", isEditMode: false}));
 			}
 		}
-		this.setState(Object.assign({}, this.state, {isEditMode: false}));
+		//this.setState(Object.assign({}, this.state, {isEditMode: false}));
 		this.notifyParentIfValueChanged();
 	}
 
@@ -86,7 +88,8 @@ EditableValue.propTypes = {
 	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.bool, PropTypes.number]),
 	onBlur: PropTypes.func,
 	validator: PropTypes.object,
-	validationMessage: PropTypes.string
+	validationMessage: PropTypes.string,
+	entity: PropTypes.object
 };
 
 EditableValue.defaultProps = {

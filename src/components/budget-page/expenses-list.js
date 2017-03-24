@@ -126,7 +126,13 @@ const mapStateToProps = (state, ownProps) => {
 		expenses: state.budget.expenses.filter(e =>
 			e.category === ownProps.category &&
 			(ownProps.dateFilterValue ?  getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue) : true)
-		),
+		)
+			.sort((a,b) => {
+				if (a.title > b.title) return 1;
+				else if (b.title > a.title) return -1;
+				else return 0;
+			})
+			.sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
 		isLoading: state.isLoading,
 		currentMonth: state.budget.ui.currentMonth.number,
 		currentYear: state.budget.ui.currentYear

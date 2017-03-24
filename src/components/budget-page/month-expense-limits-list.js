@@ -55,6 +55,7 @@ class MonthExpenseLimitsList extends React.Component {
 					<BooleanInput
 						value = {this.props.isShowCurrentMonthLimitOnly}
 						onChange = {this.onCurrentMonthOnlyChange}
+						isFocusCanceled
 					/>
 				</LabelCover>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>

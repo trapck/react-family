@@ -2,29 +2,57 @@ import React, {PropTypes} from "react";
 import {SimpleSelect} from "react-selectize";
 import "react-selectize/themes/index.css";
 
-const DropDownInput = props => {
-	const onChange = (item = {}) => {
-		props.onChange(props.tag, {label: item.label, value: item.value, isDropDown: true}, item);
-	},
-		onBlur = (item = {}) => {
+class DropDownInput extends React.Component {
+	constructor(props) {
+		super(props);
+		this.onChange = this.onChange.bind(this);
+		this.onBlur = this.onBlur.bind(this);
+		this.onOpenChange = this.onOpenChange.bind(this);
+		this.onKeyPress = this.onKeyPress.bind(this);
+	}
+
+	componentDidMount() {
+		if (!this.props.isFocusCanceled) {
+			this.refs.input.refs.select.focusOnInput();
+		}
+		this.refs.input.refs.select.refs.control.addEventListener("keypress", this.onKeyPress);
+	}
+
+	onChange(item = {}) {
+		this.props.onChange(this.props.tag, {label: item.label, value: item.value, isDropDown: true}, item);
+	}
+	onBlur(item = {}) {
 			item.value = item.value || {};
-			props.onBlur(props.tag, {label: item.value.label, value: item.value.value, isDropDown: true}, item);
-		},
-		onOpenChange = isOpened => {props.onOpenChange(isOpened);};
-	return (
-		<div className = {props.containerClassName}>
-			<SimpleSelect
-				className = {props.inputClassName}
-				value = {props.value}
-				onValueChange = {onChange}
-				onBlur = {onBlur}
-				onOpenChange = {onOpenChange}
-				options = {props.options}
-				placeholder = {props.placeholder}
-			/>
-		</div>
-	);
-};
+			this.props.onBlur(this.props.tag, {label: item.value.label, value: item.value.value, isDropDown: true}, item);
+	}
+
+	onOpenChange(isOpened) {
+		this.props.onOpenChange(isOpened);
+	}
+
+	onKeyPress(e) {
+		if(e.key == "Enter"){
+			this.refs.input.blur();
+		}
+	}
+
+	render() {
+		return (
+			<div className={this.props.containerClassName}>
+				<SimpleSelect
+					ref="input"
+					className={this.props.inputClassName}
+					value={this.props.value}
+					onValueChange={this.onChange}
+					onBlur={this.onBlur}
+					onOpenChange={this.onOpenChange}
+					options={this.props.options}
+					placeholder={this.props.placeholder}
+				/>
+			</div>
+		);
+	}
+}
 
 
 DropDownInput.propTypes = {
@@ -37,7 +65,8 @@ DropDownInput.propTypes = {
 	containerClassName: PropTypes.string,
 	inputClassName: PropTypes.string,
 	tag: PropTypes.string,
-	placeholder: PropTypes.string
+	placeholder: PropTypes.string,
+	isFocusCanceled: PropTypes.bool
 };
 
 DropDownInput.defaultProps = {

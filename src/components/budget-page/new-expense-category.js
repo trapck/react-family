@@ -5,6 +5,7 @@ import * as actionCreators from "../../redux/actions/action-creators";
 import InputByColumnType from "../common/input-by-column-type";
 import PreloaderContainer from "../common/preloader-container";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
+import validator from "../../helpers/form-validators/expense-category-validator";
 import guid from "uuid/v4";
 import toastr from "toastr";
 
@@ -14,10 +15,17 @@ class NewExpenseCategory extends React.Component {
 		this.onChange = this.onChange.bind(this);
 		this.saveNewExpenseCategory = this.saveNewExpenseCategory.bind(this);
 		this.isLoadingToken = guid();
+		this.state = {
+			validationInfo: []
+		}
 	}
 
 	componentWillUnmount() {
 		this.props.removeIsLoading(this.isLoadingToken);
+	}
+
+	componentDidMount() {
+		this.refs.title.refs.title.refs.input.focus();
 	}
 
 	onChange(column, value, e) {
@@ -25,6 +33,14 @@ class NewExpenseCategory extends React.Component {
 	}
 
 	saveNewExpenseCategory() {
+		const validationResult = validator.validate(this.props.newExpenseCategory);
+		if (validationResult.length) {
+			this.setState(Object.assign({}, this.state, {validationInfo: [...validationResult]}));
+			return;
+		}
+		if (this.state.validationInfo.length) {
+			this.setState(Object.assign({}, this.state, {validationInfo: []}));
+		}
 		this.props.addNewExpenseCategory(this.props.newExpenseCategory, this.isLoadingToken)
 			.then(() => toastr.success("New expense category added"));
 	}
@@ -41,13 +57,17 @@ class NewExpenseCategory extends React.Component {
 								.filter(c => !entityStructure.expenseCategory.columns[c].isSystem)
 								.map(
 									c => <InputByColumnType
-									key = {c}
-									entityName = "expenseCategory"
-									columnName = {c}
-									value = {this.props.newExpenseCategory[c]}
-									onChange = {this.onChange}
+										ref = {c}
+										key = {c}
+										entityName = "expenseCategory"
+										columnName = {c}
+										value = {this.props.newExpenseCategory[c]}
+										onChange = {this.onChange}
+										validationMessage = {
+												this.state.validationInfo.filter(i => i.name === c).map(i => i.message)[0] || ""
+											}
 									/>
-							)
+								)
 						}
 					</div>
 				</div>
