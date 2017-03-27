@@ -100,7 +100,7 @@ class InputByColumnType extends React.Component {
 				}
 				<ValidationInfo message = {this.props.validationMessage}/>
 			</div>
-		)
+		);
 	}
 }
 

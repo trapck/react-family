@@ -1,60 +1,10 @@
 import React, {PropTypes} from "react";
-import {getFormatedDate, getTextValueByColumnType, getEditValueByColumnType} from "../../../other/utils";
-import EditableValue from "../common/editable-value";
-import validator from "../../helpers/form-validators/expense-validator";
-import entityStructure from "../../static-data/entity-info/entity-sctructure";
-import entityColumnTypes from "../../static-data/entity-info/entity-column-types";
+import EntityRow from "../common/general-entity-row";
 
-class Expense extends React.Component {
+class Expense extends EntityRow {
 	constructor(props) {
-		super(props);
-		this.onBlur = this.onBlur.bind(this);
-	}
-
-	onBlur(column, value) {
-		this.props.onValueChange(this.props.expense.id, column, value);
-	}
-
-	render() {
-		return (
-			<tr>
-				{this.props.additionalLeftCells.map((c, i) => <td key = {i}>{c}</td>)}
-				{
-					Object.keys(entityStructure.expense.columns)
-						.filter(key => !entityStructure.expense.columns[key].isSystem)
-						.map(key => {
-							return (
-								<td key={entityStructure.expense.columns[key].id}>
-									<EditableValue
-										entityName="expense"
-										columnName={key}
-										onBlur={this.onBlur}
-										value={getEditValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
-									  validator={validator}
-									>
-										{getTextValueByColumnType("expense", key, this.props.expense[key], this.props.expense)}
-									</EditableValue>
-								</td>
-							);
-						})
-				}
-				{this.props.additionalRightCells.map((c, i) => <td key = {i}>{c}</td>)}
-			</tr>
-		);
+		super(props, "expense");
 	}
 }
-
-Expense.propTypes = {
-	expense: PropTypes.object.isRequired,
-	onValueChange: PropTypes.func,
-	additionalLeftCells: PropTypes.array,
-	additionalRightCells: PropTypes.array
-};
-
-Expense.defaultProps = {
-	onValueChange: Function.prototype,
-	additionalLeftCells: [],
-	additionalRightCells: []
-};
 
 export default Expense;

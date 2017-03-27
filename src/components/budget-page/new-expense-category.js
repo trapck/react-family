@@ -17,15 +17,15 @@ class NewExpenseCategory extends React.Component {
 		this.isLoadingToken = guid();
 		this.state = {
 			validationInfo: []
-		}
-	}
-
-	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		};
 	}
 
 	componentDidMount() {
 		this.refs.title.refs.title.refs.input.focus();
+	}
+
+	componentWillUnmount() {
+		this.props.removeIsLoading(this.isLoadingToken);
 	}
 
 	onChange(column, value, e) {

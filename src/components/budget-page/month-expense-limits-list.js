@@ -4,6 +4,7 @@ import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import LabelCover from "../common/label-cover";
 import BooleanInput from "../common/boolean-input";
+import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import MonthExpenseLimit from "./month-expense-limit";
 import {getEntityColumnsCaptions} from "../../../other/utils";
@@ -59,18 +60,18 @@ class MonthExpenseLimitsList extends React.Component {
 					/>
 				</LabelCover>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-					<table className = "month-expense-limits-table">
-						<tbody>
-						<tr>
-							{getEntityColumnsCaptions("monthExpenseLimit", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
-						</tr>
-						{this.props.monthExpenseLimits.map(e => <MonthExpenseLimit
-							key={e.id}
-							monthExpenseLimit={e}
-							onValueChange={this.onLimitValueUpdated}
-						/>)}
-						</tbody>
-					</table>
+					{
+						entityListHelper.createTableList(
+							MonthExpenseLimit,
+							this.props.monthExpenseLimits,
+							"monthExpenseLimit",
+							this.onLimitValueUpdated,
+							[],
+							[],
+							["id"],
+							"month-expense-limits-table"
+						)
+					}
 				</PreloaderContainer>
 			</div>
 		);

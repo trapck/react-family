@@ -3,14 +3,13 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import DeleteIcon from "../common/delete-icon";
+import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import ExpenseCategory from "./expense-category";
 import {getEntityColumnsCaptions} from "../../../other/utils";
 import toastr from "toastr";
 import guid from "uuid/v4";
 
-
-//TODO: think about generalizing list components
 class ExpenseCategoriesList extends React.Component {
 	constructor(props) {
 		super(props);
@@ -56,35 +55,24 @@ class ExpenseCategoriesList extends React.Component {
 	}
 
 	render() {
+		const additionalRightCells = [this.props.expenseCategories.map(
+			e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseCategoryClick} onClickArguments = {{id: e.id}}/>
+		)];
 		return (
 			<div>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-					<table className = "expense-categories-table">
-						<tbody>
-						<tr>
-							{getEntityColumnsCaptions("expenseCategory", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
-						</tr>
-						{
-							this.props.expenseCategories.map(e => {
-								const additionalRightCells = [
-									<DeleteIcon
-										key = {e.id}
-										onClick = {this.onDeleteExpenseCategoryClick}
-										onClickArguments = {{id: e.id}}
-									/>
-								];
-								return (
-									<ExpenseCategory
-										key={e.id}
-										expenseCategory={e}
-										onValueChange={this.onCategoryValueUpdated}
-										additionalRightCells={additionalRightCells}
-									/>
-								);
-							})
-						}
-						</tbody>
-					</table>
+					{
+						entityListHelper.createTableList(
+							ExpenseCategory,
+							this.props.expenseCategories,
+							"expenseCategory",
+							this.onCategoryValueUpdated,
+							additionalRightCells,
+							[],
+							["id"],
+							"expense-categories-table"
+						)
+					}
 				</PreloaderContainer>
 			</div>
 		);

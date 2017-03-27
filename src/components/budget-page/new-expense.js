@@ -17,7 +17,7 @@ class NewExpense extends React.Component {
 		this.isLoadingToken = guid();
 		this.state = {
 			validationInfo: []
-		}
+		};
 	}
 
 	componentDidMount() {

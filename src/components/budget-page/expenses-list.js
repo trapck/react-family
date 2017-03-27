@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import DeleteIcon from "../common/delete-icon";
+import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
 import {getEntityColumnsCaptions, getDateColumnEqualityComparisonResult} from "../../../other/utils";
@@ -43,16 +44,16 @@ class ExpensesList extends React.Component {
 
 	onExpenseValueUpdated(id, columnName, columnValue) {
 		this.props.updateExpense([
-			{
-				id,
-				values: [
-					{
-						columnName,
-						columnValue
-					}
-				]
-			}
-		],
+				{
+					id,
+					values: [
+						{
+							columnName,
+							columnValue
+						}
+					]
+				}
+			],
 			this.isLoadingToken,
 			this.props.currentMonth,
 			this.props.currentYear).then(() => {
@@ -69,35 +70,30 @@ class ExpensesList extends React.Component {
 			this.isLoadingToken,
 			this.props.currentMonth,
 			this.props.currentYear).then(() => {
-				toastr.success("Expense deleted");
-				this.props.removeIsLoading(this.isLoadingToken);
-			});
+			toastr.success("Expense deleted");
+			this.props.removeIsLoading(this.isLoadingToken);
+		});
 	}
 
 	render() {
+		const additionalRightCells = [this.props.expenses.map(
+			e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
+		)];
 		return (
 			<div>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
-					<table className = "expenses-table">
-						<tbody>
-						<tr>
-							{getEntityColumnsCaptions("expense", ["id"]).map((c, i) => <th key={i}>{c}</th>)}
-						</tr>
-						{this.props.expenses.map(e => {
-							const additionalRightCells = [
-								<DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
-							];
-							return (
-								<Expense
-									key={e.id}
-									expense={e}
-									onValueChange={this.onExpenseValueUpdated}
-									additionalRightCells={additionalRightCells}
-									/>
-							);
-						})}
-						</tbody>
-					</table>
+					{
+						entityListHelper.createTableList(
+							Expense,
+							this.props.expenses,
+							"expense",
+							this.onExpenseValueUpdated,
+							additionalRightCells,
+							[],
+							["id"],
+							"expenses-table"
+						)
+					}
 				</PreloaderContainer>
 			</div>
 		);
@@ -126,7 +122,7 @@ const mapStateToProps = (state, ownProps) => {
 		expenses: state.budget.expenses.filter(e =>
 			e.category === ownProps.category &&
 			(ownProps.dateFilterValue ?  getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue) : true)
-		)
+			)
 			.sort((a,b) => {
 				if (a.title > b.title) return 1;
 				else if (b.title > a.title) return -1;
