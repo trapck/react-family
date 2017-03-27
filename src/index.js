@@ -8,7 +8,7 @@ import mockApi from "../other/mock-api";
 import storeCreator from "./redux/store/store-creator";
 import "../node_modules/toastr/build/toastr.min.css";
 import "../styles/styles.css";
-// hello
+
 const store = storeCreator.create();
 
 ReactDom.render(
