@@ -17,14 +17,18 @@ const app = express();
 const compiler = webpack(config);
 const dbPath = path.join( __dirname, "db.json");
 const dbBackupPath = __dirname;
-const makeBackupInterval = 1000 * 10;//npm st * 60 * 3;
+const makeBackupInterval = 1000 * 30;//npm st * 60 * 3;
 
 const startMakeDBBackupJob = () => {
 	setInterval(() => {
-		const filePath  = path.join(dbBackupPath, new Date().toLocaleString() + ".bak.json");
-		fs.openSync(filePath, "w");
-		fs.createReadStream(dbPath).pipe(fs.createWriteStream(filePath));
-	}, makeBackupInterval)
+			const dateDirName = new Date().toLocaleDateString().replace(/[^\d]/g, ""),
+				filePath  = path.join( __dirname, "dbBak", dateDirName, "db" + Date.now() + ".bak.json");
+		//fs.openSync(filePath, "w+");
+		//let stream = fs.createWriteStream(filePath, {flags: "w+"})
+		fs.createReadStream(dbPath).pipe(fs.createWriteStream(filePath, {flags: "w+"}));
+		//fs.open(path.join( __dirname, "db" + Date.now() + ".json"), "w+", function () {
+
+	}, makeBackupInterval);
 };
 app.use(require("webpack-dev-middleware")(compiler, {
 	noInfo: true,
