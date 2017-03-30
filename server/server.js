@@ -15,7 +15,17 @@ import {
 const port = 3000;
 const app = express();
 const compiler = webpack(config);
+const dbPath = path.join( __dirname, "db.json");
+const dbBackupPath = __dirname;
+const makeBackupInterval = 1000 * 10;//npm st * 60 * 3;
 
+const startMakeDBBackupJob = () => {
+	setInterval(() => {
+		const filePath  = path.join(dbBackupPath, new Date().toLocaleString() + ".bak.json");
+		fs.openSync(filePath, "w");
+		fs.createReadStream(dbPath).pipe(fs.createWriteStream(filePath));
+	}, makeBackupInterval)
+};
 app.use(require("webpack-dev-middleware")(compiler, {
 	noInfo: true,
 	publicPath: config.output.publicPath
@@ -63,5 +73,6 @@ app.listen(port, function(err) {
 		console.log(err);
 	} else {
 		open(`http://localhost:${port}`);
+		startMakeDBBackupJob();
 	}
 });

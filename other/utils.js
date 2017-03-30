@@ -5,6 +5,7 @@ import entityRelations from "../src/static-data/entity-info/entity-relations";
 import entityColumns from "../src/static-data/entity-info/entity-columns";
 import comparisonTypes from "../src/static-data/comparison-types";
 
+
 const getFormatedDate = (date) => {
 	date = new Date(date);
 	let day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate(),
@@ -150,7 +151,6 @@ const getEditValueByColumnType = (entityName, columnName, value, entity) => {
 export {getEditValueByColumnType};
 
 const findRelatedEntities = (entityName, id, db) => {
-	// TODO: cascade delete
 	const entityRelationsColumns = entityRelations.data
 		.filter(e => e.linkTo === entityStructure[entityName].id)
 		.map(e => e.column);
