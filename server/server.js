@@ -8,7 +8,7 @@ import bodyParser from "body-parser";
 import {
 	syncDb,
 	createFilterFunction
-} from "../other/utils";
+	} from "../other/utils";
 
 /* eslint-disable no-console */
 
@@ -16,18 +16,17 @@ const port = 3000;
 const app = express();
 const compiler = webpack(config);
 const dbPath = path.join( __dirname, "db.json");
-const dbBackupPath = __dirname;
+const dbBackupPath = path.join( __dirname, "dbBak");
 const makeBackupInterval = 1000 * 30;//npm st * 60 * 3;
 
 const startMakeDBBackupJob = () => {
 	setInterval(() => {
-			const dateDirName = new Date().toLocaleDateString().replace(/[^\d]/g, ""),
-				filePath  = path.join( __dirname, "dbBak", dateDirName, "db" + Date.now() + ".bak.json");
-		//fs.openSync(filePath, "w+");
-		//let stream = fs.createWriteStream(filePath, {flags: "w+"})
+		const dateDirName = new Date().toLocaleDateString().replace(/[^\d]/g, ""),
+			filePath  = path.join( dbBackupPath, dateDirName, "db" + Date.now() + ".bak.json");
+		if (!fs.existsSync(path.join(dbBackupPath, dateDirName))){
+			fs.mkdirSync(path.join(dbBackupPath, dateDirName));
+		}
 		fs.createReadStream(dbPath).pipe(fs.createWriteStream(filePath, {flags: "w+"}));
-		//fs.open(path.join( __dirname, "db" + Date.now() + ".json"), "w+", function () {
-
 	}, makeBackupInterval);
 };
 app.use(require("webpack-dev-middleware")(compiler, {
