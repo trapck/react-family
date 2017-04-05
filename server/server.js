@@ -21,6 +21,9 @@ const makeBackupInterval = 1000 * 30;//npm st * 60 * 3;
 
 const startMakeDBBackupJob = () => {
 	setInterval(() => {
+		if (!fs.existsSync(dbBackupPath)){
+			fs.mkdirSync(dbBackupPath);
+		}
 		const dateDirName = new Date().toLocaleDateString().replace(/[^\d]/g, ""),
 			filePath  = path.join( dbBackupPath, dateDirName, "db" + Date.now() + ".bak.json");
 		if (!fs.existsSync(path.join(dbBackupPath, dateDirName))){
