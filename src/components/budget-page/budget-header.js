@@ -6,7 +6,7 @@ const Header = () => {
 		<div>
 			<IndexLink to = "/budget" className = "link" activeClassName = "link_active">Current month</IndexLink>
 			{" | "}
-			<Link to = "/budget/history" className = "link" activeClassName = "link_active">History</Link>
+			<Link to = "/budget/charts" className = "link" activeClassName = "link_active">Charts</Link>
 			{" | "}
 			<Link to = "/budget/settings" className = "link" activeClassName = "link_active">Settings</Link>
 			{" | "}
