@@ -21,6 +21,7 @@ export default {
 		newExpenseCategory: {
 			isNotVisibleInList: false
 		},
+		yearChartData: [],
 		ui: {
 			isGeneralInfoRowCollapsed: {},
 			isNewExpenseVisible: false,

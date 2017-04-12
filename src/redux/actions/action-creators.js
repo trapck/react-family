@@ -158,14 +158,6 @@ const getCurrentMonthGeneralInfo = (
 };
 export {getCurrentMonthGeneralInfo};
 
-const addExpenseToCurrentMonthGeneralInfo = expense => {
-	return {
-		type: actionTypes.ADD_EXPENSE_TO_MONTH_GENERAL_INFO,
-		expense
-	};
-};
-export {addExpenseToCurrentMonthGeneralInfo};
-
 const setReceivedCurrentMonthGeneralInfo = (info, filters = []) => {
 	return {
 		type: actionTypes.SET_RECEIVED_CURRENT_MONTH_GENERAL_INFO,
@@ -173,6 +165,33 @@ const setReceivedCurrentMonthGeneralInfo = (info, filters = []) => {
 		filters
 	};
 };
+
+const getYearChartData = (monthCount = 12, isLoadingToken = "") => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.getYearChartInfo(monthCount).then(
+		data => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedYearChartData(data));
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {getYearChartData};
+
+const setReceivedYearChartData = (data = []) => {
+	return {
+		type: actionTypes.SET_RECEIVED_YEAR_CHART_DATA,
+		data
+	};
+};
+
+const addExpenseToCurrentMonthGeneralInfo = expense => {
+	return {
+		type: actionTypes.ADD_EXPENSE_TO_MONTH_GENERAL_INFO,
+		expense
+	};
+};
+export {addExpenseToCurrentMonthGeneralInfo};
 
 const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
 	return {

@@ -6,6 +6,7 @@ import newExpenseCategory from "./new-expense-category-reducer";
 import currentMonthGeneralInfo from "./current-month-info-reducer";
 import monthLimits from "./expense-limits-reducer";
 import expenseCategories from "./expense-categories-reducer";
+import yearChartData from "./year-chart-data-reducer";
 import ui from "./ui/budget-ui-main-reducer";
 
 const budget = (state = initialState.budget, action = {}) => {
@@ -16,6 +17,7 @@ const budget = (state = initialState.budget, action = {}) => {
 		currentMonthGeneralInfo: currentMonthGeneralInfo(state.currentMonthGeneralInfo, action),
 		monthLimits: monthLimits(state.monthLimits, action),
 		expenseCategories: expenseCategories(state.expenseCategories, action),
+		yearChartData: yearChartData(state.yearChartData, action),
 		ui: ui(state.ui, action)
 	});
 };

@@ -33,7 +33,9 @@ class NewExpense extends React.Component {
 	}
 
 	saveNewExpense() {
-		const validationResult = validator.validate(this.props.newExpense);
+		const validationResult = validator.validate(this.props.newExpense),
+			currentMonth = this.props.currentMonth.number,
+			currentYear = this.props.currentYear;
 		if (validationResult.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: [...validationResult]}));
 			return;
@@ -41,37 +43,37 @@ class NewExpense extends React.Component {
 		if (this.state.validationInfo.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: []}));
 		}
-		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken)
+		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken, currentMonth, currentYear)
 			.then(() => toastr.success("New expense added"));
 	}
 
 	render() {
 		return (
-				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
+			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
+				<div>
+					<button onClick = {this.saveNewExpense}>Save</button>
+					<button onClick = {this.props.clearNewExpense}>Clear</button>
 					<div>
-						<button onClick = {this.saveNewExpense}>Save</button>
-						<button onClick = {this.props.clearNewExpense}>Clear</button>
-						<div>
-							{
-								Object.keys(entityStructure.expense.columns)
-									.filter(c => !entityStructure.expense.columns[c].isSystem)
-									.map(
-										c => <InputByColumnType
-											ref = {c}
-											key = {c}
-											entityName = "expense"
-											columnName = {c}
-											value = {this.props.newExpense[c]}
-											onChange = {this.onChange}
-											validationMessage = {
+						{
+							Object.keys(entityStructure.expense.columns)
+								.filter(c => !entityStructure.expense.columns[c].isSystem)
+								.map(
+									c => <InputByColumnType
+										ref = {c}
+										key = {c}
+										entityName = "expense"
+										columnName = {c}
+										value = {this.props.newExpense[c]}
+										onChange = {this.onChange}
+										validationMessage = {
 												this.state.validationInfo.filter(i => i.name === c).map(i => i.message)[0] || ""
 											}
-										/>
-									)
-							}
-						</div>
+									/>
+								)
+						}
 					</div>
-				</PreloaderContainer>
+				</div>
+			</PreloaderContainer>
 		);
 	}
 }
@@ -82,13 +84,17 @@ NewExpense.propTypes = {
 	clearNewExpense: PropTypes.func.isRequired,
 	addNewExpense: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
-	isLoading: PropTypes.object.isRequired
+	isLoading: PropTypes.object.isRequired,
+	currentMonth: PropTypes.object.isRequired,
+	currentYear: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => {
 	return {
 		newExpense: state.budget.newExpense,
-		isLoading: state.isLoading
+		isLoading: state.isLoading,
+		currentMonth: state.budget.ui.currentMonth,
+		currentYear: state.budget.ui.currentYear,
 	};
 };
 

@@ -226,6 +226,25 @@ const getDbBranchFromServer = (entityName) => {
 };
 export {getDbBranchFromServer};
 
+const getYearChartInfo = (monthCount = 12) => {
+	let xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://localhost:3000/year-chart-info?monthCount=" + monthCount);
+	xhr.send();
+	return new Promise((res, rej) => {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 4) {
+				if (xhr.status !== 200) {
+					rej(xhr.status + ': ' + xhr.statusText);
+				} else {
+					res(JSON.parse(xhr.responseText).data);
+				}
+			}
+		};
+	});
+};
+export {getYearChartInfo};
+
+
 const postDbBranchToServer = (entity, data) => {
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", "http://localhost:3000/syncDb");

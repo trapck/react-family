@@ -7,8 +7,9 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {
 	syncDb,
-	createFilterFunction
-	} from "../other/utils";
+	createFilterFunction,
+	getFormatedDate
+} from "../other/utils";
 
 /* eslint-disable no-console */
 
@@ -17,7 +18,7 @@ const app = express();
 const compiler = webpack(config);
 const dbPath = path.join( __dirname, "db.json");
 const dbBackupPath = path.join( __dirname, "dbBak");
-const makeBackupInterval = 1000 * 30;//npm st * 60 * 3;
+const makeBackupInterval = 1000 * 60 * 30;
 
 const startMakeDBBackupJob = () => {
 	setInterval(() => {
@@ -43,7 +44,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(require("webpack-hot-middleware")(compiler));
 
-app.post("/select", function(req, res) {
+app.post("/select", (req, res) => {
 	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
 		data = req.body.data,
 		result = {};
@@ -68,6 +69,32 @@ app.get("/syncDb", function(req, res) {
 	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
 		entityName = req.query.entity;
 	res.send(JSON.stringify({[entityName]: db[entityName]}));
+});
+
+app.get("/year-chart-info", (req, res) => {
+	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
+		result = [];
+	let nowMonth = new Date().getMonth(),
+		nowYear = new Date().getFullYear(),
+		monthCount = req.query.monthCount || 12;
+	while(monthCount) {
+		let amount = db.expense
+			.filter(e => new Date(e.date).getMonth() === nowMonth && new Date(e.date).getFullYear() === nowYear)
+			.reduce((total, item) => total + item.amount, 0),
+			month = ((nowMonth + 1) > 9 ? nowMonth + 1 : "0" + (nowMonth + 1)) + "." + nowYear;
+		result.push({
+			month,
+			amount
+		});
+		if (nowMonth === 0) {
+			nowMonth = 11;
+			nowYear--;
+		} else {
+			nowMonth--;
+		}
+		monthCount--;
+	}
+	res.send(JSON.stringify({data: [...result].reverse()}));
 });
 
 app.get("*", function(req, res) {

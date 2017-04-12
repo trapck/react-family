@@ -9,7 +9,8 @@ import {
 	getDbBranchFromServer,
 	postDbBranchToServer,
 	syncDb,
-	selectDisplayValues
+	selectDisplayValues,
+	getYearChartInfo
 } from "./utils";
 
 const currentMonth = new Date().getMonth();
@@ -431,6 +432,15 @@ const api = {
 						}
 					);
 				}
+			);
+		});
+	},
+
+	getYearChartInfo(monthCount = 12) {
+		return new Promise((res, rej) => {
+			getYearChartInfo(monthCount).then(
+				response => res(response),
+				ex => rej(ex)
 			);
 		});
 	}

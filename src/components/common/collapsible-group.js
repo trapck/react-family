@@ -5,7 +5,7 @@ class CollapsibleGroup extends React.Component {
 		super(props);
 		if (!props.hasOwnProperty("isCollapsed")) {
 			this.state = {
-				isCollapsed: true
+				isCollapsed: false
 			};
 		}
 		this.onHeaderClick = this.onHeaderClick.bind(this);
