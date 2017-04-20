@@ -14,19 +14,28 @@ import YearAmountChart from "./year-amount-chart";
 class BudgetCharts extends React.Component {
 	constructor(props) {
 		super(props);
+		this.getMonthCategoriesChartData = this.getMonthCategoriesChartData.bind(this);
 	}
 
 	componentDidMount() {
 		const currentMonth = this.props.currentMonth.number,
 			currentYear = this.props.currentYear;
-		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken, currentMonth, currentYear);
+		this.getMonthCategoriesChartData(currentMonth, currentYear);
 		this.props.getYearChartData();
+	}
+
+	getMonthCategoriesChartData(month, year) {
+		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken, month, year);
 	}
 
 	render() {
 		return (
 			<div>
-				<CurrentMonthCategoriesChart generalInfo={this.props.generalInfo}/>
+				<CurrentMonthCategoriesChart
+					currentMonth={this.props.currentMonth}
+					currentYear={this.props.currentYear}
+					generalInfo={this.props.generalInfo}
+					updateChartData={this.getMonthCategoriesChartData}/>
 				<YearAmountChart chartData={this.props.yearChartData}/>
 			</div>
 		);

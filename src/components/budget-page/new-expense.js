@@ -94,7 +94,7 @@ const mapStateToProps = state => {
 		newExpense: state.budget.newExpense,
 		isLoading: state.isLoading,
 		currentMonth: state.budget.ui.currentMonth,
-		currentYear: state.budget.ui.currentYear,
+		currentYear: state.budget.ui.currentYear
 	};
 };
 
