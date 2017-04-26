@@ -5,27 +5,35 @@ import * as actionCreators from "../../redux/actions/action-creators";
 import CurrentMonthCategoriesChart from "./current-month-categories-chart";
 import YearAmountChart from "./year-amount-chart";
 
-/*
-* 1. Add isLoadingTokens
-* 2. Enable number of month editing in year chart
-* */
-
-
 class BudgetCharts extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			yearChartMonthCount: 12
+		};
 		this.getMonthCategoriesChartData = this.getMonthCategoriesChartData.bind(this);
+		this.onYearChartMonthCountChange = this.onYearChartMonthCountChange.bind(this);
 	}
 
 	componentDidMount() {
 		const currentMonth = this.props.currentMonth.number,
 			currentYear = this.props.currentYear;
 		this.getMonthCategoriesChartData(currentMonth, currentYear);
-		this.props.getYearChartData();
+		this.getYearChartData(this.state.yearChartMonthCount);
 	}
 
 	getMonthCategoriesChartData(month, year) {
 		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken, month, year);
+	}
+
+	onYearChartMonthCountChange(e) {
+		let yearChartMonthCount = Number(e.target.value) || 12;
+		this.setState(Object.assign({}, this.state, {yearChartMonthCount}));
+		this.getYearChartData(yearChartMonthCount);
+	}
+
+	getYearChartData(monthCount) {
+		this.props.getYearChartData(monthCount);
 	}
 
 	render() {
@@ -36,7 +44,11 @@ class BudgetCharts extends React.Component {
 					currentYear={this.props.currentYear}
 					generalInfo={this.props.generalInfo}
 					updateChartData={this.getMonthCategoriesChartData}/>
-				<YearAmountChart chartData={this.props.yearChartData}/>
+				<YearAmountChart
+					monthCount={this.state.yearChartMonthCount}
+					onMonthCountChange={this.onYearChartMonthCountChange}
+					chartData={this.props.yearChartData}
+				/>
 			</div>
 		);
 	}

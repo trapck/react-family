@@ -31,14 +31,24 @@ class YearAmountChart extends React.Component {
 						<h3>Year amount</h3>
 					</a>
 				</div>
-				<LineChart chartData={data}/>
+				<div>
+					<label>Months</label>
+					<input
+						type = {"number"}
+						onChange = {this.props.onMonthCountChange}
+						value = {this.props.monthCount}
+					/>
+					<LineChart chartData={data}/>
+				</div>
 			</CollapsibleGroup>
 		);
 	}
 }
 
 YearAmountChart.propTypes = {
-	chartData: PropTypes.array
+	chartData: PropTypes.array,
+	monthCount: PropTypes.number.isRequired,
+	onMonthCountChange: PropTypes.func.isRequired
 };
 
 export default YearAmountChart;

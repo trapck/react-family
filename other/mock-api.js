@@ -417,7 +417,7 @@ const api = {
 					dbData[entityName] = dbData[entityName].filter(e => deleted.map(e => e.id).indexOf(e.id) === -1);
 
 					postDbBranchToServer(entityName, dbData[entityName]).then(
-							response => {
+						response => {
 							if (!response.success) {
 								dbData[entityName] = oldData;
 								deleted = [];
