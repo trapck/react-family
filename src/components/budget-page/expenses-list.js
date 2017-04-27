@@ -19,27 +19,41 @@ class ExpensesList extends React.Component {
 	}
 
 	componentWillMount() {
-		let categoryFilter = {
-				column: "category",
-				value: this.props.category
-			},
-			filters = [categoryFilter];
-		if (this.props.dateFilterValue) {
-			filters.push({
-				column: "date",
-				value: this.props.dateFilterValue
-			});
+		this.getExpenses(this.props);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.dateFilterValue
+			&& this.props.dateFilterValue
+			&& nextProps.dateFilterValue.M === this.props.dateFilterValue.M
+			&& nextProps.dateFilterValue.Y === this.props.dateFilterValue.Y) {
+			return;
 		}
-		this.props.getExpenses(filters, this.isLoadingToken);
-		if (this.props.isSyncNeeded) {
-			this.props.getCurrentMonthGeneralInfo(
-				filters, undefined, (this.props.dateFilterValue || {}).M, (this.props.dateFilterValue || {}).Y
-			);
-		}
+		this.getExpenses(nextProps);
 	}
 
 	componentWillUnmount() {
 		this.props.removeIsLoading(this.isLoadingToken);
+	}
+
+	getExpenses(props) {
+		let categoryFilter = {
+				column: "category",
+				value: props.category
+			},
+			filters = [categoryFilter];
+		if (props.dateFilterValue) {
+			filters.push({
+				column: "date",
+				value: props.dateFilterValue
+			});
+		}
+		props.getExpenses(filters, this.isLoadingToken);
+		if (props.isSyncNeeded) {
+			props.getCurrentMonthGeneralInfo(
+				filters, undefined, (props.dateFilterValue || {}).M, (props.dateFilterValue || {}).Y
+			);
+		}
 	}
 
 	onExpenseValueUpdated(id, columnName, columnValue) {

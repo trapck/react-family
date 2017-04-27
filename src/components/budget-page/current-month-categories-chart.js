@@ -14,6 +14,12 @@ class CurrentMonthCategoriesChart  extends React.Component {
 		this.onCurrentYearChange = this.onCurrentYearChange.bind(this);
 	}
 
+	shouldComponentUpdate(newProps) {
+		return !(this.props.generalInfo === newProps.generalInfo &&
+			this.props.currentMonth === newProps.currentMonth &&
+			this.props.currentYear === newProps.currentYear);
+	}
+
 	onCurrentMonthChange(tag, value) {
 		const month = Number.isInteger(value.value) ? value.value : new Date().getMonth(),
 			year = this.props.currentYear;
