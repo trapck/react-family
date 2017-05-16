@@ -3,9 +3,13 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import PreloaderContainer from "../common/preloader-container";
 import DeleteIcon from "../common/delete-icon";
+import Button from "../common/button";
+import ButtonLink from "../common/button-link";
+import ModalWindow from "../common/modal-window";
 import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
+import ExpenseCommentsPage from "./expense-comments-page";
 import {getEntityColumnsCaptions, getDateColumnEqualityComparisonResult} from "../../../other/utils";
 import toastr from "toastr";
 import guid from "uuid/v4";
@@ -15,7 +19,11 @@ class ExpensesList extends React.Component {
 		super(props);
 		this.onExpenseValueUpdated = this.onExpenseValueUpdated.bind(this);
 		this.onDeleteExpenseClick = this.onDeleteExpenseClick.bind(this);
+		this.toggleModalWindowState = this.toggleModalWindowState.bind(this);
 		this.isLoadingToken = guid();
+		this.state = {
+			isModalOpened: false
+		};
 	}
 
 	componentWillMount() {
@@ -89,12 +97,27 @@ class ExpensesList extends React.Component {
 		});
 	}
 
+	toggleModalWindowState(isModalOpened) {
+		this.setState(Object.assign({}, this.state, {isModalOpened: !this.state.isModalOpened}));
+	}
+
 	render() {
-		const additionalRightCells = [this.props.expenses.map(
-			e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
-		)];
+		const additionalRightCells = [
+				this.props.expenses.map(
+					e => <ButtonLink key = {e.id} caption="comments" onClick={this.toggleModalWindowState} />
+				),
+				this.props.expenses.map(
+					e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
+				)
+			];
 		return (
 			<div>
+				<ModalWindow
+					isOpen={this.state.isModalOpened}
+					contentLabel="Expense comments"
+				>
+					<ExpenseCommentsPage onClose={this.toggleModalWindowState}/>
+				</ModalWindow>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					{
 						entityListHelper.createTableList(

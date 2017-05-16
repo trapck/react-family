@@ -28,6 +28,7 @@
     "react-chartjs-2": "^2.0.5",
     "react-date-picker": "5.3.28",
     "react-dom": "15.0.2",
+    "react-modal": "^1.7.7",
     "react-redux": "4.4.5",
     "react-router": "2.4.0",
     "react-router-redux": "4.0.4",
