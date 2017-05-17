@@ -11,8 +11,8 @@ export default {
 	isLoading: {},
 	budget: {
 		expenseCategories: [],
-		expenseComments: [],
 		expenses: [],
+		expenseComments: [],
 		currentMonthGeneralInfo: [],
 		monthLimits: [],
 		newExpense: {

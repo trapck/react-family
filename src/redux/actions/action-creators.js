@@ -105,13 +105,6 @@ const setReceivedExpenseCategories = (categories = [], filters = []) => {
 	};
 };
 
-const getExpenseComments = () => {
-	return {
-		type: actionTypes.GET_EXPENSE_COMMENTS
-	};
-};
-export {getExpenseComments};
-
 const getExpenses = (filters = [], isLoadingToken = "") => dispatch => {
 	dispatch(setIsLoading(isLoadingToken, true));
 	return mockApi.getEntities("expense", filters).then(
@@ -492,3 +485,24 @@ const toggleShowCurrentMonthLimitOnly = () => {
 	};
 };
 export {toggleShowCurrentMonthLimitOnly};
+
+
+const getExpenseComments = (filters = [], isLoadingToken = "") => dispatch => {
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.getEntities("expenseComment", filters).then(
+		expenseComments => {
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setReceivedExpenseComments(expenseComments, filters));
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {getExpenseComments};
+
+const setReceivedExpenseComments = (expenseComments = []) => {
+	return {
+		type: actionTypes.SET_RECEIVED_EXPENSE_COMMENTS,
+		expenseComments
+	};
+};
+export {setReceivedExpenseComments};
