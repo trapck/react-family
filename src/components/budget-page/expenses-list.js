@@ -22,7 +22,8 @@ class ExpensesList extends React.Component {
 		this.toggleModalWindowState = this.toggleModalWindowState.bind(this);
 		this.isLoadingToken = guid();
 		this.state = {
-			isModalOpened: false
+			isModalOpened: false,
+			selectedExpense: ""
 		};
 	}
 
@@ -97,14 +98,22 @@ class ExpensesList extends React.Component {
 		});
 	}
 
-	toggleModalWindowState(isModalOpened) {
-		this.setState(Object.assign({}, this.state, {isModalOpened: !this.state.isModalOpened}));
+	toggleModalWindowState(args) {
+		this.setState(Object.assign({}, this.state, {
+			isModalOpened: !this.state.isModalOpened,
+			selectedExpense: this.state.isModalOpened ? null : args.expense
+		}));
 	}
 
 	render() {
 		const additionalRightCells = [
 				this.props.expenses.map(
-					e => <ButtonLink key = {e.id} caption="comments" onClick={this.toggleModalWindowState} />
+					e => <ButtonLink
+						key = {e.id}
+						caption="comments"
+						onClick={this.toggleModalWindowState}
+						onClickArguments = {{expense: e.id}}
+					/>
 				),
 				this.props.expenses.map(
 					e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
@@ -116,7 +125,10 @@ class ExpensesList extends React.Component {
 					isOpen={this.state.isModalOpened}
 					contentLabel="Expense comments"
 				>
-					<ExpenseCommentsPage onClose={this.toggleModalWindowState}/>
+					<ExpenseCommentsPage
+						onClose={this.toggleModalWindowState}
+						expense={this.state.selectedExpense}
+					/>
 				</ModalWindow>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					{

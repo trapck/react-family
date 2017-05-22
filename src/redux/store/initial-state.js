@@ -18,6 +18,7 @@ export default {
 		newExpense: {
 			date: new Date(new Date().setHours(0, 0, 0, 0))
 		},
+		newExpenseComment: {},
 		newExpenseCategory: {
 			isNotVisibleInList: false
 		},

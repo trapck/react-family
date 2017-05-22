@@ -240,7 +240,8 @@ export default {
 			caption: "Text",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.STRING,
-			isDisplayValue: true
+			isDisplayValue: true,
+			isMultiLine: true
 		},
 		{
 			id: "fdd72aed-71eb-4f80-852c-647f4d51d03f",
@@ -248,7 +249,8 @@ export default {
 			caption: "Expense",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.LOOKUP,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isHiddenInForm: true
 		},
 		{
 			id: "cec8208c-b4f8-4bf2-b0b5-c17ec69e783e",
@@ -256,7 +258,8 @@ export default {
 			caption: "Author",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.LOOKUP,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isHiddenInForm: true
 		},
 		{
 			id: "0362bf5a-12b3-4409-b455-01a952bfe015",
@@ -264,7 +267,8 @@ export default {
 			caption: "Date",
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.DATE,
-			isDisplayValue: false
+			isDisplayValue: false,
+			isHiddenInForm: true
 		},
 
 		// month

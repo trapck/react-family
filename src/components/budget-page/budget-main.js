@@ -3,6 +3,7 @@ import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import months from "../../static-data/months";
 import CollapsibleGroup from "../common/collapsible-group";
+import Button from "../common/button";
 import * as actionCreators from "../../redux/actions/action-creators";
 import GeneralInfoRow from "./general-info-row";
 import ExpensesList from "./expenses-list";
@@ -113,10 +114,11 @@ class BudgetMain extends React.Component {
 					yearValue = {this.props.currentYear}
 					onMonthChange = {this.onCurrentMonthChange}
 					onYearChange = {this.onCurrentYearChange}
-					/>
-				<button onClick = {this.props.toggleNewExpenseVisible}>
-					{this.props.isNewExpenseVisible ? "-" : "+"}
-				</button>
+				/>
+				<Button
+					onClick = {this.props.toggleNewExpenseVisible}
+					caption = {this.props.isNewExpenseVisible ? "-" : "+"}
+				/>
 				{this.props.isNewExpenseVisible ? <NewExpense/> : null}
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					<div>
@@ -132,7 +134,7 @@ class BudgetMain extends React.Component {
 											generalInfoRowModel = {{category, count, amount, displayValues}}
 											isCollapsed = {isCollapsed}
 											onHeaderClick = {onClick}
-											/>
+										/>
 										<ExpensesList
 											category = {category}
 											count = {count}

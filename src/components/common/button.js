@@ -1,13 +1,27 @@
 import React, {PropTypes} from "react";
 
-const Button = props => {
-	return (<button onClick={props.onClick} className={props.className}>{props.caption}</button>);
-};
+class Button extends React.Component {
+	constructor(props) {
+		super(props);
+		this.onClick = this.onClick.bind(this);
+	}
+
+	onClick() {
+		this.props.onClick(this.props.onClickArguments);
+	}
+
+	render() {
+		return (
+			<button onClick={this.onClick} className={this.props.className}>{this.props.caption}</button>
+		);
+	}
+}
 
 Button.propTypes = {
 	caption: PropTypes.string,
 	onClick: PropTypes.func,
-	className: PropTypes.string
+	className: PropTypes.string,
+	onClickArguments: PropTypes.object
 };
 
 Button.defaultProps = {

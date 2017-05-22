@@ -1,11 +1,18 @@
 import React, {PropTypes} from "react";
+import classNames from "classnames";
 
 const Summary = props =>  {
-	let className = "month-expense-summary " + (props.amount > props.income
-		? "month-expense-summary-danger"
-		: props.amount > props.limit
-		? "month-expense-summary-warning"
-		: "month-expense-summary-ok");
+	const amount = props.amount,
+		income = props.income,
+		limit = props.limit,
+		className = classNames(
+		"month-expense-summary",
+		{
+			["month-expense-summary-ok"]: true,
+			["month-expense-summary-warning"]: amount > limit && amount <= income,
+			["month-expense-summary-danger"]: amount > income
+		}
+	);
 	return (
 		<div className = {className}>
 			{`Total count: ${props.count}. Total amount: ${props.amount}`}

@@ -3,40 +3,36 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as actionCreators from "../../redux/actions/action-creators";
 import InputByColumnType from "../common/input-by-column-type";
+import Button from "../common/button";
 import PreloaderContainer from "../common/preloader-container";
 import entityStructure from "../../static-data/entity-info/entity-sctructure";
-import validator from "../../helpers/form-validators/expense-validator";
+import validator from "../../helpers/form-validators/expense-comment-validator";
 import guid from "uuid/v4";
 import toastr from "toastr";
 
 //TODO: make base component for new-expense, new expense-comment etc.
-class NewExpense extends React.Component {
+class NewExpenseComment extends React.Component {
 	constructor(props) {
 		super(props);
 		this.onChange = this.onChange.bind(this);
-		this.saveNewExpense = this.saveNewExpense.bind(this);
+		this.saveNewExpenseComment = this.saveNewExpenseComment.bind(this);
 		this.isLoadingToken = guid();
 		this.state = {
 			validationInfo: []
 		};
 	}
 
-	componentDidMount() {
-		this.refs.title.refs.title.refs.input.focus();
-	}
-
 	componentWillUnmount() {
 		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.clearNewExpenseComment();
 	}
 
 	onChange(column, value, e) {
-		this.props.newExpenseChange(column, value, e);
+		this.props.newExpenseCommentChange(column, value, e);
 	}
 
-	saveNewExpense() {
-		const validationResult = validator.validate(this.props.newExpense),
-			currentMonth = this.props.currentMonth.number,
-			currentYear = this.props.currentYear;
+	saveNewExpenseComment() {
+		const validationResult = validator.validate(this.props.newExpenseComment);
 		if (validationResult.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: [...validationResult]}));
 			return;
@@ -44,27 +40,33 @@ class NewExpense extends React.Component {
 		if (this.state.validationInfo.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: []}));
 		}
-		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken, currentMonth, currentYear)
-			.then(() => toastr.success("New expense added"));
+		const newComment= Object.assign({}, this.props.newExpenseComment, {
+			expense: this.props.expense,
+			author: (this.props.currentUser || {}).id || "",
+			date: new Date()
+		});
+		this.props.addNewExpenseComment(newComment, this.isLoadingToken)
+			.then(() => toastr.success("New expense comment added"));
 	}
 
 	render() {
 		return (
 			<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 				<div>
-					<button onClick = {this.saveNewExpense}>Save</button>
-					<button onClick = {this.props.clearNewExpense}>Clear</button>
+					<Button onClick={this.saveNewExpenseComment} caption="Save" />
+					<Button onClick={this.props.clearNewExpenseComment} caption="Clear"/>
 					<div>
 						{
-							Object.keys(entityStructure.expense.columns)
-								.filter(c => !entityStructure.expense.columns[c].isSystem)
+							Object.keys(entityStructure.expenseComment.columns)
+								.filter(c =>
+									!entityStructure.expenseComment.columns[c].isSystem &&
+									!entityStructure.expenseComment.columns[c].isHiddenInForm)
 								.map(
 									c => <InputByColumnType
-										ref = {c}
 										key = {c}
-										entityName = "expense"
+										entityName = "expenseComment"
 										columnName = {c}
-										value = {this.props.newExpense[c]}
+										value = {this.props.newExpenseComment[c]}
 										onChange = {this.onChange}
 										validationMessage = {
 												this.state.validationInfo.filter(i => i.name === c).map(i => i.message)[0] || ""
@@ -79,26 +81,25 @@ class NewExpense extends React.Component {
 	}
 }
 
-NewExpense.propTypes = {
-	newExpense: PropTypes.object.isRequired,
-	newExpenseChange: PropTypes.func.isRequired,
-	clearNewExpense: PropTypes.func.isRequired,
-	addNewExpense: PropTypes.func.isRequired,
+NewExpenseComment.propTypes = {
+	newExpenseComment: PropTypes.object.isRequired,
+	newExpenseCommentChange: PropTypes.func.isRequired,
+	clearNewExpenseComment: PropTypes.func.isRequired,
+	addNewExpenseComment: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
 	isLoading: PropTypes.object.isRequired,
-	currentMonth: PropTypes.object.isRequired,
-	currentYear: PropTypes.number.isRequired
+	currentUser: PropTypes.object.isRequired,
+	expense: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => {
 	return {
-		newExpense: state.budget.newExpense,
-		isLoading: state.isLoading,
-		currentMonth: state.budget.ui.currentMonth,
-		currentYear: state.budget.ui.currentYear
+		newExpenseComment: state.budget.newExpenseComment,
+		currentUser: state.currentUser,
+		isLoading: state.isLoading
 	};
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewExpense);
+export default connect(mapStateToProps, mapDispatchToProps)(NewExpenseComment);

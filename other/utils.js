@@ -97,7 +97,7 @@ const getValueByColumnType = (entityName, columnName, value) => {
 	switch(entityStructure[entityName].columns[columnName].type) {
 		case entityColumnTypes.NUMBER: return Number(value) || 0;
 		case entityColumnTypes.DATE: return new Date(new Date(value).setHours(0, 0, 0, 0));
-		case entityColumnTypes.LOOKUP: return value.value || "";
+		case entityColumnTypes.LOOKUP: return value.value || value || "";
 		case entityColumnTypes.BOOLEAN: return Boolean(value);
 		default: return value;
 	}

@@ -1,4 +1,5 @@
 import React, {PropTypes} from "react";
+import classNames from "classnames";
 import PieChart from "../common/pie-chart";
 import CollapsibleGroup from "../common/collapsible-group";
 import BudgetMainDateFilter from "./budget-main-date-filter";
@@ -54,11 +55,13 @@ class CurrentMonthCategoriesChart  extends React.Component {
 			preventFn = e => {
 				e.preventDefault();
 				this.setState({isCollapsed: !this.state.isCollapsed});
-			};
+			},
+			isCollapsed = this.state.isCollapsed,
+			className = classNames({link: isCollapsed, link_active: !isCollapsed});
 		return (
 			<CollapsibleGroup>
 				<div isCollapsed={this.state.isCollapsed}>
-					<a href = "#" className = {this.state.isCollapsed ? "link" : "link_active"} onClick = {preventFn}>
+					<a href = "#" className = {className} onClick = {preventFn}>
 						<h3>Current month</h3>
 					</a>
 				</div>

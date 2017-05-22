@@ -1,24 +1,21 @@
 import React, {PropTypes} from "react";
+import Button from "./button";
 
-const ButtonLink = props => {
-	const onClick = e => {
+class ButtonLink extends Button {
+	onClick(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		props.onClick();
-	};
-	return (<a href="#" onClick={onClick} className={props.className}>{props.caption}</a>);
-};
+		super.onClick(e);
+	}
 
-ButtonLink.propTypes = {
-	caption: PropTypes.string,
-	onClick: PropTypes.func,
-	className: PropTypes.string
-};
+	render() {
+		return (
+			<a href = "#" onClick = {this.onClick} className = {this.props.className}>
+				{this.props.caption}
+			</a>);
+	}
+}
 
-ButtonLink.defaultProps = {
-	caption: "",
-	onClick: Function.prototype,
-	className: "button-link"
-};
+ButtonLink.defaultProps.className = "button-link";
 
 export default ButtonLink;

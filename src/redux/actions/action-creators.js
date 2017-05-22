@@ -506,3 +506,49 @@ const setReceivedExpenseComments = (expenseComments = []) => {
 	};
 };
 export {setReceivedExpenseComments};
+
+const addNewExpenseComment = (
+	expenseComment,
+	isLoadingToken = "") => dispatch => {
+	expenseComment = Object.assign(
+		{}, setEntityDefaultValues("expenseComment"), expenseComment);
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.addEntities("expenseComment", [expenseComment]).then(
+		expenseComments => {
+			if (!expenseComments.length) {
+				alert("Expense Comment was not added");
+			} else {
+				dispatch(registerNewExpenseCommentInState(expenseComments[0]));
+			}
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(clearNewExpenseComment());
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {addNewExpenseComment};
+
+const registerNewExpenseCommentInState = expenseComment => {
+	return {
+		type: actionTypes.REGISTER_NEW_EXPENSE_COMMENT_IN_STATE,
+		expenseComment
+	};
+};
+export {registerNewExpenseCommentInState};
+
+const newExpenseCommentChange = (column, value, e) => {
+	return {
+		type: actionTypes.NEW_EXPENSE_COMMENT_CHANGE,
+		column,
+		value,
+		e
+	};
+};
+export {newExpenseCommentChange};
+
+const clearNewExpenseComment = () => {
+	return {
+		type: actionTypes.CLEAR_NEW_EXPENSE_COMMENT
+	};
+};
+export {clearNewExpenseComment};
