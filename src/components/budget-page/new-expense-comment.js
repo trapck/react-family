@@ -46,7 +46,8 @@ class NewExpenseComment extends React.Component {
 			date: new Date()
 		});
 		this.props.addNewExpenseComment(newComment, this.isLoadingToken)
-			.then(() => toastr.success("New expense comment added"));
+			.then(() => toastr.success("New expense comment added"))
+			.then(() => this.props.removeIsLoading(this.isLoadingToken));
 	}
 
 	render() {

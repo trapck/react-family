@@ -552,3 +552,65 @@ const clearNewExpenseComment = () => {
 	};
 };
 export {clearNewExpenseComment};
+
+
+const updateExpenseComment = (updateMap, isLoadingToken = "") => dispatch =>{
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.updateEntitiesByColumnMap("expenseComment", updateMap).then(
+		expenseComments => {
+			// TODO: implement nice information window
+			if (updateMap.length !== expenseComments.length) {
+				alert(`${updateMap.length - expenseComments.length} of ${updateMap.length} were not updated`);
+			}
+			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(registerUpdatedExpenseCommentInState(expenseComments));
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {updateExpenseComment};
+
+const registerUpdatedExpenseCommentInState = expenseComments => {
+	return {
+		type: actionTypes.REGISTER_UPDATED_EXPENSE_COMMENT_IN_STATE,
+		expenseComments
+	};
+};
+export {registerUpdatedExpenseCommentInState};
+
+const deleteExpenseComment = (
+	filters,
+	isLoadingToken = "",
+	currentMonth = new Date().getMonth(),
+	currentYear = new Date().getFullYear()) => dispatch => {
+	//TODO: implement nice filters validation
+	if (!filters) {
+		alert("Filters are empty !");
+		return;
+	}
+	dispatch(setIsLoading(isLoadingToken, true));
+	return mockApi.deleteEntities("expenseComment", filters).then(
+		result => {
+			// TODO: implement info about number of deleted items, duplicate info for insert/update
+			dispatch(setIsLoading(isLoadingToken, false));
+			if (result.notDeleted.length) {
+				alert(getCantDeleteByIntegrityConstraintMessage(result));
+			}
+			if (result.deleted.length) {
+				dispatch(removeDeletedExpenseCommentFromState(result.deleted.map(c => c.id)));
+			} else {
+				return Promise.reject();
+			}
+		},
+		ex => rejectCallback(ex, isLoadingToken, dispatch)
+	);
+};
+export {deleteExpenseComment};
+
+const removeDeletedExpenseCommentFromState = (deletedIds = []) => {
+	return {
+		type: actionTypes.REMOVE_DELETED_EXPENSE_COMMENT_FROM_STATE,
+		deletedIds
+	};
+};
+export {removeDeletedExpenseCommentFromState};

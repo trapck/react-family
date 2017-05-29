@@ -119,6 +119,7 @@ class ExpensesList extends React.Component {
 					e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
 				)
 			];
+		// TODO: implement comments counter
 		return (
 			<div>
 				<ModalWindow

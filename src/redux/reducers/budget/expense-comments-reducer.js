@@ -10,6 +10,15 @@ const expenseComments = (state = [], action = {}) => {
 				ec => newComments.map(c => c.id).indexOf(ec.id) === -1
 			).concat(...newComments);
 		}
+		case actionTypes.REGISTER_NEW_EXPENSE_COMMENT_IN_STATE:
+			return [...state, Object.assign({}, action.expenseComment)];
+		case actionTypes.REGISTER_UPDATED_EXPENSE_COMMENT_IN_STATE:
+			return [
+				...state.filter(e => action.expenseComments.map(e => e.id).indexOf(e.id) === -1),
+				...action.expenseComments
+			];
+		case actionTypes.REMOVE_DELETED_EXPENSE_COMMENT_FROM_STATE:
+			return [...state.filter(e => action.deletedIds.indexOf(e.id) === -1)];
 		default:
 			return state;
 	}

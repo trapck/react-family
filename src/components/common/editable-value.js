@@ -49,6 +49,7 @@ class EditableValue extends React.Component {
 		if (oldValue !== newValue) {
 			this.props.onBlur(this.props.columnName, this.state.editValue);
 		}
+		this.setState(Object.assign({}, this.state, {isEditMode: false}));
 	}
 
 	onEditBlur(column, value, e) {

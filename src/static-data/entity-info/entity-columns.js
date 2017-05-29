@@ -241,7 +241,8 @@ export default {
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.STRING,
 			isDisplayValue: true,
-			isMultiLine: true
+			isMultiLine: true,
+			isEditDisabled: true
 		},
 		{
 			id: "fdd72aed-71eb-4f80-852c-647f4d51d03f",
@@ -250,7 +251,8 @@ export default {
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.LOOKUP,
 			isDisplayValue: false,
-			isHiddenInForm: true
+			isHiddenInForm: true,
+			isSystem: true
 		},
 		{
 			id: "cec8208c-b4f8-4bf2-b0b5-c17ec69e783e",
@@ -268,7 +270,8 @@ export default {
 			entity: "f71ac263-d79a-48f6-9be0-ff5ff0ef4e2c",
 			type: ColumnTypes.DATE,
 			isDisplayValue: false,
-			isHiddenInForm: true
+			isHiddenInForm: true,
+			isEditDisabled: true
 		},
 
 		// month
