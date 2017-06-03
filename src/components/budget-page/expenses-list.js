@@ -9,7 +9,7 @@ import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import Expense from "./expense";
 import ExpenseCommentsPage from "./expense-comments-page";
-import {getDateColumnEqualityComparisonResult} from "../../../other/utils";
+import {getDateColumnEqualityComparisonResult} from "../../../other/utils"; // TODO: you can use absolute path: https://webpack.github.io/docs/resolving.html
 import toastr from "toastr";
 import guid from "uuid/v4";
 

@@ -17,13 +17,18 @@ class BooleanInput  extends React.Component {
 	}
 
 	render() {
+		const {
+			containerClassName,
+			inputClassName,
+			value
+			} = this.props;
 		return (
-			<div className={this.props.containerClassName}>
+			<div className={containerClassName}>
 				<input
 					ref="input"
-					className = {this.props.inputClassName}
+					className = {inputClassName}
 					type = "checkbox"
-					checked = {!!this.props.value}
+					checked = {!!value}
 					onChange = {this.onChange}
 					/>
 			</div>

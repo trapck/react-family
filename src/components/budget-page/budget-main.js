@@ -11,6 +11,7 @@ import PreloaderContainer from "../common/preloader-container";
 import Summary from "./month-summary";
 import NewExpense from "./new-expense";
 import guid from "uuid/v4";
+import {sortBy} from "lodash";
 
 class BudgetMain extends React.Component {
 	constructor(props) {
@@ -48,44 +49,33 @@ class BudgetMain extends React.Component {
 	getSummaryInfo() {
 		let count = 0,
 			amount = 0;
-		for (let info of this.props.generalInfo) {
+		const {generalInfo, monthLimit} = this.props;
+		for (let info of generalInfo) {
 			count += info.count;
 			amount += info.amount;
 		}
 		return {
 			count,
 			amount,
-			income: this.props.monthLimit.income || 0,
-			limit: this.props.monthLimit.limit || 0
+			income: monthLimit.income || 0,
+			limit: monthLimit.limit || 0
 		};
 	}
 
 	onCurrentMonthChange(tag, value) {
 		const currentMonth = Number.isInteger(value.value) ? value.value : new Date().getMonth(),
-			currentYear = this.props.currentYear,
-			currentMonthFilters = [
-				{
-					column: "month",
-					value: currentMonth
-				}, {
-					column: "year",
-					value: currentYear
-				}
-			];
-		this.props.setCurrentMonth(Number.isInteger(value.value) ? value.value : new Date().getMonth());
-		this.props.getCurrentMonthGeneralInfo(
-			undefined,
-			this.isLoadingToken,
-			currentMonth,
-			currentYear
-		);
-		this.props.getMonthExpenseLimits(currentMonthFilters);
+			currentYear = this.props.currentYear;
+		this.executeCurrentDateActions(currentMonth, currentYear);
 	}
 
 	onCurrentYearChange(e) {
 		const currentMonth = this.props.currentMonth.number,
-			currentYear = Number(e.target.value) || new Date().getFullYear(),
-			currentMonthFilters = [
+			currentYear = Number(e.target.value) || new Date().getFullYear();
+		this.executeCurrentDateActions(currentMonth, currentYear);
+	}
+
+	executeCurrentDateActions(currentMonth, currentYear) {
+		const currentMonthFilters = [
 				{
 					column: "month",
 					value: currentMonth
@@ -93,38 +83,54 @@ class BudgetMain extends React.Component {
 					column: "year",
 					value: currentYear
 				}
-			];
-		this.props.setCurrentYear(Number(e.target.value) || new Date().getFullYear());
-		this.props.getCurrentMonthGeneralInfo(
+			],
+			{
+				setCurrentMonth,
+				setCurrentYear,
+				getCurrentMonthGeneralInfo,
+				getMonthExpenseLimits
+				} = this.props;
+		setCurrentMonth(currentMonth);
+		setCurrentYear(currentYear);
+		getCurrentMonthGeneralInfo(
 			undefined,
 			this.isLoadingToken,
 			currentMonth,
 			currentYear
 		);
-		this.props.getMonthExpenseLimits(currentMonthFilters);
+		getMonthExpenseLimits(currentMonthFilters);
 	}
 
 	render() {
+		const {
+			currentMonth,
+			currentYear,
+			toggleNewExpenseVisible,
+			isNewExpenseVisible,
+			isLoading,
+			generalInfo,
+			generalInfoRowsCollapsedState
+			} = this.props;
 		return (
 			<div>
 				<BudgetMainDateFilter
-					monthValue = {{label: this.props.currentMonth.title, value: this.props.currentMonth.number}}
-					yearValue = {this.props.currentYear}
+					monthValue = {{label: currentMonth.title, value: currentMonth.number}}
+					yearValue = {currentYear}
 					onMonthChange = {this.onCurrentMonthChange}
 					onYearChange = {this.onCurrentYearChange}
-				/>
+					/>
 				<Button
-					onClick = {this.props.toggleNewExpenseVisible}
-					caption = {this.props.isNewExpenseVisible ? "-" : "+"}
-				/>
-				{this.props.isNewExpenseVisible ? <NewExpense/> : null}
-				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
+					onClick = {toggleNewExpenseVisible}
+					caption = {isNewExpenseVisible ? "-" : "+"}
+					/>
+				{isNewExpenseVisible ? <NewExpense/> : null}
+				<PreloaderContainer isLoading = {isLoading} isLoadingToken = {this.isLoadingToken}>
 					<div>
-						{this.props.generalInfo.map(
+						{generalInfo.map(
 							({category, count, amount, displayValues}) => {
 								let onClick = this.setGeneralInfoGroupCollapsed.bind(this, category),
-									isCollapsed = this.props.generalInfoRowsCollapsedState.hasOwnProperty(category) ?
-										this.props.generalInfoRowsCollapsedState[category] :
+									isCollapsed = generalInfoRowsCollapsedState.hasOwnProperty(category) ?
+										generalInfoRowsCollapsedState[category] :
 										true;
 								return (
 									<CollapsibleGroup key = {category}>
@@ -132,14 +138,14 @@ class BudgetMain extends React.Component {
 											generalInfoRowModel = {{category, count, amount, displayValues}}
 											isCollapsed = {isCollapsed}
 											onHeaderClick = {onClick}
-										/>
+											/>
 										<ExpensesList
 											category = {category}
 											count = {count}
 											amount = {amount}
 											dateFilterValue = {{
-												M: this.props.currentMonth.number,
-												Y: this.props.currentYear
+												M: currentMonth.number,
+												Y: currentYear
 											}}
 											isSyncNeeded/>
 									</CollapsibleGroup>
@@ -173,13 +179,9 @@ BudgetMain.propTypes = {
 
 const mapStateToProps = state => {
 	return {
-		generalInfo: state.budget.currentMonthGeneralInfo
-			.slice()
-			.sort((a,b) => {
-				if (a.displayValues.category < b.displayValues.category ) return -1;
-				else if (a.displayValues.category > b.displayValues.category ) return 1;
-				else return 0;
-			}),
+		generalInfo: sortBy(
+			state.budget.currentMonthGeneralInfo.slice(),
+			(g = {displayValues: {}}) => g.displayValues.category),
 		generalInfoRowsCollapsedState: state.budget.ui.isGeneralInfoRowCollapsed,
 		monthLimit: state.budget.monthLimits
 			.filter(l => l.month === state.budget.ui.currentMonth.number && l.year === state.budget.ui.currentYear)[0] || {},

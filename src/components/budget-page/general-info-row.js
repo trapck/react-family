@@ -1,13 +1,12 @@
 import React, {PropTypes} from "react";
 
 const GeneralInfoRow = (props) => {
-	const preventFn = e => e.preventDefault();
 	return (
 		<div>
-			<a href = "#" className = "link" onClick = {preventFn}>
+			<div className = "link">
 				{`${props.generalInfoRowModel.displayValues.category} ` +
 				`(${props.generalInfoRowModel.count}) ${props.generalInfoRowModel.amount}`}
-			</a>
+			</div>
 		</div>
 	);
 };

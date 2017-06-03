@@ -1,10 +1,13 @@
 .link {
 	color: #e87d0d;
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .link_active {
 	color: #3c3c3c;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .header {

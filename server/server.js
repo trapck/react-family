@@ -60,7 +60,7 @@ app.post("/syncDb", function(req, res) {
 		entityName = req.body.entity,
 		data = req.body.data;
 	syncDb(entityName, data, db);
-	fs.writeFileSync(path.join( __dirname, "db.json"), JSON.stringify(db));
+	fs.writeFileSync(path.join( __dirname, "db.json"), JSON.stringify(db, null, "\t"));
 	res.send(JSON.stringify({success: true}));
 });
 

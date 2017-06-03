@@ -8,7 +8,7 @@ const Summary = props =>  {
 		className = classNames(
 		"month-expense-summary",
 		{
-			["month-expense-summary-ok"]: true,
+			["month-expense-summary-ok"]: amount <= limit,
 			["month-expense-summary-warning"]: amount > limit && amount <= income,
 			["month-expense-summary-danger"]: amount > income
 		}

@@ -17,7 +17,7 @@ const BudgetMainDateFilter = props => {
 					type = {"number"}
 					onChange = {props.onYearChange}
 					value = {props.yearValue}
-					className = {"current-year-edit"}
+					className = "current-year-edit"
 					/>
 			</div>
 		</div>

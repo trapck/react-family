@@ -8,6 +8,14 @@ class YearAmountChart extends React.Component {
 		this.state = {
 			isCollapsed: false
 		};
+		this.preventFn = this.preventFn.bind(this);
+	}
+
+	preventFn(e) {
+		e.preventDefault();
+		this.setState(
+			Object.assign({}, this.state, {isCollapsed: !this.state.isCollapsed})
+		);
 	}
 
 	render() {
@@ -17,17 +25,13 @@ class YearAmountChart extends React.Component {
 			);
 		}
 		const data = {
-				labels: this.props.chartData.map(d => d.month),
-				values: this.props.chartData.map(d => d.amount)
-			},
-			preventFn = e => {
-				e.preventDefault();
-				this.setState({isCollapsed: !this.state.isCollapsed});
-			};
+			labels: this.props.chartData.map(d => d.month),
+			values: this.props.chartData.map(d => d.amount)
+		};
 		return (
 			<CollapsibleGroup>
 				<div isCollapsed={this.state.isCollapsed}>
-					<a href = "#" className = {this.state.isCollapsed ? "link" : "link_active"} onClick = {preventFn}>
+					<a href = "#" className = {this.state.isCollapsed ? "link" : "link_active"} onClick = {this.preventFn}>
 						<h3>Year amount</h3>
 					</a>
 				</div>

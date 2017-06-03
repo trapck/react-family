@@ -19,8 +19,7 @@ class MonthExpenseLimitsList extends React.Component {
 	}
 
 	componentWillMount() {
-		let filters = [];
-		this.props.getMonthExpenseLimits(filters, this.isLoadingToken);
+		this.props.getMonthExpenseLimits([], this.isLoadingToken);
 	}
 
 	componentWillUnmount() {

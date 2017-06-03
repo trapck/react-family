@@ -226,7 +226,7 @@ const getDbBranchFromServer = (entityName) => {
 				xhr,
 				xhr => res(JSON.parse(xhr.responseText)),
 				xhr => rej(xhr.status + ': ' + xhr.statusText)
-			)
+			);
 		};
 	});
 };
@@ -242,7 +242,7 @@ const getYearChartInfo = (monthCount = 12) => {
 				xhr,
 				xhr => res(JSON.parse(xhr.responseText).data),
 				xhr => rej(xhr.status + ': ' + xhr.statusText)
-			)
+			);
 		};
 	});
 };
@@ -263,7 +263,7 @@ const postDbBranchToServer = (entity, data) => {
 				xhr,
 				xhr => res(JSON.parse(xhr.responseText)),
 				xhr => rej(xhr.status + ': ' + xhr.statusText)
-			)
+			);
 		};
 	});
 };
@@ -325,7 +325,7 @@ const selectDisplayValues = (objects, db) => {
 					res();
 				},
 				xhr => rej(xhr.status + ': ' + xhr.statusText)
-			)
+			);
 		};
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {

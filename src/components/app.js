@@ -1,13 +1,10 @@
 import React, {PropTypes} from "react";
+//import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as actionCreators from "../redux/actions/action-creators";
 import Header from "./header/header";
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-
 	componentWillMount() {
 		this.props.getCurrentUser();
 	}

@@ -9,6 +9,7 @@ import ExpenseCategory from "./expense-category";
 import {getEntityColumnsCaptions} from "../../../other/utils";
 import toastr from "toastr";
 import guid from "uuid/v4";
+import {sortBy} from "lodash";
 
 class ExpenseCategoriesList extends React.Component {
 	constructor(props) {
@@ -22,6 +23,7 @@ class ExpenseCategoriesList extends React.Component {
 		this.props.getExpenseCategories(undefined, this.isLoadingToken);
 	}
 
+	// TODO: You can pass one parameter - `options` instead and check it inside the function
 	componentWillUnmount() {
 		this.props.removeIsLoading(this.isLoadingToken);
 	}
@@ -91,11 +93,7 @@ ExpenseCategoriesList.propTypes = {
 const mapStateToProps = (state) => {
 	return {
 		isLoading: state.isLoading,
-		expenseCategories: state.budget.expenseCategories.slice().sort((a, b) => {
-			if (a.title < b.title) return -1;
-			else if (b.title < a.title) return 1;
-			else return 0;
-		})
+		expenseCategories: sortBy(state.budget.expenseCategories.slice(), (e = {title: ""}) => e.title)
 	};
 };
 

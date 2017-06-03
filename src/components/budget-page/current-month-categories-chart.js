@@ -13,12 +13,15 @@ class CurrentMonthCategoriesChart  extends React.Component {
 		};
 		this.onCurrentMonthChange = this.onCurrentMonthChange.bind(this);
 		this.onCurrentYearChange = this.onCurrentYearChange.bind(this);
+		this.preventFn = this.preventFn.bind(this);
 	}
 
-	shouldComponentUpdate(newProps) {
+	shouldComponentUpdate(newProps, newState) {
 		return !(this.props.generalInfo === newProps.generalInfo &&
 			this.props.currentMonth === newProps.currentMonth &&
-			this.props.currentYear === newProps.currentYear);
+			this.props.currentYear === newProps.currentYear &&
+			this.state.isCollapsed === newState.isCollapsed
+		);
 	}
 
 	onCurrentMonthChange(tag, value) {
@@ -44,24 +47,27 @@ class CurrentMonthCategoriesChart  extends React.Component {
 		);
 	}
 
+	preventFn(e) {
+		e.preventDefault();
+		this.setState(
+			Object.assign({}, this.state, {isCollapsed: !this.state.isCollapsed})
+		);
+	}
+
 	render() {
-		const data = {
+		const isCollapsed = this.state.isCollapsed,
+			className = classNames({link: isCollapsed, link_active: !isCollapsed}),
+			data = {
 				labels: this.props.generalInfo.map(({displayValues}) => displayValues.category),
 				datasets: [{
 					data: this.props.generalInfo.map(({amount}) => amount),
 					backgroundColor: this.props.generalInfo.map(() => generateRandomColor())
 				}]
-			},
-			preventFn = e => {
-				e.preventDefault();
-				this.setState({isCollapsed: !this.state.isCollapsed});
-			},
-			isCollapsed = this.state.isCollapsed,
-			className = classNames({link: isCollapsed, link_active: !isCollapsed});
+			};
 		return (
 			<CollapsibleGroup>
 				<div isCollapsed={this.state.isCollapsed}>
-					<a href = "#" className = {className} onClick = {preventFn}>
+					<a href = "#" className = {className} onClick = {this.preventFn}>
 						<h3>Current month</h3>
 					</a>
 				</div>

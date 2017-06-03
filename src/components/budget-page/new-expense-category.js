@@ -21,6 +21,7 @@ class NewExpenseCategory extends React.Component {
 	}
 
 	componentDidMount() {
+		// TODO: think about something instead of this evil
 		this.refs.title.refs.title.refs.input.focus();
 	}
 
