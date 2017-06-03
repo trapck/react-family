@@ -1,4 +1,3 @@
-import {combineReducers} from "redux";
 import initialState from "../../store/initial-state";
 import expenses from "./expenses-reducer";
 import expenseComments from "./expense-comments-reducer";

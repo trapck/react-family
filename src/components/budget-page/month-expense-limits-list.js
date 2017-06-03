@@ -7,7 +7,6 @@ import BooleanInput from "../common/boolean-input";
 import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
 import * as actionCreators from "../../redux/actions/action-creators";
 import MonthExpenseLimit from "./month-expense-limit";
-import {getEntityColumnsCaptions} from "../../../other/utils";
 import toastr from "toastr";
 import guid from "uuid/v4";
 

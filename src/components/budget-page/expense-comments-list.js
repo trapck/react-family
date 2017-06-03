@@ -1,7 +1,6 @@
 import React, {PropTypes} from "react";
 import DeleteIcon from "../common/delete-icon";
 import entityListHelper from "../../helpers/visual-helpers/entity-list-helper";
-import {getEntityColumnsCaptions} from "../../../other/utils";
 import ExpenseComment from "./expense-comment";
 import toastr from "toastr";
 

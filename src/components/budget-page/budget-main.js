@@ -1,7 +1,6 @@
 import React, {PropTypes} from "react";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
-import months from "../../static-data/months";
 import CollapsibleGroup from "../common/collapsible-group";
 import Button from "../common/button";
 import * as actionCreators from "../../redux/actions/action-creators";
@@ -9,7 +8,6 @@ import GeneralInfoRow from "./general-info-row";
 import ExpensesList from "./expenses-list";
 import BudgetMainDateFilter from "./budget-main-date-filter";
 import PreloaderContainer from "../common/preloader-container";
-import DropDownInput from "../common/dropdown-input";
 import Summary from "./month-summary";
 import NewExpense from "./new-expense";
 import guid from "uuid/v4";

@@ -1,4 +1,3 @@
-import initialState from "../../../store/initial-state";
 import actionTypes from "../../../actions/action-types";
 import months from "../../../../static-data/months";
 

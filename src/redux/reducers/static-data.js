@@ -1,2 +1,2 @@
-const staticData = (state = {}, action = {}) => state;
+const staticData = (state = {}) => state;
 export default staticData;

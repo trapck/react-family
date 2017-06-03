@@ -3,8 +3,16 @@ import entities from "../src/static-data/entity-info/entities";
 import entityStructure from "../src/static-data/entity-info/entity-sctructure";
 import entityRelations from "../src/static-data/entity-info/entity-relations";
 import entityColumns from "../src/static-data/entity-info/entity-columns";
-import comparisonTypes from "../src/static-data/comparison-types";
 
+const readyStateChangeHandler = (xhr, onSuccess, onFail, scope) => {
+	if (xhr.readyState === 4) {
+		if (xhr.status !== 200) {
+			onFail.call(scope, xhr);
+		} else {
+			onSuccess.call(scope, xhr);
+		}
+	}
+};
 
 const getFormatedDate = (date) => {
 	date = new Date(date);
@@ -214,13 +222,11 @@ const getDbBranchFromServer = (entityName) => {
 	xhr.send();
 	return new Promise((res, rej) => {
 		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
-				if (xhr.status !== 200) {
-					rej(xhr.status + ': ' + xhr.statusText);
-				} else {
-					res(JSON.parse(xhr.responseText));
-				}
-			}
+			readyStateChangeHandler(
+				xhr,
+				xhr => res(JSON.parse(xhr.responseText)),
+				xhr => rej(xhr.status + ': ' + xhr.statusText)
+			)
 		};
 	});
 };
@@ -232,13 +238,11 @@ const getYearChartInfo = (monthCount = 12) => {
 	xhr.send();
 	return new Promise((res, rej) => {
 		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
-				if (xhr.status !== 200) {
-					rej(xhr.status + ': ' + xhr.statusText);
-				} else {
-					res(JSON.parse(xhr.responseText).data);
-				}
-			}
+			readyStateChangeHandler(
+				xhr,
+				xhr => res(JSON.parse(xhr.responseText).data),
+				xhr => rej(xhr.status + ': ' + xhr.statusText)
+			)
 		};
 	});
 };
@@ -255,13 +259,11 @@ const postDbBranchToServer = (entity, data) => {
 	}));
 	return new Promise((res, rej) => {
 		xhr.onreadystatechange = () => {
-			if (xhr.readyState === 4) {
-				if (xhr.status !== 200) {
-					rej(xhr.status + ": " + xhr.statusText);
-				} else {
-					res(JSON.parse(xhr.responseText));
-				}
-			}
+			readyStateChangeHandler(
+				xhr,
+				xhr => res(JSON.parse(xhr.responseText)),
+				xhr => rej(xhr.status + ': ' + xhr.statusText)
+			)
 		};
 	});
 };
@@ -269,15 +271,13 @@ export {postDbBranchToServer};
 
 const prepareDataToCreateDisplayValues = (entityName, entity, resultObject = {}) => {
 	for (let column in entity) {
-		if (entity[column]) {
-			if ((entityStructure[entityName].columns[column] || {}).type === entityColumnTypes.LOOKUP) {
-				let linkToName = entityStructure[entityName].columns[column].linkTo.entityName;
-				if (!resultObject[linkToName]) {
-					resultObject[linkToName] = [];
-				}
-				if (resultObject[linkToName].indexOf(entity[column] === -1)) {
-					resultObject[linkToName].push(entity[column]);
-				}
+		if (entity[column] && (entityStructure[entityName].columns[column] || {}).type === entityColumnTypes.LOOKUP) {
+			let linkToName = entityStructure[entityName].columns[column].linkTo.entityName;
+			if (!resultObject[linkToName]) {
+				resultObject[linkToName] = [];
+			}
+			if (resultObject[linkToName].indexOf(entity[column] === -1)) {
+				resultObject[linkToName].push(entity[column]);
 			}
 		}
 	}
@@ -298,20 +298,35 @@ const selectDisplayValues = (objects, db) => {
 	const data = [];
 	for (let entity in preparedData) {
 		data.push({
-				entityName: entity,
-				filters: [
-					{
-						column: "id",
-						value: preparedData[entity]
-					}
-				]
-			});
+			entityName: entity,
+			filters: [
+				{
+					column: "id",
+					value: preparedData[entity]
+				}
+			]
+		});
 	}
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", "http://localhost:3000/select");
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.send(JSON.stringify({data}));
 	return new Promise((res, rej) => {
+		xhr.onreadystatechange = () => {
+			readyStateChangeHandler(
+				xhr,
+				xhr => {
+					let result = JSON.parse(xhr.responseText);
+					for (let entityName in result.data) {
+						for (let record of result.data[entityName]) {
+							writeEntityToDb(entityName, record, db);
+						}
+					}
+					res();
+				},
+				xhr => rej(xhr.status + ': ' + xhr.statusText)
+			)
+		};
 		xhr.onreadystatechange = () => {
 			if (xhr.readyState === 4) {
 				if (xhr.status !== 200) {
@@ -343,7 +358,7 @@ const coreValidator = {
 	validateStringLength(min, max, value) {
 		min = min || Number.NEGATIVE_INFINITY;
 		max = max || Number.POSITIVE_INFINITY;
-		length = (value || "").length;
+		const length = (value || "").length;
 		return length >= min && length <= max;
 	},
 	validatePositiveNumber(value) {

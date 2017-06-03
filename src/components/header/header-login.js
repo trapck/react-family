@@ -1,5 +1,4 @@
 import React, {PropTypes} from "react";
-import {Link, IndexLink} from "react-router";
 import HeaderCurrentUser from "./header-current-user";
 
 const HeaderLogin = (props) => {

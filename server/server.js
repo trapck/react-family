@@ -7,8 +7,7 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {
 	syncDb,
-	createFilterFunction,
-	getFormatedDate
+	createFilterFunction
 } from "../other/utils";
 
 /* eslint-disable no-console */
@@ -19,6 +18,7 @@ const compiler = webpack(config);
 const dbPath = path.join( __dirname, "db.json");
 const dbBackupPath = path.join( __dirname, "dbBak");
 const makeBackupInterval = 1000 * 60 * 30;
+const lastMonthNumber = 11;
 
 const startMakeDBBackupJob = () => {
 	setInterval(() => {
@@ -55,7 +55,6 @@ app.post("/select", (req, res) => {
 	res.send(JSON.stringify({data: result}));
 });
 
-// TODO: implement make backup
 app.post("/syncDb", function(req, res) {
 	const db = JSON.parse(fs.readFileSync(path.join( __dirname, "db.json"))),
 		entityName = req.body.entity,
@@ -87,7 +86,7 @@ app.get("/year-chart-info", (req, res) => {
 			amount
 		});
 		if (nowMonth === 0) {
-			nowMonth = 11;
+			nowMonth = lastMonthNumber;
 			nowYear--;
 		} else {
 			nowMonth--;

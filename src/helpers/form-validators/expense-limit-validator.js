@@ -1,5 +1,4 @@
 import {coreValidator} from "../../../other/utils";
-import constants from "../../../other/general-const";
 import generalValidator from "./general-validator";
 
 const incomeLimitValidator = (value, columnName, entity) => {

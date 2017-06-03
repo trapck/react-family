@@ -1,5 +1,4 @@
 import React, {PropTypes} from "react";
-import {Link, IndexLink} from "react-router";
 
 const HeaderCurrentUser = (props) => {
 	const onClick = e => e.preventDefault();

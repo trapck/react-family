@@ -1,5 +1,4 @@
 import initialState from "../../../store/initial-state";
-import actionTypes from "../../../actions/action-types";
 import isGeneralInfoRowCollapsed from "./general-info-row-collapsed-reducer";
 import isNewExpenseVisible from "./toggle-new-expense-visible-reducer";
 import isNewExpenseCategoryVisible from "./toggle-new-expense-category-visible-reducer";

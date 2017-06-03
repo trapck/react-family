@@ -1,5 +1,5 @@
 import React, {PropTypes} from "react";
-import {DateField, Calendar} from "react-date-picker";
+import {DateField} from "react-date-picker";
 import "react-date-picker/index.css";
 
 class DateInput extends React.Component {
