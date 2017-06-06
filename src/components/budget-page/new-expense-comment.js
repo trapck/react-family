@@ -23,7 +23,7 @@ class NewExpenseComment extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		this.props.clearNewExpenseComment();
 	}
 
@@ -47,7 +47,7 @@ class NewExpenseComment extends React.Component {
 		});
 		this.props.addNewExpenseComment(newComment, this.isLoadingToken)
 			.then(() => toastr.success("New expense comment added"))
-			.then(() => this.props.removeIsLoading(this.isLoadingToken));
+			.then(() => this.props.removeIsLoading({isLoadingToken: this.isLoadingToken}));
 	}
 
 	render() {

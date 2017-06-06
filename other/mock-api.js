@@ -23,8 +23,6 @@ let dbData = {
 	monthExpenseLimit: []
 };
 
-//TODO: implement correct sync db error handling
-
 const addLimitToDb = (month, year) => {
 	const entityName = "monthExpenseLimit";
 	let limit = {

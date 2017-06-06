@@ -41,7 +41,7 @@ class ExpensesList extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 	}
 
 	getExpenses(props) {
@@ -80,7 +80,7 @@ class ExpensesList extends React.Component {
 			this.props.currentMonth,
 			this.props.currentYear).then(() => {
 			toastr.success("Expense updated");
-			this.props.removeIsLoading(this.isLoadingToken);
+			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 
@@ -93,7 +93,7 @@ class ExpensesList extends React.Component {
 			this.props.currentMonth,
 			this.props.currentYear).then(() => {
 			toastr.success("Expense deleted");
-			this.props.removeIsLoading(this.isLoadingToken);
+			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 
@@ -103,6 +103,8 @@ class ExpensesList extends React.Component {
 			selectedExpense: this.state.isModalOpened ? null : args.expense
 		}));
 	}
+
+//TODO: implement comments count
 
 	render() {
 		const additionalRightCells = [

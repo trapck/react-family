@@ -6,26 +6,26 @@ import {
 } from "../../../other/utils";
 
 const rejectCallback = (ex, isLoadingToken, dispatch) => {
-	dispatch(setIsLoading(isLoadingToken, false));
+	dispatch(setIsLoading({isLoadingToken ,value: false}));
 	throw ex;
 };
 
 // Common actions
 
-const setIsLoading = (token, value) => {
+const setIsLoading = ({isLoadingToken, value}) => {
 	return {
 		type: actionTypes.SET_IS_LOADING,
-		token,
+		isLoadingToken,
 		value
 	};
 };
 export {setIsLoading};
 
 
-const removeIsLoading = (token) => {
+const removeIsLoading = ({isLoadingToken}) => {
 	return {
 		type: actionTypes.REMOVE_IS_LOADING,
-		token
+		isLoadingToken
 	};
 };
 export {removeIsLoading};
@@ -33,7 +33,7 @@ export {removeIsLoading};
 const getUsers = () => {
 	return dispatch => {
 		return mockApi.getEntities("user").then(
-				users => dispatch(setReceivedUsers(users),
+				users => dispatch(setReceivedUsers({users}),
 					ex => rejectCallback(ex)
 			)
 		);
@@ -41,7 +41,7 @@ const getUsers = () => {
 };
 export {getUsers};
 
-const setReceivedUsers = (users = []) => {
+const setReceivedUsers = ({users = []}) => {
 	return {
 		type: actionTypes.SET_RECEIVED_USERS,
 		users
@@ -53,14 +53,14 @@ export {setReceivedUsers};
 const getCurrentUser = () => dispatch => {
 	return mockApi.getCurrentUser().then(
 			user => {
-			dispatch(setCurrentUser(user));
+			dispatch(setCurrentUser({user}));
 		},
 			ex => rejectCallback(ex)
 	);
 };
 export {getCurrentUser};
 
-const setCurrentUser = (user) => {
+const setCurrentUser = ({user}) => {
 	return {
 		type: actionTypes.SET_CURRENT_USER,
 		user
@@ -68,7 +68,7 @@ const setCurrentUser = (user) => {
 };
 
 // Budget actions
-const setCurrentMonth = number => {
+const setCurrentMonth = ({number}) => {
 	return {
 		type: actionTypes.SET_CURRENT_MONTH,
 		number
@@ -76,7 +76,7 @@ const setCurrentMonth = number => {
 };
 export {setCurrentMonth};
 
-const setCurrentYear = year => {
+const setCurrentYear = ({year}) => {
 	return {
 		type: actionTypes.SET_CURRENT_YEAR,
 		year
@@ -85,19 +85,19 @@ const setCurrentYear = year => {
 export {setCurrentYear};
 
 
-const getExpenseCategories = (filters = [], isLoadingToken = "") => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+const getExpenseCategories = ({filters = [], isLoadingToken = ""}) => dispatch => {
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getEntities("expenseCategory", filters).then(
 			categories => {
-			dispatch(setIsLoading(isLoadingToken, false));
-			dispatch(setReceivedExpenseCategories(categories, filters));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
+			dispatch(setReceivedExpenseCategories({categories, filters}));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
 };
 export {getExpenseCategories};
 
-const setReceivedExpenseCategories = (categories = [], filters = []) => {
+const setReceivedExpenseCategories = ({categories = [], filters = []}) => {
 	return {
 		type: actionTypes.SET_RECEIVED_EXPENSE_CATEGORIES,
 		categories,
@@ -106,10 +106,10 @@ const setReceivedExpenseCategories = (categories = [], filters = []) => {
 };
 
 const getExpenses = (filters = [], isLoadingToken = "") => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getEntities("expense", filters).then(
 			expenses => {
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(setReceivedExpenses(expenses, filters));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -140,10 +140,10 @@ const getCurrentMonthGeneralInfo = (
 			}
 		}
 	];
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getMonthGeneralInfo(filters).then(
 			info => {
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(setReceivedCurrentMonthGeneralInfo(info, filters));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -160,10 +160,10 @@ const setReceivedCurrentMonthGeneralInfo = (info, filters = []) => {
 };
 
 const getYearChartData = (monthCount = 12, isLoadingToken = "") => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getYearChartInfo(monthCount).then(
 		data => {
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(setReceivedYearChartData(data));
 		},
 		ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -196,11 +196,11 @@ const setGeneralInfoGroupCollapsed = (key, isCollapsed) => {
 export {setGeneralInfoGroupCollapsed};
 
 const getMonthExpenseLimits = (filters = [], isLoadingToken = "") => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getMonthExpenseLimits(filters).then(
 			limits => {
 			dispatch(setReceivedMonthExpenseLimits(limits));
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);
@@ -215,14 +215,14 @@ const setReceivedMonthExpenseLimits = (limits) => {
 };
 
 const updateMonthExpenseLimit = (updateMap, isLoadingToken = "") => dispatch =>{
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.updateEntitiesByColumnMap("monthExpenseLimit", updateMap).then(
 			limits => {
 			// TODO: implement nice information window
 			if (updateMap.length !== limits.length) {
 				alert(`${updateMap.length - limits.length} of ${updateMap.length} were not updated`);
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(registerUpdatedMonthExpenseLimitsInState(limits));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -244,7 +244,7 @@ const addNewExpense = (
 	currentMonth = new Date().getMonth(),
 	currentYear = new Date().getFullYear()) => dispatch => {
 	expense = Object.assign({}, setEntityDefaultValues("expense"), expense);
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.addEntities("expense", [expense]).then(
 			expenses => {
 			if (!expenses.length) {
@@ -258,7 +258,7 @@ const addNewExpense = (
 					dispatch(addExpenseToCurrentMonthGeneralInfo(expenses[0]));
 				}
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(clearNewExpense());
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -296,14 +296,14 @@ const updateExpense = (
 	isLoadingToken = "",
 	currentMonth = new Date().getMonth(),
 	currentYear = new Date().getFullYear()) => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.updateEntitiesByColumnMap("expense", updateMap).then(
 			expenses => {
 			// TODO: implement nice information window
 			if (updateMap.length !== expenses.length) {
 				alert(`${updateMap.length - expenses.length} of ${updateMap.length} were not updated`);
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(registerUpdatedExpenseInState(expenses));
 			dispatch(getCurrentMonthGeneralInfo(undefined, undefined, currentMonth, currentYear));
 		},
@@ -330,11 +330,11 @@ const deleteExpense = (
 		alert("Filters are empty !");
 		return;
 	}
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.deleteEntities("expense", filters).then(
 			result => {
 			// TODO: implement info about number of deleted items, duplicate info for insert/update
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			if (result.notDeleted.length) {
 				alert(getCantDeleteByIntegrityConstraintMessage(result));
 			}
@@ -361,14 +361,14 @@ export {removeDeletedExpensesFromState};
 
 const addNewExpenseCategory = (expenseCategory, isLoadingToken = "") => dispatch => {
 	expenseCategory = Object.assign({}, setEntityDefaultValues("expenseCategory"), expenseCategory);
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.addEntities("expenseCategory", [expenseCategory]).then(
 			expenseCategories => {
 			// TODO: implement nice information window
 			if (!expenseCategories.length) {
 				alert("Expense category was not added");
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(registerNewExpenseCategoryInState(expenseCategories[0]));
 			dispatch(clearNewExpenseCategory());
 		},
@@ -403,14 +403,14 @@ const clearNewExpenseCategory = () => {
 export {clearNewExpenseCategory};
 
 const updateExpenseCategory = (updateMap, isLoadingToken = "") => dispatch =>{
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.updateEntitiesByColumnMap("expenseCategory", updateMap).then(
 			expenseCategories => {
 			// TODO: implement nice information window
 			if (updateMap.length !== expenseCategories.length) {
 				alert(`${updateMap.length - expenseCategories.length} of ${updateMap.length} were not updated`);
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(registerUpdatedExpenseCategoryInState(expenseCategories));
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -436,11 +436,11 @@ const deleteExpenseCategory = (
 		alert("Filters are empty !");
 		return;
 	}
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.deleteEntities("expenseCategory", filters).then(
 			result => {
 			// TODO: implement info about number of deleted items, duplicate info for insert/update
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			if (result.notDeleted.length) {
 				alert(getCantDeleteByIntegrityConstraintMessage(result));
 			}
@@ -488,10 +488,10 @@ export {toggleShowCurrentMonthLimitOnly};
 
 
 const getExpenseComments = (filters = [], isLoadingToken = "") => dispatch => {
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getEntities("expenseComment", filters).then(
 		expenseComments => {
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(setReceivedExpenseComments(expenseComments, filters));
 		},
 		ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -512,7 +512,7 @@ const addNewExpenseComment = (
 	isLoadingToken = "") => dispatch => {
 	expenseComment = Object.assign(
 		{}, setEntityDefaultValues("expenseComment"), expenseComment);
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.addEntities("expenseComment", [expenseComment]).then(
 		expenseComments => {
 			if (!expenseComments.length) {
@@ -520,7 +520,7 @@ const addNewExpenseComment = (
 			} else {
 				dispatch(registerNewExpenseCommentInState(expenseComments[0]));
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(clearNewExpenseComment());
 		},
 		ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -555,14 +555,14 @@ export {clearNewExpenseComment};
 
 
 const updateExpenseComment = (updateMap, isLoadingToken = "") => dispatch =>{
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.updateEntitiesByColumnMap("expenseComment", updateMap).then(
 		expenseComments => {
 			// TODO: implement nice information window
 			if (updateMap.length !== expenseComments.length) {
 				alert(`${updateMap.length - expenseComments.length} of ${updateMap.length} were not updated`);
 			}
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			dispatch(registerUpdatedExpenseCommentInState(expenseComments));
 		},
 		ex => rejectCallback(ex, isLoadingToken, dispatch)
@@ -588,11 +588,11 @@ const deleteExpenseComment = (
 		alert("Filters are empty !");
 		return;
 	}
-	dispatch(setIsLoading(isLoadingToken, true));
+	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.deleteEntities("expenseComment", filters).then(
 		result => {
 			// TODO: implement info about number of deleted items, duplicate info for insert/update
-			dispatch(setIsLoading(isLoadingToken, false));
+			dispatch(setIsLoading({isLoadingToken,value: false}));
 			if (result.notDeleted.length) {
 				alert(getCantDeleteByIntegrityConstraintMessage(result));
 			}

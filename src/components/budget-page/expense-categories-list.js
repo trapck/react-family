@@ -20,12 +20,11 @@ class ExpenseCategoriesList extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.getExpenseCategories(undefined, this.isLoadingToken);
+		this.props.getExpenseCategories({isLoadingToken: this.isLoadingToken});
 	}
 
-	// TODO: You can pass one parameter - `options` instead and check it inside the function
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 	}
 
 	onCategoryValueUpdated(id, columnName, columnValue) {
@@ -41,7 +40,7 @@ class ExpenseCategoriesList extends React.Component {
 			}
 		], this.isLoadingToken).then(() => {
 			toastr.success("Category updated");
-			this.props.removeIsLoading(this.isLoadingToken);
+			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 
@@ -51,7 +50,7 @@ class ExpenseCategoriesList extends React.Component {
 			value: args.id
 		}], this.isLoadingToken).then(() => {
 			toastr.success("Expense category deleted");
-			this.props.removeIsLoading(this.isLoadingToken);
+			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		},
 			() => toastr.error("Something went wrong"));
 	}

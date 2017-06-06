@@ -24,18 +24,18 @@ class ExpenseCommentsPage extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 	}
 	// TODO: make base component for budget-main, expense-comments-page etc.
 
 	updateExpenseComment() {
 		this.props.updateExpenseComment(arguments)
-			.then(() => this.props.removeIsLoading(this.isLoadingToken));
+			.then(() => this.props.removeIsLoading({isLoadingToken: this.isLoadingToken}));
 	}
 
 	deleteExpenseComment() {
 		this.props.deleteExpenseComment(arguments)
-			.then(() => this.props.removeIsLoading(this.isLoadingToken));
+			.then(() => this.props.removeIsLoading({isLoadingToken: this.isLoadingToken}));
 	}
 
 	render() {

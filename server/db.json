@@ -264,13 +264,6 @@
 			"date": "2017-05-21T21:00:00.000Z"
 		},
 		{
-			"id": "c29d7a35-ff16-49be-a0ef-adb7efc0552d",
-			"text": "new comment",
-			"expense": "97effb30-16b3-4c2f-8d59-cfe5ddf9468d",
-			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",
-			"date": "2017-05-24T21:00:00.000Z"
-		},
-		{
 			"id": "906e80ac-7c08-4008-a31f-0d5aecd9f8ff",
 			"text": "123",
 			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",

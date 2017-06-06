@@ -39,7 +39,7 @@ class BudgetMain extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 	}
 
 	setGeneralInfoGroupCollapsed(key, isCollapsed) {
@@ -90,8 +90,8 @@ class BudgetMain extends React.Component {
 				getCurrentMonthGeneralInfo,
 				getMonthExpenseLimits
 				} = this.props;
-		setCurrentMonth(currentMonth);
-		setCurrentYear(currentYear);
+		setCurrentMonth({currentMonth});
+		setCurrentYear({currentYear});
 		getCurrentMonthGeneralInfo(
 			undefined,
 			this.isLoadingToken,

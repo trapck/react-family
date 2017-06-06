@@ -23,7 +23,7 @@ class MonthExpenseLimitsList extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.props.removeIsLoading(this.isLoadingToken);
+		this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 	}
 
 	onLimitValueUpdated(id, columnName, columnValue) {
@@ -39,7 +39,7 @@ class MonthExpenseLimitsList extends React.Component {
 			}
 		], this.isLoadingToken).then(() => {
 			toastr.success("Limit updated");
-			this.props.removeIsLoading(this.isLoadingToken);
+			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 

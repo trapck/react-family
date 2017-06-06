@@ -40,7 +40,6 @@ const getLookupDisplayValue = (value, entityName, columnName, dbData) => {
 };
 export {getLookupDisplayValue};
 
-// TODO: implement lookup data loading
 const createObjectWithDisplayValues = (entityName, entity, dbData) => {
 	let resultObject = Object.assign({displayValues: {}}, entity);
 	for (let column in entity) {
