@@ -56,16 +56,20 @@ class ExpensesList extends React.Component {
 				value: props.dateFilterValue
 			});
 		}
-		props.getExpenses(filters, this.isLoadingToken);
+		props.getExpenses({filters, isLoadingToken: this.isLoadingToken});
 		if (props.isSyncNeeded) {
-			props.getCurrentMonthGeneralInfo(
-				filters, undefined, (props.dateFilterValue || {}).M, (props.dateFilterValue || {}).Y
+			props.getCurrentMonthGeneralInfo({
+					filters,
+					currentMonth: (props.dateFilterValue || {}).M,
+					currentYear: (props.dateFilterValue || {}).Y
+				}
 			);
 		}
 	}
 
 	onExpenseValueUpdated(id, columnName, columnValue) {
-		this.props.updateExpense([
+		this.props.updateExpense({
+			updateMap: [
 				{
 					id,
 					values: [
@@ -76,22 +80,24 @@ class ExpensesList extends React.Component {
 					]
 				}
 			],
-			this.isLoadingToken,
-			this.props.currentMonth,
-			this.props.currentYear).then(() => {
+			isLoadingToken: this.isLoadingToken,
+			currentMonth: this.props.currentMonth,
+			currentYear: this.props.currentYear}).then(() => {
 			toastr.success("Expense updated");
 			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 
 	onDeleteExpenseClick(args) {
-		this.props.deleteExpense([{
+		this.props.deleteExpense({
+			filters: [{
 				column: "id",
 				value: args.id
 			}],
-			this.isLoadingToken,
-			this.props.currentMonth,
-			this.props.currentYear).then(() => {
+			isLoadingToken: this.isLoadingToken,
+			currentMonth: this.props.currentMonth,
+			currentYear: this.props.currentYear
+		}).then(() => {
 			toastr.success("Expense deleted");
 			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
@@ -104,33 +110,33 @@ class ExpensesList extends React.Component {
 		}));
 	}
 
-//TODO: implement comments count
+	//TODO: implement comments count
 
 	render() {
 		const additionalRightCells = [
-				this.props.expenses.map(
+			this.props.expenses.map(
 					e => <ButtonLink
-						key = {e.id}
-						caption="comments"
-						onClick={this.toggleModalWindowState}
-						onClickArguments = {{expense: e.id}}
+					key = {e.id}
+					caption="comments"
+					onClick={this.toggleModalWindowState}
+					onClickArguments = {{expense: e.id}}
 					/>
-				),
-				this.props.expenses.map(
+			),
+			this.props.expenses.map(
 					e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
-				)
-			];
+			)
+		];
 		// TODO: implement comments counter
 		return (
 			<div>
 				<ModalWindow
 					isOpen={this.state.isModalOpened}
 					contentLabel="Expense comments"
-				>
+					>
 					<ExpenseCommentsPage
 						onClose={this.toggleModalWindowState}
 						expense={this.state.selectedExpense}
-					/>
+						/>
 				</ModalWindow>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					{
@@ -173,7 +179,7 @@ const mapStateToProps = (state, ownProps) => {
 		expenses: state.budget.expenses.filter(e =>
 			e.category === ownProps.category &&
 			(ownProps.dateFilterValue ?  getDateColumnEqualityComparisonResult(e.date, ownProps.dateFilterValue) : true)
-			)
+		)
 			.sort((a,b) => {
 				if (a.title > b.title) return 1;
 				else if (b.title > a.title) return -1;

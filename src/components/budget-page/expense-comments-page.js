@@ -17,10 +17,13 @@ class ExpenseCommentsPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.getExpenseComments([{
-			column: "expense",
-			value: this.props.expense
-		}], this.isLoadingToken);
+		this.props.getExpenseComments({
+			filters: [{
+				column: "expense",
+				value: this.props.expense
+			}],
+			isLoadingToken: this.isLoadingToken
+		});
 	}
 
 	componentWillUnmount() {
@@ -49,7 +52,7 @@ class ExpenseCommentsPage extends React.Component {
 						updateExpenseComment={this.props.updateExpenseComment}
 						deleteExpenseComment={this.props.deleteExpenseComment}
 						isLoadingToken={this.isLoadingToken}
-					/>
+						/>
 				</PreloaderContainer>
 			</div>
 		);

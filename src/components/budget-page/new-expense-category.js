@@ -30,7 +30,7 @@ class NewExpenseCategory extends React.Component {
 	}
 
 	onChange(column, value, e) {
-		this.props.newExpenseCategoryChange(column, value, e);
+		this.props.newExpenseCategoryChange({column, value, e});
 	}
 
 	saveNewExpenseCategory() {
@@ -42,8 +42,10 @@ class NewExpenseCategory extends React.Component {
 		if (this.state.validationInfo.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: []}));
 		}
-		this.props.addNewExpenseCategory(this.props.newExpenseCategory, this.isLoadingToken)
-			.then(() => toastr.success("New expense category added"));
+		this.props.addNewExpenseCategory({
+			expenseCategory: this.props.newExpenseCategory,
+			isLoadingToken: this.isLoadingToken
+		}).then(() => toastr.success("New expense category added"));
 	}
 
 	render() {

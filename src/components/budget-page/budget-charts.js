@@ -23,7 +23,11 @@ class BudgetCharts extends React.Component {
 	}
 
 	getMonthCategoriesChartData(month, year) {
-		this.props.getCurrentMonthGeneralInfo(undefined, this.isLoadingToken, month, year);
+		this.props.getCurrentMonthGeneralInfo({
+			isLoadingToken: this.isLoadingToken,
+			currentMonth: month,
+			currentYear: year
+		});
 	}
 
 	onYearChartMonthCountChange(e) {
@@ -33,7 +37,7 @@ class BudgetCharts extends React.Component {
 	}
 
 	getYearChartData(monthCount) {
-		this.props.getYearChartData(monthCount);
+		this.props.getYearChartData({monthCount});
 	}
 
 	render() {

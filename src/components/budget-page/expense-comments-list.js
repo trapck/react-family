@@ -12,26 +12,32 @@ class ExpenseCommentsList extends React.Component {
 	}
 
 	onCommentValueUpdated(id, columnName, columnValue) {
-		this.props.updateExpenseComment([
-			{
-				id,
-				values: [
-					{
-						columnName,
-						columnValue
-					}
-				]
-			}
-		], this.props.isLoadingToken).then(() => {
+		this.props.updateExpenseComment({
+			updateMap: [
+				{
+					id,
+					values: [
+						{
+							columnName,
+							columnValue
+						}
+					]
+				}
+			],
+			isLoadingToken: this.props.isLoadingToken
+		}).then(() => {
 			toastr.success("Comment updated");
 		});
 	}
 
 	onDeleteCommentClick(args) {
-		this.props.deleteExpenseComment([{
-			column: "id",
-			value: args.id
-		}], this.props.isLoadingToken).then(() => {
+		this.props.deleteExpenseComment({
+			filters: [{
+				column: "id",
+				value: args.id
+			}],
+			isLoadingToken: this.props.isLoadingToken
+		}).then(() => {
 				toastr.success("Expense comment deleted");
 			},
 			() => toastr.error("Something went wrong"));
@@ -39,7 +45,7 @@ class ExpenseCommentsList extends React.Component {
 
 	render() {
 		const additionalRightCells = [this.props.comments.map(
-			c => <DeleteIcon key = {c.id} onClick = {this.onDeleteCommentClick} onClickArguments = {{id: c.id}}/>
+				c => <DeleteIcon key = {c.id} onClick = {this.onDeleteCommentClick} onClickArguments = {{id: c.id}}/>
 		)];
 		return (
 			<div>

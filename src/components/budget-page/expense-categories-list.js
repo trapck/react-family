@@ -28,36 +28,42 @@ class ExpenseCategoriesList extends React.Component {
 	}
 
 	onCategoryValueUpdated(id, columnName, columnValue) {
-		this.props.updateExpenseCategory([
-			{
-				id,
-				values: [
-					{
-						columnName,
-						columnValue
-					}
-				]
-			}
-		], this.isLoadingToken).then(() => {
+		this.props.updateExpenseCategory({
+			updateMap: [
+				{
+					id,
+					values: [
+						{
+							columnName,
+							columnValue
+						}
+					]
+				}
+			],
+			isLoadingToken: this.isLoadingToken
+		}).then(() => {
 			toastr.success("Category updated");
 			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
 	}
 
 	onDeleteExpenseCategoryClick(args) {
-		this.props.deleteExpenseCategory([{
-			column: "id",
-			value: args.id
-		}], this.isLoadingToken).then(() => {
-			toastr.success("Expense category deleted");
-			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
-		},
+		this.props.deleteExpenseCategory({
+			filters: [{
+				column: "id",
+				value: args.id
+			}],
+			isLoadingToken: this.isLoadingToken
+		}).then(() => {
+				toastr.success("Expense category deleted");
+				this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
+			},
 			() => toastr.error("Something went wrong"));
 	}
 
 	render() {
 		const additionalRightCells = [this.props.expenseCategories.map(
-			e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseCategoryClick} onClickArguments = {{id: e.id}}/>
+				e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseCategoryClick} onClickArguments = {{id: e.id}}/>
 		)];
 		return (
 			<div>

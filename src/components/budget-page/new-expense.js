@@ -30,7 +30,7 @@ class NewExpense extends React.Component {
 	}
 
 	onChange(column, value, e) {
-		this.props.newExpenseChange(column, value, e);
+		this.props.newExpenseChange({column, value, e});
 	}
 
 	saveNewExpense() {
@@ -44,8 +44,12 @@ class NewExpense extends React.Component {
 		if (this.state.validationInfo.length) {
 			this.setState(Object.assign({}, this.state, {validationInfo: []}));
 		}
-		this.props.addNewExpense(this.props.newExpense, this.isLoadingToken, currentMonth, currentYear)
-			.then(() => toastr.success("New expense added"));
+		this.props.addNewExpense({
+			expense: this.props.newExpense,
+			isLoadingToken: this.isLoadingToken,
+			currentMonth,
+			currentYear
+		}).then(() => toastr.success("New expense added"));
 	}
 
 	render() {

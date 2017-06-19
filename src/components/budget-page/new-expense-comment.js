@@ -28,7 +28,7 @@ class NewExpenseComment extends React.Component {
 	}
 
 	onChange(column, value, e) {
-		this.props.newExpenseCommentChange(column, value, e);
+		this.props.newExpenseCommentChange({column, value, e});
 	}
 
 	saveNewExpenseComment() {
@@ -45,7 +45,7 @@ class NewExpenseComment extends React.Component {
 			author: (this.props.currentUser || {}).id || "",
 			date: new Date()
 		});
-		this.props.addNewExpenseComment(newComment, this.isLoadingToken)
+		this.props.addNewExpenseComment({expenseComment: newComment, isLoadingToken: this.isLoadingToken})
 			.then(() => toastr.success("New expense comment added"))
 			.then(() => this.props.removeIsLoading({isLoadingToken: this.isLoadingToken}));
 	}

@@ -19,7 +19,7 @@ class MonthExpenseLimitsList extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.getMonthExpenseLimits([], this.isLoadingToken);
+		this.props.getMonthExpenseLimits({filters: [], isLoadingToken: this.isLoadingToken});
 	}
 
 	componentWillUnmount() {
@@ -27,17 +27,20 @@ class MonthExpenseLimitsList extends React.Component {
 	}
 
 	onLimitValueUpdated(id, columnName, columnValue) {
-		this.props.updateMonthExpenseLimit([
-			{
-				id,
-				values: [
-					{
-						columnName,
-						columnValue
-					}
-				]
-			}
-		], this.isLoadingToken).then(() => {
+		this.props.updateMonthExpenseLimit({
+			updateMap: [
+				{
+					id,
+					values: [
+						{
+							columnName,
+							columnValue
+						}
+					]
+				}
+			],
+			isLoadingToken: this.isLoadingToken
+		}).then(() => {
 			toastr.success("Limit updated");
 			this.props.removeIsLoading({isLoadingToken: this.isLoadingToken});
 		});
@@ -55,7 +58,7 @@ class MonthExpenseLimitsList extends React.Component {
 						value = {this.props.isShowCurrentMonthLimitOnly}
 						onChange = {this.onCurrentMonthOnlyChange}
 						isFocusCanceled
-					/>
+						/>
 				</LabelCover>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
 					{
@@ -92,7 +95,7 @@ const mapStateToProps = state => {
 		monthExpenseLimits: (state.budget.ui.isShowCurrentMonthLimitOnly ?
 			state.budget.monthLimits.filter(
 					l => l.month === state.budget.ui.currentMonth.number && l.year === state.budget.ui.currentYear
-				) :
+			) :
 			state.budget.monthLimits).sort((a,b) => (a.year + a.month) - (b.year + b.month)),
 		isShowCurrentMonthLimitOnly: state.budget.ui.isShowCurrentMonthLimitOnly
 	};
