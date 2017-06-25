@@ -269,6 +269,27 @@
 			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",
 			"date": "2017-06-02T21:00:00.000Z",
 			"expense": "5edf1aa0-98f0-4bcf-8723-b615402d7f81"
+		},
+		{
+			"id": "7c32389c-89a5-45ba-af1e-cfb2871285b0",
+			"text": "bla-bla-bla",
+			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",
+			"date": "2017-06-24T21:00:00.000Z",
+			"expense": "5edf1aa0-98f0-4bcf-8723-b615402d7f81"
+		},
+		{
+			"id": "11a0e94a-a56a-4c42-b282-952d390fcc84",
+			"text": "new bla",
+			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",
+			"date": "2017-06-24T21:00:00.000Z",
+			"expense": "5edf1aa0-98f0-4bcf-8723-b615402d7f81"
+		},
+		{
+			"id": "b535510f-cd2b-4b2d-9dd7-131449be330f",
+			"text": "new new new",
+			"author": "a8b10cfc-c418-4141-b28e-b5f31e18a660",
+			"date": "2017-06-24T21:00:00.000Z",
+			"expense": "5edf1aa0-98f0-4bcf-8723-b615402d7f81"
 		}
 	]
 }

@@ -17,13 +17,19 @@ class ExpenseCommentsPage extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.getExpenseComments({
-			filters: [{
-				column: "expense",
-				value: this.props.expense
-			}],
-			isLoadingToken: this.isLoadingToken
-		});
+		if (!this.props.preloadedComments) {
+			this.props.getExpenseComments({
+				filters: [
+					{
+						column: "expense",
+						value: this.props.expense
+					}
+				],
+				isLoadingToken: this.isLoadingToken
+			});
+		} else {
+			this.props.setReceivedExpenseComments({expenseComments: this.props.preloadedComments});
+		}
 	}
 
 	componentWillUnmount() {
@@ -63,7 +69,9 @@ ExpenseCommentsPage.propTypes = {
 	expense: PropTypes.string.isRequired,
 	onClose: PropTypes.func.isRequired,
 	comments: PropTypes.array.isRequired,
+	preloadedComments: PropTypes.array,
 	getExpenseComments: PropTypes.func.isRequired,
+	setReceivedExpenseComments: PropTypes.func.isRequired,
 	removeIsLoading: PropTypes.func.isRequired,
 	updateExpenseComment: PropTypes.func.isRequired,
 	deleteExpenseComment: PropTypes.func.isRequired,

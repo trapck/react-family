@@ -105,12 +105,28 @@ const setReceivedExpenseCategories = ({categories = [], filters = []}) => {
 	};
 };
 
-const getExpenses = ({filters = [], isLoadingToken = ""}) => dispatch => {
+const getExpenses = ({includeCommentsCount, filters = [], isLoadingToken = ""}) => dispatch => {
 	dispatch(setIsLoading({isLoadingToken,value: true}));
 	return mockApi.getEntities("expense", filters).then(
 			expenses => {
-			dispatch(setIsLoading({isLoadingToken,value: false}));
-			dispatch(setReceivedExpenses({expenses, filters}));
+			if (includeCommentsCount) {
+				mockApi.getEntities("expenseComment", [{
+					column: "expense",
+					value: expenses.map(e => e.id)
+				}]).then(
+					(ec = []) => {
+						expenses = expenses.map(e => Object.assign({}, e, {
+							comments: ec.filter(c => c.expense === e.id)
+						}));
+						dispatch(setIsLoading({isLoadingToken,value: false}));
+						dispatch(setReceivedExpenses({expenses, filters}));
+					},
+					ex => rejectCallback(ex, isLoadingToken, dispatch)
+				);
+			} else {
+				dispatch(setIsLoading({isLoadingToken,value: false}));
+				dispatch(setReceivedExpenses({expenses, filters}));
+			}
 		},
 			ex => rejectCallback(ex, isLoadingToken, dispatch)
 	);

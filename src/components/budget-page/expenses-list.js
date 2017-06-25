@@ -22,7 +22,8 @@ class ExpensesList extends React.Component {
 		this.isLoadingToken = guid();
 		this.state = {
 			isModalOpened: false,
-			selectedExpense: ""
+			selectedExpense: "",
+			preloadedComments: null
 		};
 	}
 
@@ -56,7 +57,7 @@ class ExpensesList extends React.Component {
 				value: props.dateFilterValue
 			});
 		}
-		props.getExpenses({filters, isLoadingToken: this.isLoadingToken});
+		props.getExpenses({filters, isLoadingToken: this.isLoadingToken, includeCommentsCount: true});
 		if (props.isSyncNeeded) {
 			props.getCurrentMonthGeneralInfo({
 					filters,
@@ -104,29 +105,34 @@ class ExpensesList extends React.Component {
 	}
 
 	toggleModalWindowState(args) {
+		const isOpened = !this.state.isModalOpened;
 		this.setState(Object.assign({}, this.state, {
-			isModalOpened: !this.state.isModalOpened,
-			selectedExpense: this.state.isModalOpened ? null : args.expense
+			isModalOpened: isOpened,
+			selectedExpense: !isOpened ? null : args.expense,
+			preloadedComments: !isOpened ? null : args.expenseComments
 		}));
+		if (!isOpened) {
+			this.getExpenses(this.props);
+		}
 	}
-
-	//TODO: implement comments count
 
 	render() {
 		const additionalRightCells = [
 			this.props.expenses.map(
 					e => <ButtonLink
 					key = {e.id}
-					caption="comments"
+					caption={`${e.comments.length} comments`}
 					onClick={this.toggleModalWindowState}
-					onClickArguments = {{expense: e.id}}
+					onClickArguments = {{
+					expense: e.id,
+					expenseComments: e.comments
+					}}
 					/>
 			),
 			this.props.expenses.map(
 					e => <DeleteIcon key = {e.id} onClick = {this.onDeleteExpenseClick} onClickArguments = {{id: e.id}}/>
 			)
 		];
-		// TODO: implement comments counter
 		return (
 			<div>
 				<ModalWindow
@@ -136,6 +142,7 @@ class ExpensesList extends React.Component {
 					<ExpenseCommentsPage
 						onClose={this.toggleModalWindowState}
 						expense={this.state.selectedExpense}
+						preloadedComments={this.state.preloadedComments}
 						/>
 				</ModalWindow>
 				<PreloaderContainer isLoading = {this.props.isLoading} isLoadingToken = {this.isLoadingToken}>
